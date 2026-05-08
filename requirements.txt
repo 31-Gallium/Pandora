@@ -1,0 +1,8 @@
+PyQt6
+PyQt6-Qt6
+pywin32
+fastapi
+uvicorn
+pydantic
+python-multipart
+Pillow

@@ -1,0 +1,26 @@
+# Python environment and cache
+venv/
+__pycache__/
+*.pyc
+
+# Build and Dist folders
+build/
+dist/
+*.spec
+build_and_deploy.ps1
+CusFolder.exe.manifest
+
+# App specific data and logs
+internal_storage/
+logs/
+*.log
+drag_debug.txt
+rollback.txt
+
+# User generated config
+config.json
+
+# Backups and temporary files
+backup_stable_v8/
+gem/
+test_*.png
