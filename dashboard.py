@@ -805,7 +805,7 @@ class DashboardUI(QMainWindow):
 class TitleBar(QWidget):
     def __init__(self, parent):
         super().__init__(parent); self.parent = parent; self.setFixedHeight(60); self.layout = QHBoxLayout(self); self.layout.setContentsMargins(25, 0, 20, 0)
-        self.title_label = QLabel("CusFolder Dashboard"); self.title_label.setStyleSheet("color: #ffffff; font-weight: bold; font-size: 18px; background: transparent;"); self.layout.addWidget(self.title_label); self.layout.addStretch()
+        self.title_label = QLabel("Pandora Dashboard"); self.title_label.setStyleSheet("color: #ffffff; font-weight: bold; font-size: 18px; background: transparent;"); self.layout.addWidget(self.title_label); self.layout.addStretch()
         self.close_btn = QPushButton("✕"); self.close_btn.setFixedSize(32, 32); self.close_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.close_btn.setStyleSheet("QPushButton { background-color: rgba(255,255,255,15); color: #ffffff; border: none; font-weight: bold; font-size: 14px; border-radius: 16px;} QPushButton:hover { background-color: #ff4c4c; }")
         self.close_btn.clicked.connect(self.parent.close); self.layout.addWidget(self.close_btn); self._start_pos = None

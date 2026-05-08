@@ -10,7 +10,7 @@ import sys
 
 # When running from Program Files (PyInstaller), we cannot write to the installation directory.
 # Use AppData for all user-writable data.
-APPDATA_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), "CusFolder")
+APPDATA_DIR = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), "Pandora")
 if not os.path.exists(APPDATA_DIR):
     os.makedirs(APPDATA_DIR)
 
@@ -23,7 +23,7 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s',
     datefmt='%H:%M:%S'
 )
-logger = logging.getLogger("CusFolder")
+logger = logging.getLogger("Pandora")
 
 # ==========================================
 # CONSTANTS & PATHS
@@ -32,7 +32,7 @@ BASE_DIR = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 # Wait, if we are in PyInstaller --onedir, sys._MEIPASS is the _internal folder, but we want the app folder if we need to migrate.
 # Actually, os.path.dirname(os.path.abspath(__file__)) works for both script and onedir inside _internal.
 # Let's just use the original project directory for migration if it exists.
-ORIGINAL_PROJECT_DIR = r"C:\Users\Base\Desktop\Seb\CusFolder"
+ORIGINAL_PROJECT_DIR = r"C:\Users\Base\Desktop\Seb\Pandora"
 
 DESKTOP_PATH = os.path.join(os.path.expanduser('~'), 'Desktop')
 STORAGE_PATH = os.path.join(APPDATA_DIR, 'internal_storage')

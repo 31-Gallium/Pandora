@@ -8,7 +8,7 @@ build/
 dist/
 *.spec
 build_and_deploy.ps1
-CusFolder.exe.manifest
+Pandora.exe.manifest
 
 # App specific data and logs
 internal_storage/

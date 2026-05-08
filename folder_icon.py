@@ -398,12 +398,12 @@ class FolderIcon(QWidget):
         self.hide()
         self.deleteLater()
     def dragEnterEvent(self, e): 
-        if e.mimeData().hasFormat("application/x-cusfolder-app") or e.mimeData().hasUrls(): e.acceptProposedAction()
+        if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls(): e.acceptProposedAction()
     def dragMoveEvent(self, e): e.acceptProposedAction()
     
     def dropEvent(self, e):
-        if e.mimeData().hasFormat("application/x-cusfolder-app"):
-            sid = e.mimeData().data("application/x-cusfolder-app").data().decode()
+        if e.mimeData().hasFormat("application/x-pandora-app"):
+            sid = e.mimeData().data("application/x-pandora-app").data().decode()
             try:
                 dropped_apps = json.loads(e.mimeData().text())
                 if isinstance(dropped_apps, dict):

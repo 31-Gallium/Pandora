@@ -1,11 +1,11 @@
-# CusFolder
+# Pandora
 
-**CusFolder** is an advanced, highly customizable Windows desktop widget application built with Python and PyQt6. It allows users to create interactive, translucent, and animated "folders" directly on their desktop environment. Unlike standard application windows, CusFolder seamlessly integrates with the Windows Shell to act as true desktop content.
+**Pandora** is an advanced, highly customizable Windows desktop widget application built with Python and PyQt6. It allows users to create interactive, translucent, and animated "folders" directly on their desktop environment. Unlike standard application windows, Pandora seamlessly integrates with the Windows Shell to act as true desktop content.
 
 ## ✨ Key Features
 
 ### 🖥️ Native Desktop Integration (Win+D Bypass)
-Standard application windows minimize when the user presses **Win+D** ("Show Desktop"). CusFolder utilizes advanced Windows API (Win32) hooks to bypass this:
+Standard application windows minimize when the user presses **Win+D** ("Show Desktop"). Pandora utilizes advanced Windows API (Win32) hooks to bypass this:
 * **Progman / WorkerW Ownership:** Folders are natively reparented/owned by the desktop background layer (`SHELLDLL_DefView`). This ensures they survive the desktop minimization sweep.
 * **Stay On Bottom:** Widgets are strictly pinned to the bottom of the Z-order, preventing them from overlapping active applications.
 
@@ -32,14 +32,14 @@ A modern, frosted-glass dashboard lets you tweak every aspect of your folders.
 
 ### 📂 Intuitive Drag & Drop
 * Add new apps simply by dragging executable files, shortcuts (`.lnk`, `.url`), or regular files directly into a folder.
-* CusFolder automatically copies shortcuts into its internal storage, keeping your actual Desktop directory clean and organized.
+* Pandora automatically copies shortcuts into its internal storage, keeping your actual Desktop directory clean and organized.
 
 ---
 
 ## 🚀 How to Use
 
 1. **Launch:** Run `python main.py` or the compiled executable. The app runs silently in the system tray.
-2. **Dashboard:** Right-click the CusFolder icon in the System Tray and select **Settings**, or right-click any folder and hit **Settings**.
+2. **Dashboard:** Right-click the Pandora icon in the System Tray and select **Settings**, or right-click any folder and hit **Settings**.
 3. **Add Folders:** Use the System Tray menu to create a new folder.
 4. **Add Apps:** Drag and drop any file or shortcut directly onto a folder widget to add it.
 5. **Snap to Grid:** In the Dashboard, toggle **"Snap to Grid"**. Adjust the **Grid Size** (default: 110) and **Edge Padding** (default: 0).
@@ -50,7 +50,7 @@ A modern, frosted-glass dashboard lets you tweak every aspect of your folders.
 ## 🛠️ Architecture Details
 
 * **Frontend:** PyQt6 (Translucent Widgets, Frameless Windows, QPainter for custom rendering).
-* **Backend Storage:** Configurations and internal storage are kept in `AppData/Roaming/CusFolder`.
+* **Backend Storage:** Configurations and internal storage are kept in `AppData/Roaming/Pandora`.
 * **System Tray:** `QSystemTrayIcon` for background lifecycle management.
 * **WinAPI Integrations:** `ctypes.windll.user32` is heavily utilized for:
   * Sending `0x052C` to Progman to spawn desktop layers.

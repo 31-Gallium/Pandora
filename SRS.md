@@ -1,17 +1,17 @@
-# Software Requirements Specification (SRS) for CusFolder
+# Software Requirements Specification (SRS) for Pandora
 
 ## 1. Introduction
 
 ### 1.1 Purpose
-The purpose of this document is to outline the software requirements for the "CusFolder" application. It describes the system's functional and non-functional requirements, target environment, and user interactions.
+The purpose of this document is to outline the software requirements for the "Pandora" application. It describes the system's functional and non-functional requirements, target environment, and user interactions.
 
 ### 1.2 Scope
-CusFolder is a desktop productivity and customization application built with Python and PyQt6. It allows users to create highly interactive, visually customizable floating "folders" directly on their desktop. These folders act as visually appealing containers for application shortcuts, files, and games, providing a stylish alternative to the native Windows desktop icon system.
+Pandora is a desktop productivity and customization application built with Python and PyQt6. It allows users to create highly interactive, visually customizable floating "folders" directly on their desktop. These folders act as visually appealing containers for application shortcuts, files, and games, providing a stylish alternative to the native Windows desktop icon system.
 
 ### 1.3 Definitions, Acronyms, and Abbreviations
 * **GUI**: Graphical User Interface
 * **SRS**: Software Requirements Specification
-* **App Icon**: A shortcut or executable file contained within a CusFolder.
+* **App Icon**: A shortcut or executable file contained within a Pandora.
 * **Morph Animation**: The visual transition when a collapsed desktop folder expands into its grid view.
 * **Dashboard**: The central settings and management UI.
 
@@ -20,7 +20,7 @@ CusFolder is a desktop productivity and customization application built with Pyt
 ## 2. Overall Description
 
 ### 2.1 Product Perspective
-CusFolder operates as a standalone desktop utility on the Windows operating system. It runs in the background (via the system tray) and draws borderless, transparent, frameless windows on the desktop to represent user-created folders. It manages its own internal storage for dragged-and-dropped shortcuts.
+Pandora operates as a standalone desktop utility on the Windows operating system. It runs in the background (via the system tray) and draws borderless, transparent, frameless windows on the desktop to represent user-created folders. It manages its own internal storage for dragged-and-dropped shortcuts.
 
 ### 2.2 Product Functions
 * **Creation of Custom Folders**: Users can create multiple independent folder widgets on their desktop.

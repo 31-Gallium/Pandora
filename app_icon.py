@@ -147,7 +147,7 @@ class AppIcon(QWidget):
             mime = QMimeData()
             selected_apps_data = [a for a in self.parent_view.folder_data.get('apps', []) if a['path'] in self.parent_view.selected_apps]
             mime.setText(json.dumps(selected_apps_data))
-            mime.setData("application/x-cusfolder-app", self.parent_view.folder_data.get('id', '').encode())
+            mime.setData("application/x-pandora-app", self.parent_view.folder_data.get('id', '').encode())
 
             urls = []
             for app_data in selected_apps_data:

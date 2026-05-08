@@ -587,7 +587,7 @@ class FolderView(QWidget):
             self.hide_morph()
 
     def dragEnterEvent(self, e): 
-        if e.mimeData().hasFormat("application/x-cusfolder-app") or e.mimeData().hasUrls(): 
+        if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls(): 
             e.acceptProposedAction()
 
     def dragLeaveEvent(self, e): 
@@ -595,7 +595,7 @@ class FolderView(QWidget):
         self.refresh()
 
     def dragMoveEvent(self, e):
-        if e.mimeData().hasFormat("application/x-cusfolder-app") or e.mimeData().hasUrls():
+        if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls():
             e.acceptProposedAction()
             p = e.position().toPoint() - self.cw.pos()
             
@@ -635,8 +635,8 @@ class FolderView(QWidget):
 
         is_internal_move = False
 
-        if e.mimeData().hasFormat("application/x-cusfolder-app"):
-            sid = e.mimeData().data("application/x-cusfolder-app").data().decode()
+        if e.mimeData().hasFormat("application/x-pandora-app"):
+            sid = e.mimeData().data("application/x-pandora-app").data().decode()
             try:
                 dropped_apps = json.loads(e.mimeData().text())
                 if isinstance(dropped_apps, dict):
