@@ -1,6 +1,7 @@
 import os
 import json
 import shutil
+import math
 from PyQt6.QtWidgets import QWidget, QApplication
 from PyQt6.QtCore import Qt, QVariantAnimation, QEasingCurve, QPoint, QPointF, QRect, QRectF, QFileInfo, QPropertyAnimation
 from PyQt6.QtGui import QPainter, QColor, QRadialGradient, QAction, QPixmap, QPainterPath
@@ -10,6 +11,11 @@ from utils import WinAPI, IconExtractor, VectorIcon
 from ui_common import AnimatedMenu
 from folder_view import FolderView
 from app_icon import AppIcon
+from layout_logic import get_engine
+from ui_utils import draw_folder_thumbnail
+from logic import handle_app_drop
+import logging
+logger = logging.getLogger("Pandora")
 
 class FolderIcon(QWidget):
     def __init__(self, data, cfg, dashboard=None):
@@ -20,7 +26,7 @@ class FolderIcon(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool | Qt.WindowType.WindowStaysOnBottomHint)
         self.setFixedSize(300, 300)
-        self.move(data['pos'][0], data['pos'][1])
+        self.move(int(data['pos'][0]), int(data['pos'][1]))
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
         
@@ -44,28 +50,83 @@ class FolderIcon(QWidget):
         self.is_dragging = False
         self._suppress_restore = False
         self._desktop_init = False
+        self.movie = None
+        self.dsp = QPoint(0, 0)
+        self.wsp = self.pos()
+        self._update_movie()
         
         self.setMouseTracking(True)
         self.setAttribute(Qt.WidgetAttribute.WA_Hover)
 
+        # Paging State
+        self._page_idx = 0
+        self._next_page_idx = 0
+        self._page_direction = 1
+        self._page_anim_progress = 1.0
+        self.page_anim = QVariantAnimation(self)
+        self.page_anim.setDuration(400)
+        self.page_anim.setEasingCurve(QEasingCurve.Type.InOutCubic)
+        self.page_anim.setStartValue(0.0)
+        self.page_anim.setEndValue(1.0)
+        self.page_anim.valueChanged.connect(self._set_page_progress)
+        self.page_anim.finished.connect(self._on_page_anim_finished)
+
+    def _set_page_progress(self, v): self._page_anim_progress = v; self.update()
+    def _on_page_anim_finished(self): self._page_idx = self._next_page_idx; self._page_anim_progress = 1.0; self.update()
+
+    def wheelEvent(self, e):
+        if self._hover_progress < 0.5: return
+        apps = self.data.get('apps', [])
+        page_size = 7 if self.data.get('template_type') == 'flower' else 9
+        if len(apps) <= page_size: return
+        
+        delta = e.angleDelta().y()
+        if abs(delta) < 20: return
+        
+        direction = 1 if delta < 0 else -1
+        max_pages = (len(apps) + page_size - 1) // page_size
+        new_page = self._page_idx + direction
+        
+        if 0 <= new_page < max_pages:
+            if self.page_anim.state() != QVariantAnimation.State.Running:
+                self._page_direction = direction
+                self._next_page_idx = new_page
+                self.page_anim.start()
+
+    def _update_movie(self):
+        cp = self.data.get('cover_image')
+        if cp and cp.lower().endswith('.gif') and os.path.exists(cp):
+            if not self.movie or self.movie.fileName() != cp:
+                from PyQt6.QtGui import QMovie
+                self.movie = QMovie(cp)
+                self.movie.frameChanged.connect(lambda _: self.update())
+                self.movie.start()
+        elif self.movie:
+            self.movie.stop(); self.movie = None
+
     def get_setting(self, key, default):
-        preset = self.cfg.get('global_settings', {}).get('size_preset', 'Medium')
+        INSTANCE_KEYS = ('show_title', 'grid_snap', 'show_cover', 'title_color')
+        if key in INSTANCE_KEYS and key in self.data:
+            return self.data[key]
+        t_type = self.data.get('template_type', 'grid')
+        t_name = self.data.get('template_name', 'Default')
+        t_data = self.cfg.get('templates', {}).get(t_type, {}).get(t_name, {})
         use_custom = self.data.get('use_custom_settings', False)
         if use_custom:
+            val = self.data.get('custom_settings', {}).get(key)
+            if val is not None: return val
+        if key in t_data: return t_data[key]
+        preset = t_data.get('size_preset', 'Medium')
+        if use_custom:
             preset = self.data.get('custom_settings', {}).get('size_preset', preset)
-            
         SIZE_PRESETS = {
-            "Small": {"folder_size": 60, "mini_icon_size": 12, "font_size": 9, "expanded_icon_size": 32},
-            "Medium": {"folder_size": 80, "mini_icon_size": 16, "font_size": 10, "expanded_icon_size": 48},
-            "Large": {"folder_size": 110, "mini_icon_size": 24, "font_size": 12, "expanded_icon_size": 64}
+            "Small": {"folder_size": 60, "mini_icon_size": 20, "font_size": 9, "expanded_icon_size": 32},
+            "Medium": {"folder_size": 80, "mini_icon_size": 27, "font_size": 10, "expanded_icon_size": 48},
+            "Large": {"folder_size": 110, "mini_icon_size": 34, "font_size": 12, "expanded_icon_size": 64}
         }
-        
         if preset in SIZE_PRESETS and key in SIZE_PRESETS[preset]:
             return SIZE_PRESETS[preset][key]
-            
-        if use_custom:
-            return self.data.get('custom_settings', {}).get(key, self.cfg.get('global_settings', {}).get(key, default))
-        return self.cfg.get('global_settings', {}).get(key, default)
+        return self.cfg.get('general_settings', {}).get(key, default)
 
     def _set_scale(self, v): self._scale = v; self.update()
     def _set_hover_progress(self, v): self._hover_progress = v; self.update()
@@ -88,401 +149,198 @@ class FolderIcon(QWidget):
     def showEvent(self, e): 
         WinAPI.set_modern_visuals(self.winId(), False)
         WinAPI.allow_drag_drop(self.winId())
-        # Apply WorkerW trick slightly after show to prevent rendering glitches
         __import__('PyQt6.QtCore').QtCore.QTimer.singleShot(50, lambda: WinAPI.pin_to_workerw(self.winId()))
-
-    def _get_grid_params(self, hp=None):
-        if hp is None: hp = self._hover_progress
-        cx, cy = self.width() / 2, self.height() / 2
-        folder_size = self.get_setting('folder_size', 80)
-        mini_icon_size = self.get_setting('mini_icon_size', 16)
-        
-        isz = mini_icon_size + (11 * hp)
-        gap = (folder_size / 20) + ((folder_size / 5) * hp)
-        tl = 3 * isz + 2 * gap
-        gx, gy = cx - tl / 2, cy - tl / 2
-        
-        # Edge avoidance
-        scr = QApplication.primaryScreen().availableGeometry()
-        global_left, global_top = self.x() + gx, self.y() + gy
-        global_right, global_bottom = global_left + tl, global_top + tl
-        
-        if global_left < scr.left() + 5: gx += (scr.left() + 5 - global_left)
-        if global_right > scr.right() - 5: gx -= (global_right - (scr.right() - 5))
-        if global_top < scr.top() + 5: gy += (scr.top() + 5 - global_top)
-        if global_bottom > scr.bottom() - 5: gy -= (global_bottom - (scr.bottom() - 5))
-        
-        # Clamp to widget bounds
-        if gx < 10: gx = 10
-        elif gx + tl > 290: gx = 290 - tl
-        if gy < 10: gy = 10
-        elif gy + tl > 290: gy = 290 - tl
-        
-        return gx, gy, isz, gap, tl
 
     def paintEvent(self, e):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         p.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        
-        # Clean background fill with CompositionMode_Source to prevent ghosting
         p.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
         p.fillRect(self.rect(), Qt.GlobalColor.transparent)
         p.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
         
         cx, cy = self.width() / 2, self.height() / 2
-        folder_size = self.get_setting('folder_size', 80)
-        glow_intensity = self.get_setting('glow_intensity', 40)
-        glow_color = self.get_setting('glow_color', '#ffffff')
-        bg_color = self.get_setting('bg_color', '#141414')
-        opacity = self.get_setting('opacity', 80)
-        radius = self.get_setting('radius', 20)
         
-        if self._hover_progress > 0:
-            p.save()
-            p.setPen(Qt.PenStyle.NoPen)
-            glow_c = QColor(glow_color)
-            steps = 6
-            max_a = int(glow_intensity * self._hover_progress)
-            step_a = max(1, int(max_a / steps)) if steps > 0 else 0
-            glow_c.setAlpha(step_a)
-            p.setBrush(glow_c)
-            for i in range(steps, 0, -1):
-                offset = i * 4 * self._hover_progress
-                p.drawRoundedRect(QRectF(cx - folder_size / 2 - offset, 
-                                         cy - folder_size / 2 - offset, 
-                                         folder_size + offset * 2, 
-                                         folder_size + offset * 2), 
-                                  radius + offset / 2, radius + offset / 2)
-            p.restore()
-            
-        hover_zoom = 1.0 + (0.15 * self._hover_progress)
-        combined_scale = self._scale * hover_zoom
-        if combined_scale != 1.0: 
-            p.translate(cx, cy)
-            p.scale(combined_scale, combined_scale)
-            p.translate(-cx, -cy)
-            
-        if self._hover_progress > 0 or self.is_dragging:
-            p.save()
-            p.setPen(Qt.PenStyle.NoPen)
-            p.setBrush(QColor(0, 0, 0, int(15 * self._hover_progress)))
-            for i in range(6, 0, -1):
-                offset = i * 2 * self._hover_progress
-                p.drawRoundedRect(QRectF(cx - folder_size / 2 - offset, 
-                                         cy - folder_size / 2 - offset + 3, 
-                                         folder_size + offset * 2, 
-                                         folder_size + offset * 2), 
-                                  radius + offset / 2, radius + offset / 2)
-            p.restore()
-        
-        c = QColor(glow_color)
-        c.setAlpha(30)
-        bg_c = QColor(bg_color)
-        bg_c.setAlpha(opacity)
-        p.setBrush(bg_c)
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawRoundedRect(QRectF(cx - folder_size / 2, cy - folder_size / 2, folder_size, folder_size).adjusted(0.5, 0.5, -0.5, -0.5), radius, radius)
-        
-        draw_grid = True
-        show_cover = self.get_setting('show_cover', False)
-        cover_path = self.data.get('cover_image')
-        
-        if show_cover:
-            pixmap = None
-            if cover_path and os.path.exists(cover_path):
-                pixmap = QPixmap(cover_path)
-            else:
-                # Use default thumbnail
-                pixmap = VectorIcon.icon("folders", "#ffffff").pixmap(256, 256)
-                
-            if pixmap and not pixmap.isNull():
-                path = QPainterPath()
-                path.addRoundedRect(QRectF(cx - folder_size / 2, cy - folder_size / 2, folder_size, folder_size), radius, radius)
-                p.setClipPath(path)
-                
-                blur_amount = self.get_setting('cover_blur', 0)
-                if blur_amount > 0:
-                    scale_factor = max(4, int(32 - (blur_amount / 100.0) * 28))
-                    pixmap = pixmap.scaled(scale_factor, scale_factor, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-                    
-                cover_opacity = self.get_setting('cover_opacity', 100) / 100.0
-                p.setOpacity((1.0 - self._hover_progress) * cover_opacity)
-                
-                scaled_pixmap = pixmap.scaled(int(folder_size), int(folder_size), Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-                px, py = cx - folder_size / 2 + (folder_size - scaled_pixmap.width()) / 2.0, cy - folder_size / 2 + (folder_size - scaled_pixmap.height()) / 2.0
-                p.drawPixmap(int(px), int(py), scaled_pixmap)
-                p.setClipping(False)
-                p.setOpacity(1.0)
-                if self._hover_progress <= 0: draw_grid = False
-                else: p.setOpacity(self._hover_progress)
+        # Apply Pulse Scale
+        if self._scale != 1.0:
+            p.translate(cx, cy); p.scale(self._scale, self._scale); p.translate(-cx, -cy)
 
-        if draw_grid:
-            gx, gy, isz, gap, tl = self._get_grid_params()
-            apps = self.data.get('apps', [])[:9]
-            for i, a in enumerate(apps):
-                r, c_idx = i // 3, i % 3
-                x, y = gx + c_idx * (isz + gap), gy + r * (isz + gap)
-                raw_pix = IconExtractor.get_icon_pixmap(a['path'], int(isz))
-                if not raw_pix.isNull():
-                    scaled_pix = raw_pix.scaled(int(isz), int(isz), Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
-                    p.drawPixmap(int(x), int(y), int(isz), int(isz), scaled_pix)
-            p.setOpacity(1.0)
-            
-        p.resetTransform()
+        # Refresh movie if path changed, then inject GIF frame if active
+        self._update_movie()
+        if self.movie: self.data['_current_cover_frame'] = self.movie.currentPixmap()
+        else: self.data.pop('_current_cover_frame', None)
+
+        draw_folder_thumbnail(p, self.rect(), self.data, self.cfg, 
+                              hover_progress=self._hover_progress,
+                              paging_params={
+                                  'page': self._page_idx, 
+                                  'next_page': self._next_page_idx, 
+                                  'progress': self._page_anim_progress,
+                                  'direction': self._page_direction
+                              })
+        
         if self.get_setting('show_title', True):
+            p.resetTransform() # Reset for text so it doesn't zoom too much
             title_color = QColor(self.get_setting('title_color', '#ffffff'))
             title_color.setAlpha(int(title_color.alpha() * (1.0 - self._hover_progress)))
             p.setPen(title_color)
+            folder_size = self.get_setting('folder_size', 80)
             p.drawText(QRect(0, int(cy + folder_size / 2 + 3), 300, 20), Qt.AlignmentFlag.AlignCenter, self.data['name'])
 
+    def get_app_at_pos(self, pos):
+        cx, cy = self.width() / 2, self.height() / 2
+        folder_size = self.get_setting('folder_size', 80)
+        mini_icon_size = self.get_setting('mini_icon_size', 18)
+        t_type = self.data.get('template_type', 'grid')
+        engine = get_engine(t_type)
+        apps = self.data.get('apps', [])
+        
+        # Account for paging in hit detection
+        page_size = 7 if t_type == 'flower' else 9
+        start_idx = self._page_idx * page_size
+        current_apps = apps[start_idx : start_idx + page_size]
+
+        pos_list = engine.get_collapsed_positions(cx, cy, folder_size, mini_icon_size, len(current_apps), self._hover_progress)
+        isz = mini_icon_size * (1.0 + 0.5 * self._hover_progress)
+        for i, p_pos in enumerate(pos_list):
+            if i >= len(current_apps): break
+            r = QRectF(p_pos.x() + (mini_icon_size - isz) / 2, p_pos.y() + (mini_icon_size - isz) / 2, isz, isz)
+            if r.contains(QPointF(pos)): return current_apps[i]
+        return None
+
     def mousePressEvent(self, e):
-        if e.button() == Qt.MouseButton.LeftButton: 
+        # We handle the 'press' mainly for drag-start detection.
+        # But for Right Click to work as a configurable action, we need to store the start pos.
+        if e.button() in (Qt.MouseButton.LeftButton, Qt.MouseButton.MiddleButton, Qt.MouseButton.RightButton): 
             self.dsp = e.globalPosition().toPoint()
             self.wsp = self.pos()
 
     def mouseReleaseEvent(self, e):
-        self.is_dragging = False
-        if self.rect().contains(e.pos()):
-            self.hover_anim.setDirection(QVariantAnimation.Direction.Forward)
-            self.hover_anim.start()
+        if self.is_dragging:
+            if self.dashboard and hasattr(self.dashboard, 'grid_overlay'):
+                self.dashboard.grid_overlay.set_drag_state(False, pos=e.globalPosition().toPoint())
+                if self.get_setting('grid_snap', False):
+                    snapped = self.dashboard.grid_overlay.get_snap_pos(e.globalPosition().toPoint())
+                    if snapped:
+                        target_np = QPoint(int(snapped.x() - self.width()/2), int(snapped.y() - self.height()/2))
+                        self.snap_anim = QPropertyAnimation(self, b"pos"); self.snap_anim.setDuration(400); self.snap_anim.setEasingCurve(QEasingCurve.Type.OutBack); self.snap_anim.setEndValue(target_np); self.snap_anim.start()
+                        self.data['pos'] = [target_np.x(), target_np.y()]
+                else: self.data['pos'] = [self.pos().x(), self.pos().y()]
+            ConfigManager.save(self.cfg); self.is_dragging = False
+        elif hasattr(self, 'dsp') and (e.globalPosition().toPoint() - self.dsp).manhattanLength() < 5:
+            gs = self.cfg.get('general_settings', {})
+            kb = gs.get('keybinds', {"launch_app": 1, "open_folder": 4, "show_menu": 2})
+            btn = e.button().value
+            
+            # Prioritization logic for collisions: Launch > Open > Menu
+            if btn == kb.get('launch_app'):
+                app = self.get_app_at_pos(e.pos())
+                if app and os.path.exists(app['path']): 
+                    os.startfile(app['path'])
+                    return
+                else:
+                    # Fallback to Open Folder if they clicked Launch App but missed
+                    if not hasattr(self, 'view') or self.view.isHidden():
+                        self.view = FolderView(self.data, self); self.view.show_morph(self.geometry())
+                    return
 
-        if e.button() == Qt.MouseButton.LeftButton and hasattr(self, 'dsp') and (e.globalPosition().toPoint() - self.dsp).manhattanLength() < 5: 
-            if e.modifiers() & Qt.KeyboardModifier.AltModifier:
-                # Alt-click detected. Assume fully fanned out.
-                hp = 1.0 if self._hover_progress < 0.5 else self._hover_progress
-                
-                gx, gy, isz, gap, tl = self._get_grid_params(hp)
-                cx, cy = self.width() / 2, self.height() / 2
-                
-                hover_zoom = 1.0 + (0.15 * hp)
-                combined_scale = self._scale * hover_zoom
-                
-                lp = e.position()
-
-                apps = self.data.get('apps', [])[:9]
-                for i, a in enumerate(apps):
-                    r, c_idx = i // 3, i % 3
-                    
-                    logical_x = gx + c_idx * (isz + gap)
-                    logical_y = gy + r * (isz + gap)
-                    
-                    visual_x = cx + (logical_x - cx) * combined_scale
-                    visual_y = cy + (logical_y - cy) * combined_scale
-                    visual_size = isz * combined_scale
-                    
-                    # 5px padding on all sides
-                    hit_box = QRectF(visual_x - 5, visual_y - 5, visual_size + 10, visual_size + 10)
-                    
-                    if hit_box.contains(lp):
-                        if os.path.exists(a['path']): os.startfile(a['path'])
-                        return
-            FolderView(self.data, self).show_morph(self.geometry())
-        elif e.button() == Qt.MouseButton.LeftButton and hasattr(self, 'dsp'):
-            if self.get_setting('grid_snap', False):
-                grid_size = self.cfg.get('global_settings', {}).get('grid_size', 110)
-                if grid_size > 0:
-                    cx = self.x() + 150
-                    cy = self.y() + 150
-                    
-                    def get_snap_pos(x, y):
-                        scr_c = QApplication.primaryScreen().availableGeometry().center()
-                        nx = scr_c.x() + round((x - scr_c.x()) / grid_size) * grid_size
-                        ny = scr_c.y() + round((y - scr_c.y()) / grid_size) * grid_size
-                        return nx, ny
-                    
-                    target_gx, target_gy = get_snap_pos(cx, cy)
-                    
-                    fs = self.get_setting('folder_size', 80)
-                    edge_padding = self.cfg.get('global_settings', {}).get('edge_padding', 15)
-                    margin = fs / 2 + edge_padding
-                    scr = QApplication.primaryScreen().availableGeometry()
-                    safe_rect = scr.adjusted(int(margin), int(margin), -int(margin), -int(margin))
-                    
-                    def is_valid_and_unoccupied(gx, gy, exclude_id):
-                        if not safe_rect.contains(QPoint(int(gx), int(gy))):
-                            return False
-                        if not self.dashboard: return True
-                        for w in self.dashboard.app_instances:
-                            if w.data.get('id') == exclude_id: continue
-                            # If the widget is animating, check its target
-                            if hasattr(w, 'anim_move') and w.anim_move.state() == QPropertyAnimation.State.Running:
-                                end_val = w.anim_move.endValue()
-                                wgx, wgy = get_snap_pos(end_val.x() + 150, end_val.y() + 150)
-                            else:
-                                wgx, wgy = get_snap_pos(w.x() + 150, w.y() + 150)
-                            if gx == wgx and gy == wgy:
-                                return False
-                        return True
-                        
-                    # Spiral search for the nearest valid and empty slot
-                    spiral_dx = [0, 1, 0, -1]
-                    spiral_dy = [-1, 0, 1, 0]
-                    step = 0
-                    dir_idx = 0
-                    steps_in_dir = 1
-                    curr_gx, curr_gy = target_gx, target_gy
-                    
-                    while not is_valid_and_unoccupied(curr_gx, curr_gy, self.data.get('id')) and step < 200:
-                        curr_gx += spiral_dx[dir_idx] * grid_size
-                        curr_gy += spiral_dy[dir_idx] * grid_size
-                        step += 1
-                        if step % steps_in_dir == 0:
-                            dir_idx = (dir_idx + 1) % 4
-                            if dir_idx % 2 == 0:
-                                steps_in_dir += 1
-                                
-                    nx = curr_gx - 150
-                    ny = curr_gy - 150
-                    
-                    self.anim_move = QPropertyAnimation(self, b"pos")
-                    self.anim_move.setDuration(150)
-                    self.anim_move.setEasingCurve(QEasingCurve.Type.OutQuad)
-                    self.anim_move.setEndValue(QPoint(int(nx), int(ny)))
-                    self.anim_move.finished.connect(lambda: (self.data.update({'pos': [self.x(), self.y()]}), ConfigManager.save(self.cfg)))
-                    self.anim_move.start()
+            if btn == kb.get('open_folder'):
+                if not hasattr(self, 'view') or self.view.isHidden():
+                    self.view = FolderView(self.data, self); self.view.show_morph(self.geometry())
+            elif btn == kb.get('show_menu'):
+                self.show_context_menu(e.globalPosition().toPoint())
+        
+        self.local_mouse_pos = QPoint(150, 150); self.update()
 
     def mouseMoveEvent(self, e):
         if e.buttons() & Qt.MouseButton.LeftButton:
-            if self.data.get('locked', False): return
-            
-            # Collapse grid smoothly while dragging
-            if not self.is_dragging:
+            if not self.is_dragging and (e.globalPosition().toPoint() - self.dsp).manhattanLength() > 10:
                 self.is_dragging = True
-                if self._hover_progress > 0:
-                    self.hover_anim.setDirection(QVariantAnimation.Direction.Backward)
-                    self.hover_anim.start()
-                
-            if hasattr(self, 'wsp') and hasattr(self, 'dsp'):
-                np = self.wsp + e.globalPosition().toPoint() - self.dsp
-            else:
-                np = self.pos() + e.pos() - QPoint(150, 150)
-            scr = QApplication.primaryScreen().availableGeometry()
-            fs = self.get_setting('folder_size', 80)
-            min_x = scr.left() - 150 + fs / 2
-            max_x = scr.right() - 150 - fs / 2
-            min_y = scr.top() - 150 + fs / 2
-            max_y = scr.bottom() - 150 - fs / 2
-            nx, ny = max(min_x, min(np.x(), max_x)), max(min_y, min(np.y(), max_y))
-            self.move(int(nx), int(ny))
-            self.data['pos'] = [self.x(), self.y()]
-            ConfigManager.save(self.cfg)
-        elif e.buttons() == Qt.MouseButton.NoButton:
-            self.local_mouse_pos = e.position().toPoint()
-            if self._hover_progress > 0: self.update()
+                if hasattr(self, 'snap_anim'): self.snap_anim.stop()
+                if self.dashboard and hasattr(self.dashboard, 'grid_overlay'):
+                    self.dashboard.grid_overlay.set_drag_state(True)
+            
+            if self.is_dragging:
+                delta = e.globalPosition().toPoint() - self.dsp
+                np = self.wsp + delta
+                self.move(np)
+        
+        self.local_mouse_pos = e.pos()
+        self.update()
 
-    def contextMenuEvent(self, e):
-        m = AnimatedMenu(self)
-        l = QAction("Launch All", self); l.triggered.connect(self.launch_all); m.addAction(l)
-        if self.dashboard:
-            s = QAction("Settings", self); s.triggered.connect(lambda: self.dashboard.show_folder(self.data['id'])); m.addAction(s)
-        d = QAction("Delete", self); d.triggered.connect(self.delete_folder); m.addAction(d)
-        m.exec(e.globalPos())
-
-    def launch_all(self):
-        for app in self.data.get('apps', []):
-            try:
-                if os.path.exists(app.get('path', '')): os.startfile(app['path'])
-            except: pass
-
-    def delete_folder(self): 
-        self._is_deleted = True
-        self._suppress_restore = True
-        from utils import DesktopMonitor
-        DesktopMonitor.unregister(self)
-        WinAPI.unregister_appbar(self.winId())
-        self.cfg['folders'].remove(self.data)
-        ConfigManager.save(self.cfg)
-        if self.dashboard:
-            self.dashboard.handle_folder_deleted(self)
-        self.hide()
-        self.deleteLater()
-    def dragEnterEvent(self, e): 
-        if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls(): e.acceptProposedAction()
-    def dragMoveEvent(self, e): e.acceptProposedAction()
-    
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasUrls(): e.acceptProposedAction()
     def dropEvent(self, e):
         if e.mimeData().hasFormat("application/x-pandora-app"):
-            sid = e.mimeData().data("application/x-pandora-app").data().decode()
-            try:
-                dropped_apps = json.loads(e.mimeData().text())
-                if isinstance(dropped_apps, dict):
-                    dropped_apps = [dropped_apps]
-            except json.JSONDecodeError:
-                dropped_apps = []
-
-            for ad in dropped_apps:
-                ad['pinned'] = False
-                if isinstance(e.source(), AppIcon): e.source().is_internal = True
-                for f in self.cfg['folders']:
-                    if f['id'] == sid: f['apps'] = [a for a in f['apps'] if a['path'] != ad['path']]; break
-                self.data['apps'].append(ad)
-                
-            ConfigManager.save(self.cfg)
-            if self.data.get('sort_type', 'name') != 'custom':
-                self.apply_sort_logic()
-            self.update()
-            self.trigger_pulse()
-            e.acceptProposedAction()
+            success, _ = handle_app_drop(self.cfg, self.data, e.mimeData(), e.source(), False, 0, self.dashboard)
+            if success:
+                ConfigManager.save(self.cfg)
+                if hasattr(self, 'view') and self.view:
+                    self.view.refresh()
+                self.update()
+                self.trigger_pulse()
+                e.acceptProposedAction()
             return
-        for u in e.mimeData().urls():
-            s = u.toLocalFile()
-            d = os.path.join(STORAGE_PATH, os.path.basename(s))
-            try: 
-                shutil.move(s, d)
-                self.data['apps'].append({"name": QFileInfo(d).baseName(), "path": d, "pinned": False})
-            except: pass
-        ConfigManager.save(self.cfg)
-        if self.data.get('sort_type', 'name') != 'custom':
-            self.apply_sort_logic()
-        self.update()
-        self.trigger_pulse()
-        e.acceptProposedAction()
 
-    def apply_sort_logic(self):
-        rev = self.data.get('sort_order', 'asc') == 'desc'
-        st = self.data.get('sort_type', 'name')
-        def sk(app):
-            p = app.get('path', '')
-            info = QFileInfo(p)
-            name_key = app.get('name', '').lower()
-            if st == 'extension':
-                if info.isDir(): return (0, '_folder', name_key)
-                ext = info.suffix().lower()
-                is_folder_link = False
-                if ext == 'lnk':
-                    try:
-                        import win32com.client
-                        shell = win32com.client.Dispatch("WScript.Shell")
-                        shortcut = shell.CreateShortCut(p)
-                        target = shortcut.TargetPath
-                        if target:
-                            target_info = QFileInfo(target)
-                            is_folder_link = target_info.isDir()
-                            ext = '_folder' if is_folder_link else target_info.suffix().lower()
-                    except: pass
-                elif ext == 'url':
-                    try:
-                        with open(p, 'r', encoding='utf-8', errors='ignore') as f:
-                            for line in f:
-                                if line.startswith('URL='):
-                                    url_val = line.strip().split('=', 1)[1]
-                                    if url_val.startswith('file:///'): url_val = url_val[8:]
-                                    elif url_val.startswith('steam://') or url_val.startswith('com.epicgames'): ext = 'game'; break
-                                    target_info = QFileInfo(url_val)
-                                    is_folder_link = target_info.isDir()
-                                    ext = '_folder' if is_folder_link else target_info.suffix().lower()   
-                                    break
-                    except: pass
-                return (0 if is_folder_link else 1, ext, name_key)
-            if st == 'size': return (0, info.size(), name_key)
-            if st == 'date': return (0, info.lastModified().toMSecsSinceEpoch(), name_key)
-            if st == 'recent':
-                bt = info.birthTime().toMSecsSinceEpoch() if info.birthTime().isValid() else info.lastModified().toMSecsSinceEpoch()
-                return (0, bt, name_key)
-            return (0, name_key, "")
+        new_apps = []
+        target_storage = os.path.join(STORAGE_PATH, self.data['id'])
+        if not os.path.exists(target_storage): os.makedirs(target_storage)
+        
+        for url in e.mimeData().urls():
+            s = url.toLocalFile()
+            if os.path.exists(s):
+                bn = os.path.basename(s)
+                d = os.path.join(target_storage, bn)
+                
+                # Collision handling within THIS folder
+                if os.path.exists(d):
+                    name_part, ext_part = os.path.splitext(bn)
+                    counter = 1
+                    while os.path.exists(os.path.join(target_storage, f"{name_part} ({counter}){ext_part}")):
+                        counter += 1
+                    d = os.path.join(target_storage, f"{name_part} ({counter}){ext_part}")
 
-        p = [a for a in self.data.get('apps', []) if a.get('pinned')]
-        u = [a for a in self.data.get('apps', []) if not a.get('pinned')]
-        self.data['apps'] = sorted(p, key=sk, reverse=rev) + sorted(u, key=sk, reverse=rev)
+                try:
+                    shutil.move(s, d)
+                    fi = QFileInfo(d)
+                    name = fi.completeBaseName() if fi.isFile() else os.path.basename(d)
+                    if not name: name = os.path.basename(d)
+                    new_apps.append({"name": name, "path": d, "pinned": False})
+                except Exception as ex:
+                    logger.error(f"FolderIcon drop error: {ex}")
+        
+        if new_apps:
+            self.data['apps'].extend(new_apps)
+            ConfigManager.save(self.cfg)
+            self.trigger_pulse()
+            self.update()
+
+    def contextMenuEvent(self, e):
+        # We don't trigger here if it's already handled in mouseReleaseEvent.
+        # But we keep it for standard context menu triggers.
+        gs = self.cfg.get('general_settings', {})
+        if gs.get('right_click_action') == 'Show Menu':
+            self.show_context_menu(e.globalPos())
+
+    def show_context_menu(self, pos):
+        m = AnimatedMenu(self)
+        s = QAction("Settings", self); s.triggered.connect(self.open_settings); m.addAction(s)
+        t = QAction("Change Template", self); m.addAction(t)
+        tm = AnimatedMenu(self); t.setMenu(tm)
+        t_type = self.data.get('template_type', 'grid')
+        for name in self.cfg.get('templates', {}).get(t_type, {}).keys():
+            ta = QAction(name, self); ta.triggered.connect(lambda _, n=name: self.set_template(n))
+            if name == self.data.get('template_name', 'Default'): ta.setIcon(VectorIcon.icon("check", "#50FA7B"))
+            tm.addAction(ta)
+        r = QAction("Remove Folder", self); r.triggered.connect(self.remove_self); m.addAction(r)
+        m.exec(pos)
+
+    def open_settings(self):
+        if self.dashboard: self.dashboard.show_folder(self.data['id'])
+    def set_template(self, name):
+        self.data['template_name'] = name; ConfigManager.save(self.cfg); self.update()
+    def remove_self(self):
+        self.cfg['folders'] = [f for f in self.cfg['folders'] if f['id'] != self.data['id']]
         ConfigManager.save(self.cfg)
+        if self.dashboard: self.dashboard.handle_folder_deleted(self)
+        self.close()

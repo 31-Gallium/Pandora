@@ -1,9 +1,9 @@
 import os
 import ctypes
 from ctypes import wintypes
-from PyQt6.QtCore import Qt, QFileInfo, QSize, QRect
+from PyQt6.QtCore import Qt, QFileInfo, QSize, QRect, QRectF, QObject, pyqtSignal, QVariantAnimation, QEasingCurve
 from PyQt6.QtGui import QPixmap, QColor, QPainter, QPen, QIcon, QImage
-from PyQt6.QtWidgets import QFileIconProvider
+from PyQt6.QtWidgets import QFileIconProvider, QApplication
 from config import logger
 
 # ==========================================
@@ -52,6 +52,24 @@ class WinAPI:
             ctypes.windll.shell32.SHAppBarMessage(0, ctypes.byref(abd)) # ABM_NEW = 0
         except Exception as e:
             logger.error(f"WinAPI register_appbar error: {e}")
+
+    @staticmethod
+    def unregister_appbar(hwnd):
+        try:
+            from ctypes import wintypes
+            class APPBARDATA(ctypes.Structure):
+                _fields_ = [("cbSize", wintypes.DWORD),
+                            ("hWnd", wintypes.HWND),
+                            ("uCallbackMessage", wintypes.UINT),
+                            ("uEdge", wintypes.UINT),
+                            ("rc", wintypes.RECT),
+                            ("lParam", wintypes.LPARAM)]
+            abd = APPBARDATA()
+            abd.cbSize = ctypes.sizeof(APPBARDATA)
+            abd.hWnd = int(hwnd)
+            ctypes.windll.shell32.SHAppBarMessage(1, ctypes.byref(abd)) # ABM_REMOVE = 1
+        except Exception as e:
+            logger.error(f"WinAPI unregister_appbar error: {e}")
 
     @staticmethod
     def pin_to_workerw(hwnd):
@@ -181,9 +199,210 @@ class IconExtractor:
 
         return IconExtractor._cache[norm_path]
 
+_volume_interface = None
+_mute_cache = {'state': False, 'last_check': 0}
+
+def get_system_mute():
+    global _volume_interface
+    import time
+    now = time.time()
+    if now - _mute_cache['last_check'] < 0.3: # Faster check
+        return _mute_cache['state']
+        
+    try:
+        import pythoncom
+        pythoncom.CoInitialize()
+        if _volume_interface is None:
+            from pycaw.pycaw import AudioUtilities
+            devices = AudioUtilities.GetSpeakers()
+            _volume_interface = devices.EndpointVolume
+        
+        is_muted = (_volume_interface.GetMute() == 1)
+        if not is_muted:
+            is_muted = (_volume_interface.GetMasterVolumeLevelScalar() < 0.01)
+            
+        if is_muted != _mute_cache['state']:
+            print(f"DEBUG: Mute state changed to: {is_muted}")
+            
+        _mute_cache['state'] = is_muted
+        _mute_cache['last_check'] = now
+    except Exception as e:
+        print(f"MUTE ERROR: {e}")
+        _volume_interface = None # Reset on error to try re-init next time
+        
+    return _mute_cache['state']
+
+def change_system_volume(delta):
+    global _volume_interface
+    try:
+        import pythoncom
+        pythoncom.CoInitialize()
+        if _volume_interface is None:
+            from pycaw.pycaw import AudioUtilities
+            devices = AudioUtilities.GetSpeakers()
+            _volume_interface = devices.EndpointVolume
+            
+        current = _volume_interface.GetMasterVolumeLevelScalar()
+        new_vol = max(0.0, min(1.0, current + delta))
+        _volume_interface.SetMasterVolumeLevelScalar(new_vol, None)
+        # Clear cache to force immediate update
+        _mute_cache['last_check'] = 0
+        return True
+    except Exception as e:
+        print(f"VOL ERROR: {e}")
+        _volume_interface = None
+        return False
+
+def get_system_volume_level():
+    global _volume_interface
+    try:
+        import pythoncom
+        pythoncom.CoInitialize()
+        if _volume_interface is None:
+            from pycaw.pycaw import AudioUtilities
+            devices = AudioUtilities.GetSpeakers()
+            _volume_interface = devices.EndpointVolume
+        return _volume_interface.GetMasterVolumeLevelScalar()
+    except:
+        return 0.0
+
+def get_battery_info():
+    try:
+        import psutil
+        battery = psutil.sensors_battery()
+        if battery:
+            return battery.percent, battery.power_plugged
+        return 100, True
+    except:
+        return 100, True
+
+
+# ==========================================
+# 4. DISPLAY EFFECTS ENGINE (SOLID STATE)
+# ==========================================
+class DisplayEffectsEngine(QObject):
+    """
+    Pandora's internal hardware-accelerated screen filter engine.
+    Uses WinAPI Gamma Ramps for zero-latency, anti-cheat-safe visual effects.
+    """
+    _instance = None
+    
+    @staticmethod
+    def instance():
+        if DisplayEffectsEngine._instance is None:
+            DisplayEffectsEngine._instance = DisplayEffectsEngine()
+        return DisplayEffectsEngine._instance
+
+    def __init__(self):
+        super().__init__()
+        self._original_ramp = self.get_current_ramp()
+        self._current_intensity = 0.0
+        self._target_intensity = 0.0
+        self._active_preset = "Sunset"
+        self._is_enabled = False
+        
+        self.anim = QVariantAnimation(self)
+        self.anim.setDuration(300)
+        self.anim.setEasingCurve(QEasingCurve.Type.OutQuad)
+        self.anim.valueChanged.connect(self._apply_frame)
+
+    def get_current_ramp(self):
+        try:
+            hdc = ctypes.windll.user32.GetDC(0)
+            ramp = (wintypes.WORD * 768)()
+            if ctypes.windll.gdi32.GetDeviceGammaRamp(hdc, ctypes.byref(ramp)):
+                ctypes.windll.user32.ReleaseDC(0, hdc)
+                return bytes(ramp)
+            ctypes.windll.user32.ReleaseDC(0, hdc)
+        except: pass
+        return None
+
+    def restore_original(self):
+        if self._original_ramp:
+            hdc = ctypes.windll.user32.GetDC(0)
+            ramp = (wintypes.WORD * 768).from_buffer_copy(self._original_ramp)
+            ctypes.windll.gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
+            ctypes.windll.user32.ReleaseDC(0, hdc)
+
+    def set_enabled(self, enabled, instant=False):
+        self._is_enabled = enabled
+        target = 1.0 if enabled else 0.0
+        if instant:
+            self._current_intensity = target
+            self._apply_frame(target)
+        else:
+            self.anim.stop()
+            self.anim.setStartValue(self._current_intensity)
+            self.anim.setEndValue(target)
+            self.anim.start()
+
+    def set_intensity(self, val):
+        """Sets the warmth intensity (0.0 to 1.0)"""
+        self._target_intensity = max(0.0, min(1.0, val))
+        if self._is_enabled:
+            self._current_intensity = self._target_intensity
+            self._apply_frame(self._current_intensity)
+
+    def set_preset(self, name):
+        self._active_preset = name
+        if self._is_enabled:
+            self._apply_frame(self._current_intensity)
+
+    def _apply_frame(self, intensity):
+        self._current_intensity = intensity
+        if intensity <= 0.001 and not self._is_enabled:
+            self.restore_original()
+            return
+
+        # Preset Multipliers [Blue Reduction, Green Reduction]
+        presets = {
+            "Reading": [0.45, 0.75],
+            "Sunset": [0.60, 0.85],
+            "Movie": [0.85, 0.95],
+            "Eye Saver": [0.75, 0.90]
+        }
+        b_mul, g_mul = presets.get(self._active_preset, [0.60, 0.85])
+        
+        # Scale by intensity
+        b_final = 1.0 - (1.0 - b_mul) * intensity
+        g_final = 1.0 - (1.0 - g_mul) * intensity
+        
+        ramp = (wintypes.WORD * 768)()
+        for i in range(256):
+            v = i * 256
+            ramp[i] = v                   # Red
+            ramp[i + 256] = int(v * g_final) # Green
+            ramp[i + 512] = int(v * b_final) # Blue
+            
+        hdc = ctypes.windll.user32.GetDC(0)
+        ctypes.windll.gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
+        ctypes.windll.user32.ReleaseDC(0, hdc)
+
+# Global helper for cleanup
+def restore_display_effects():
+    if DisplayEffectsEngine._instance:
+        DisplayEffectsEngine.instance().restore_original()
+
 class VectorIcon:
     @staticmethod
     def icon(name, color="#ffffff"):
+        actual_name = name
+        if name == "mute":
+            # If muted, show 'unmute' icon. If unmuted, show 'mute' icon.
+            actual_name = "unmute" if get_system_mute() else "mute"
+            
+        svg_path = actual_name
+        if not (svg_path.endswith(".svg") and os.path.exists(svg_path)):
+            svg_path = os.path.join("assets", f"{actual_name}.svg")
+            
+        if os.path.exists(svg_path):
+            from PyQt6.QtSvg import QSvgRenderer
+            renderer = QSvgRenderer(svg_path)
+            if renderer.isValid():
+                pix = QPixmap(64, 64); pix.fill(Qt.GlobalColor.transparent); p = QPainter(pix)
+                renderer.render(p, QRectF(pix.rect())); p.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn); p.fillRect(pix.rect(), QColor(color)); p.end()
+                return QIcon(pix)
+            
         pix = QPixmap(32, 32); pix.fill(Qt.GlobalColor.transparent); p = QPainter(pix)
         p.setRenderHint(QPainter.RenderHint.Antialiasing); p.setPen(QPen(QColor(color), 2))
         if name=="search": p.drawEllipse(7, 7, 12, 12); p.drawLine(18, 18, 24, 24)
@@ -198,4 +417,6 @@ class VectorIcon:
         elif name=="back": p.drawLine(20, 8, 12, 16); p.drawLine(12, 16, 20, 24); p.drawLine(12, 16, 28, 16)
         elif name=="settings": p.drawEllipse(10, 10, 12, 12); p.drawLine(16, 4, 16, 8); p.drawLine(16, 24, 16, 28); p.drawLine(4, 16, 8, 16); p.drawLine(24, 16, 28, 16); p.drawLine(8, 8, 11, 11); p.drawLine(21, 21, 24, 24); p.drawLine(24, 8, 21, 11); p.drawLine(8, 24, 11, 21)
         elif name=="folders": p.drawRect(6, 12, 20, 14); p.drawRect(6, 8, 8, 4)
+        elif name=="template": p.drawRect(6, 6, 20, 20); p.drawLine(6, 12, 26, 12); p.drawLine(13, 12, 13, 26)
+        elif name=="upload": p.drawLine(16, 8, 16, 24); p.drawLine(16, 8, 10, 14); p.drawLine(16, 8, 22, 14); p.drawLine(10, 24, 22, 24)
         p.end(); return QIcon(pix)

@@ -1,4 +1,5 @@
 import os
+import math
 import json
 import shutil
 import time
@@ -6,10 +7,12 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton
 from PyQt6.QtCore import Qt, QEvent, QVariantAnimation, QEasingCurve, QFileInfo, QPoint, QPropertyAnimation, QRectF, QRect
 from PyQt6.QtGui import QColor, QPainter, QPen, QAction
 
-from config import ConfigManager, DESKTOP_PATH, STORAGE_PATH
-from utils import WinAPI, VectorIcon
+from config import ConfigManager, STORAGE_PATH, DESKTOP_PATH
+from utils import WinAPI, IconExtractor, VectorIcon
 from ui_common import AnimatedMenu
 from app_icon import AppIcon
+from layout_logic import get_engine
+from logic import handle_app_drop
 
 class FolderView(QWidget):
     def __init__(self, data, parent_icon, parent=None):
@@ -116,23 +119,39 @@ class FolderView(QWidget):
         self.morph.finished.connect(self._morph_finished)
 
     def get_setting(self, key, default):
-        preset = self.cfg.get('global_settings', {}).get('size_preset', 'Medium')
+        # 1. Template Resolution (Base for everything)
+        t_type = self.folder_data.get('template_type', 'grid')
+        t_name = self.folder_data.get('template_name', 'Default')
+        t_data = self.cfg.get('templates', {}).get(t_type, {}).get(t_name, {})
+
+        # 2. Instance Level Properties (Highest priority for specific toggles)
+        INSTANCE_KEYS = ('show_title', 'grid_snap', 'show_cover', 'title_color')
+        if key in INSTANCE_KEYS and key in self.folder_data:
+            return self.folder_data[key]
+        
+        # 3. Custom Styling Overrides (If enabled)
         use_custom = self.folder_data.get('use_custom_settings', False)
+        if use_custom:
+            val = self.folder_data.get('custom_settings', {}).get(key)
+            if val is not None: return val
+            
+        # 4. Check Template Data
+        if key in t_data: return t_data[key]
+        
+        # 5. Fallback to General Defaults / Size Presets
+        preset = t_data.get('size_preset', 'Medium')
         if use_custom:
             preset = self.folder_data.get('custom_settings', {}).get('size_preset', preset)
             
         SIZE_PRESETS = {
-            "Small": {"folder_size": 60, "mini_icon_size": 12, "font_size": 9, "expanded_icon_size": 32},
-            "Medium": {"folder_size": 80, "mini_icon_size": 16, "font_size": 10, "expanded_icon_size": 48},
-            "Large": {"folder_size": 110, "mini_icon_size": 24, "font_size": 12, "expanded_icon_size": 64}
+            "Small": {"folder_size": 60, "mini_icon_size": 20, "font_size": 9, "expanded_icon_size": 32},
+            "Medium": {"folder_size": 80, "mini_icon_size": 27, "font_size": 10, "expanded_icon_size": 48},
+            "Large": {"folder_size": 110, "mini_icon_size": 34, "font_size": 12, "expanded_icon_size": 64}
         }
-        
         if preset in SIZE_PRESETS and key in SIZE_PRESETS[preset]:
             return SIZE_PRESETS[preset][key]
             
-        if use_custom:
-            return self.folder_data.get('custom_settings', {}).get(key, self.cfg.get('global_settings', {}).get(key, default))
-        return self.cfg.get('global_settings', {}).get(key, default)
+        return self.cfg.get('general_settings', {}).get(key, default)
 
     def eventFilter(self, obj, event):
         if obj == self.title_edit and event.type() == QEvent.Type.KeyPress:
@@ -236,63 +255,45 @@ class FolderView(QWidget):
 
     def apply_sort(self, new_paths=None):
         st = self.folder_data.get('sort_type', 'name')
-        if st == 'custom':
-            self.refresh(new_paths=new_paths)
-            self.parent_icon.update()
-            return
-            
         rev = self.folder_data.get('sort_order', 'asc') == 'desc'
-        def sk(app):
-            p = app.get('path', '')
-            info = QFileInfo(p)
-            name_key = app.get('name', '').lower()
-            
-            if st == 'extension': 
-                if info.isDir():
-                    return (0, '_folder', name_key)
-                
-                ext = info.suffix().lower()
-                is_folder_link = False
-                
-                if ext == 'lnk':
-                    try:
-                        import win32com.client
-                        shell = win32com.client.Dispatch("WScript.Shell")
-                        shortcut = shell.CreateShortCut(p)
-                        target = shortcut.TargetPath
-                        if target: 
-                            target_info = QFileInfo(target)
-                            is_folder_link = target_info.isDir()
-                            ext = '_folder' if is_folder_link else target_info.suffix().lower()
-                    except: pass
-                elif ext == 'url':
-                    try:
-                        with open(p, 'r', encoding='utf-8', errors='ignore') as f:
-                            for line in f:
-                                if line.startswith('URL='):
-                                    url_val = line.strip().split('=', 1)[1]
-                                    if url_val.startswith('file:///'): url_val = url_val[8:]
-                                    elif url_val.startswith('steam://') or url_val.startswith('com.epicgames'): ext = 'game'; break
-                                    target_info = QFileInfo(url_val)
-                                    is_folder_link = target_info.isDir()
-                                    ext = '_folder' if is_folder_link else target_info.suffix().lower()
-                                    break
-                    except: pass
-                
-                return (0 if is_folder_link else 1, ext, name_key)
-            
-            # For other sorts, ensure a uniform tuple to prevent crashes
-            if st == 'size': return (0, info.size(), name_key)
-            if st == 'date': return (0, info.lastModified().toMSecsSinceEpoch(), name_key)
-            if st == 'recent': 
-                bt = info.birthTime().toMSecsSinceEpoch() if info.birthTime().isValid() else info.lastModified().toMSecsSinceEpoch()
-                return (0, bt, name_key)
-                
-            return (0, name_key, "")
         
         p = [a for a in self.folder_data['apps'] if a.get('pinned')]
         u = [a for a in self.folder_data['apps'] if not a.get('pinned')]
-        self.folder_data['apps'] = sorted(p, key=sk, reverse=rev) + sorted(u, key=sk, reverse=rev)
+
+        if st != 'custom':
+            def sk(app):
+                p_path = app.get('path', '')
+                info = QFileInfo(p_path)
+                name_key = app.get('name', '').lower()
+                
+                if st == 'extension': 
+                    if info.isDir(): return (0, '_folder', name_key)
+                    ext = info.suffix().lower()
+                    if ext == 'lnk':
+                        try:
+                            import win32com.client
+                            shell = win32com.client.Dispatch("WScript.Shell")
+                            shortcut = shell.CreateShortCut(p_path)
+                            target = shortcut.TargetPath
+                            if target: 
+                                target_info = QFileInfo(target)
+                                ext = '_folder' if target_info.isDir() else target_info.suffix().lower()
+                        except: pass
+                    return (0 if ext == '_folder' else 1, ext, name_key)
+                
+                if st == 'size': return (0, info.size(), name_key)
+                if st == 'date': return (0, info.lastModified().toMSecsSinceEpoch(), name_key)
+                if st == 'recent': 
+                    bt = info.birthTime().toMSecsSinceEpoch() if info.birthTime().isValid() else info.lastModified().toMSecsSinceEpoch()
+                    return (0, bt, name_key)
+                    
+                return (0, name_key, "")
+
+            self.folder_data['apps'] = sorted(p, key=sk, reverse=rev) + sorted(u, key=sk, reverse=rev)
+        else:
+            # For Custom, we still enforce Pinned at Top, but keep original order within groups
+            self.folder_data['apps'] = p + u
+
         ConfigManager.save(self.cfg)
         self.refresh()
         self.parent_icon.update()
@@ -302,6 +303,14 @@ class FolderView(QWidget):
         self.refresh()
 
     def scroll_to_page(self, page, animate=True):
+        # Calculate max page based on content
+        vis_len = len([a for a in self.folder_data.get('apps', []) if self.search_query in a.get('name', '').lower()])
+        # We show 3 rows per page, so max page is (rows - 1) // 3
+        # Actually, let's use the grid dimensions:
+        rows = math.ceil(vis_len / 3)
+        max_page = max(0, math.ceil(rows / 3) - 1)
+        
+        page = max(0, min(page, max_page))
         self.current_page = page
         target_y = -page * self.grid_h
         
@@ -311,7 +320,8 @@ class FolderView(QWidget):
             self.scroll_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
             
         target_pos = QPoint(0, int(target_y))
-        if animate:
+        # Disable animation during dragging to ensure wheel events don't get stuck in blocking loops
+        if animate and not getattr(self, 'is_dragging', False):
             self.scroll_anim.stop()
             self.scroll_anim.setEndValue(target_pos)
             self.scroll_anim.start()
@@ -338,9 +348,15 @@ class FolderView(QWidget):
                 self.app_widgets[p].hide()
                 self.app_widgets.pop(p).deleteLater()
                 
+        total_items = len(vis) + (1 if self.drag_placeholder_idx != -1 else 0)
+        # Always use grid engine for expanded view as per user request
+        engine = get_engine('grid')
+        positions, content_h = engine.get_expanded_params(total_items, self.cell_w, self.cell_h, self.grid_w)
+        self.content_h = content_h
+
         for i, app in enumerate(vis):
             v_idx = i + 1 if self.drag_placeholder_idx != -1 and i >= self.drag_placeholder_idx else i
-            t = QPoint(int((v_idx % 3) * self.cell_w), int((v_idx // 3) * self.cell_h))
+            t = positions[v_idx].toPoint()
             if app['path'] not in self.app_widgets:
                 w = AppIcon(app, self, pop_in=(new_paths and app['path'] in new_paths), font_size=font_size, icon_size=expanded_icon_size)
                 w.move(t)
@@ -357,13 +373,11 @@ class FolderView(QWidget):
                     w.pos_anim.setEndValue(t)
                     w.pos_anim.start()
                     
-        total_items = len(vis) + (1 if self.drag_placeholder_idx != -1 else 0)
-        rows = max(3, (total_items + 2) // 3)
+        rows = (total_items + 2) // 3
         self.grid_h = 3 * self.cell_h
-        self.content_h = rows * self.cell_h
         
-        self.grid_widget.setFixedSize(self.grid_w, self.content_h)
-        self.cw.setFixedSize(self.grid_w, self.grid_h)
+        self.grid_widget.setFixedSize(int(self.grid_w), int(self.content_h))
+        self.cw.setFixedSize(int(self.grid_w), int(self.grid_h))
         
         max_page = max(0, (rows - 1) // 3)
         if getattr(self, 'current_page', 0) > max_page:
@@ -414,7 +428,7 @@ class FolderView(QWidget):
         
         # Draw Page Indicators
         if hasattr(self, 'content_h') and self.content_h > self.grid_h:
-            num_pages = (self.content_h + self.grid_h - 1) // self.grid_h
+            num_pages = int((self.content_h + self.grid_h - 1) // self.grid_h)
             if num_pages > 1:
                 dot_size = 6
                 gap = 8
@@ -447,10 +461,13 @@ class FolderView(QWidget):
                 num = 9 if num == 0 else num
                 cw = getattr(self, 'cell_w', 100)
                 ch = getattr(self, 'cell_h', 115)
+                # Always use grid engine for expanded view placeholders
+                engine = get_engine('grid')
+                # Use engine to get positions for placeholders (relative to grid_widget)
+                positions, _ = engine.get_expanded_params(num, cw, ch, gw)
                 for i in range(num):
-                    col, row = i % 3, i // 3
-                    x = int(sx + (col * cw) + (cw - 48) / 2)
-                    y = int(sy + 40 + (row * ch) + 10)
+                    pos = positions[i]
+                    x, y = int(sx + pos.x() + (cw - 48)/2), int(sy + 40 + pos.y() + (ch - 60)/2)
                     p.drawRoundedRect(x, y, 48, 48, 8, 8)
                     p.drawRoundedRect(x - 10, y + 60, 68, 8, 4, 4)
 
@@ -588,7 +605,8 @@ class FolderView(QWidget):
 
     def dragEnterEvent(self, e): 
         if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls(): 
-            e.acceptProposedAction()
+            e.setDropAction(Qt.DropAction.MoveAction)
+            e.accept()
 
     def dragLeaveEvent(self, e): 
         self.drag_placeholder_idx = -1
@@ -596,15 +614,18 @@ class FolderView(QWidget):
 
     def dragMoveEvent(self, e):
         if e.mimeData().hasFormat("application/x-pandora-app") or e.mimeData().hasUrls():
-            e.acceptProposedAction()
+            e.setDropAction(Qt.DropAction.MoveAction)
+            e.accept()
             p = e.position().toPoint() - self.cw.pos()
             
+            # Auto-scroll on edges
             current_time = time.time()
-            if current_time - getattr(self, '_last_scroll_time', 0) > 0.5:
-                if p.y() < 30 and self.current_page > 0:
+            if current_time - getattr(self, '_last_scroll_time', 0) > 0.4:
+                # Faster auto-scroll detection
+                if p.y() < 40 and self.current_page > 0:
                     self.scroll_to_page(self.current_page - 1)
                     self._last_scroll_time = current_time
-                elif p.y() > self.grid_h - 30:
+                elif p.y() > self.grid_h - 40:
                     max_page = max(0, (getattr(self, 'content_h', self.grid_h) // getattr(self, 'cell_h', 115) - 1) // 3)
                     if self.current_page < max_page:
                         self.scroll_to_page(self.current_page + 1)
@@ -613,90 +634,129 @@ class FolderView(QWidget):
             adjusted_y = p.y() - self.grid_widget.y()
             if adjusted_y < 0: adjusted_y = 0
             
-            idx = int((adjusted_y // getattr(self, 'cell_h', 115)) * 3 + (p.x() // getattr(self, 'cell_w', 100)))
+            cw = getattr(self, 'cell_w', 100)
+            ch = getattr(self, 'cell_h', 115)
+            
+            # Center-weighted math: snap to the closest cell center
+            # Adding half cell width/height ensures we are looking at the nearest neighbor
+            col = int((p.x()) // cw)
+            row = int((adjusted_y) // ch)
+            
+            # To handle insertion points properly: 
+            # If we are in the left 50% of the cell, we are at 'idx'.
+            # If we are in the right 50%, we are still at 'idx' because standard 
+            # flow layout logic usually treats the slot as the target.
+            # But the user says it drops to the next slot prematurely.
+            # So let's use a very conservative check: 
+            col = max(0, min(col, 2))
+            idx = row * 3 + col
+            
+            # Only increment if we are significantly past the icon
+            if (p.x() % cw) > (cw * 0.9): 
+                idx += 1
             
             f = [a for a in self.folder_data.get('apps', []) if self.search_query in a.get('name', '').lower()]
             vis_len = len([a for a in f if not (self.is_dragging and a['path'] in self.selected_apps)])
             
-            if idx > vis_len:
-                idx = vis_len
+            idx = max(0, min(idx, vis_len))
                 
             if self.drag_placeholder_idx != idx: 
                 self.drag_placeholder_idx = idx
                 self.refresh()
 
+    def eventFilter(self, obj, e):
+        # Global filter to catch wheel events during drag
+        if e.type() == QEvent.Type.Wheel:
+            # If we are dragging, we want to intercept the wheel globally
+            if getattr(self, 'is_dragging', False):
+                self.wheelEvent(e)
+                return True
+        if obj == self.title_edit and e.type() == QEvent.Type.KeyPress:
+            if e.key() == Qt.Key.Key_Escape: 
+                self.exit_rename()
+                return True
+        return super().eventFilter(obj, e)
+
     def dropEvent(self, e):
-        idx = max(0, min(self.drag_placeholder_idx, len(self.folder_data['apps'])))
+        # 1. Map screen index to total list index
+        f = [a for a in self.folder_data.get('apps', []) if self.search_query in a.get('name', '').lower()]
+        vis = [a for a in f if not (self.is_dragging and a['path'] in self.selected_apps)]
+        
+        # If we drop at the end of the visible list, target the end of the total list
+        if self.drag_placeholder_idx >= len(vis):
+            idx = len(self.folder_data['apps'])
+            target_is_pinned = False
+        else:
+            # Map visible index back to the real index in the underlying list
+            target_app = vis[self.drag_placeholder_idx]
+            idx = self.folder_data['apps'].index(target_app)
+            target_is_pinned = target_app.get('pinned', False)
+
+            # Fix for 'one slot ahead' bug: 
+            # If moving forward internally, the removal of the source icon will shift the target index.
+            sid = e.mimeData().data("application/x-pandora-app").data().decode().strip()
+            if sid == self.folder_data['id']:
+                # Find how many selected apps were BEFORE the drop target
+                selected_paths = [a['path'] for a in self.folder_data['apps'] if a['path'] in self.selected_apps]
+                if not selected_paths and e.source() and hasattr(e.source(), 'app_data'):
+                    selected_paths = [e.source().app_data['path']]
+                
+                count_before = 0
+                for i, app in enumerate(self.folder_data['apps']):
+                    if i >= idx: break
+                    if app['path'] in selected_paths:
+                        count_before += 1
+                idx -= count_before
+
         self.drag_placeholder_idx = -1
         dropped = []
 
-        initial_pinned = sum(1 for a in self.folder_data['apps'] if a.get('pinned'))
-        target_is_pinned = (idx < initial_pinned)
-
         is_internal_move = False
-
         if e.mimeData().hasFormat("application/x-pandora-app"):
-            sid = e.mimeData().data("application/x-pandora-app").data().decode()
-            try:
-                dropped_apps = json.loads(e.mimeData().text())
-                if isinstance(dropped_apps, dict):
-                    dropped_apps = [dropped_apps]
-            except json.JSONDecodeError:
-                dropped_apps = []
+            sid = e.mimeData().data("application/x-pandora-app").data().decode().strip()
+            is_internal_move = (sid == self.folder_data['id'])
 
-            for ad in dropped_apps:
-                if isinstance(e.source(), AppIcon):
-                    e.source().is_internal = True
-                    is_internal_move = True
-
-                for f in self.cfg['folders']:
-                    if f['id'] == sid:
-                        f['apps'] = [a for a in f['apps'] if a['path'] != ad['path']]
-                        break
-
-                current_pinned = [a for a in self.folder_data['apps'] if a.get('pinned')]
-                current_unpinned = [a for a in self.folder_data['apps'] if not a.get('pinned')]
-
-                ad['pinned'] = target_is_pinned
-
-                if ad['pinned']:
-                    insert_idx = min(idx, len(current_pinned))
-                    current_pinned.insert(insert_idx, ad)
+            success, dropped = handle_app_drop(
+                self.cfg, self.folder_data, e.mimeData(), e.source(), 
+                target_is_pinned, idx, self.parent_icon.dashboard
+            )
+            
+            if success:
+                if is_internal_move:
+                    self.folder_data['sort_type'] = 'custom'
+                
+                ConfigManager.save(self.cfg)
+                if self.folder_data.get('sort_type', 'name') != 'custom' and not is_internal_move:
+                    self.apply_sort(new_paths=dropped)
                 else:
-                    insert_idx = max(0, idx - len(current_pinned))
-                    insert_idx = min(insert_idx, len(current_unpinned))
-                    current_unpinned.insert(insert_idx, ad)
-
-                self.folder_data['apps'] = current_pinned + current_unpinned
-                idx += 1
-                dropped.append(ad['path'])
-
-            if is_internal_move:
-                self.folder_data['sort_type'] = 'custom'
-
-            # Final deduplication check
-            seen = set(); unique = []
-            for a in self.folder_data['apps']:
-                if a['path'] not in seen:
-                    unique.append(a); seen.add(a['path'])
-            self.folder_data['apps'] = unique
-
-            ConfigManager.save(self.cfg)
-            if self.folder_data.get('sort_type', 'name') != 'custom':
-                self.apply_sort(new_paths=dropped)
-            else:
-                self.refresh(new_paths=dropped)
-                self.parent_icon.update()
-            self.parent_icon.trigger_pulse()
-            e.acceptProposedAction()
+                    self.refresh(new_paths=dropped)
+                    self.parent_icon.update()
+                self.parent_icon.trigger_pulse()
+                e.acceptProposedAction()
 
         elif e.mimeData().hasUrls():
+            target_storage = os.path.join(STORAGE_PATH, self.folder_data['id'])
+            if not os.path.exists(target_storage): os.makedirs(target_storage)
+            
             for u in e.mimeData().urls():
                 s = u.toLocalFile()
-                d = os.path.join(STORAGE_PATH, os.path.basename(s))
+                bn = os.path.basename(s)
+                d = os.path.join(target_storage, bn)
+                
+                # Collision handling within THIS folder's storage
+                if os.path.exists(d):
+                    name_part, ext_part = os.path.splitext(bn)
+                    counter = 1
+                    while os.path.exists(os.path.join(target_storage, f"{name_part} ({counter}){ext_part}")):
+                        counter += 1
+                    d = os.path.join(target_storage, f"{name_part} ({counter}){ext_part}")
+
                 try:
                     shutil.move(s, d)
-                    ad = {"name": QFileInfo(d).baseName(), "path": d, "pinned": target_is_pinned}
+                    fi = QFileInfo(d)
+                    name = fi.completeBaseName() if fi.isFile() else os.path.basename(d)
+                    if not name: name = os.path.basename(d)
+                    ad = {"name": name, "path": d, "pinned": target_is_pinned}
 
                     current_pinned = [a for a in self.folder_data['apps'] if a.get('pinned')]
                     current_unpinned = [a for a in self.folder_data['apps'] if not a.get('pinned')]

@@ -1,8 +1,8 @@
 import os
 import json
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from PyQt6.QtCore import Qt, QPropertyAnimation, QPoint, QMimeData, QUrl, QRect
-from PyQt6.QtGui import QPainter, QColor, QCursor, QDrag, QAction
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QApplication
+from PyQt6.QtCore import Qt, QPropertyAnimation, QPoint, QMimeData, QUrl, QRect, QRectF
+from PyQt6.QtGui import QPainter, QColor, QCursor, QDrag, QAction, QPixmap
 
 from utils import IconExtractor, VectorIcon
 from ui_common import AnimatedMenu
@@ -28,9 +28,20 @@ class AppIcon(QWidget):
         self.il.setFixedSize(icon_size, icon_size)
         self.il.setScaledContents(True)
 
-        pix = IconExtractor.get_icon_pixmap(data.get('path', ''), icon_size)
-        if not pix.isNull():
-            self.il.setPixmap(pix.scaled(icon_size, icon_size, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        if data.get('is_placeholder'):
+            pix = QPixmap(icon_size, icon_size)
+            pix.fill(Qt.GlobalColor.transparent)
+            pp = QPainter(pix)
+            pp.setRenderHint(QPainter.RenderHint.Antialiasing)
+            pp.setBrush(QColor(data.get('color', "#ffffff")))
+            pp.setPen(Qt.PenStyle.NoPen)
+            pp.drawRoundedRect(QRectF(0, 0, icon_size, icon_size), 8, 8)
+            pp.end()
+            self.il.setPixmap(pix)
+        else:
+            pix = IconExtractor.get_icon_pixmap(data.get('path', ''), icon_size)
+            if not pix.isNull():
+                self.il.setPixmap(pix.scaled(icon_size, icon_size, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation))
 
         from PyQt6.QtGui import QFont
         font = QFont("Segoe UI", font_size)
@@ -69,12 +80,13 @@ class AppIcon(QWidget):
             p.scale(1.05, 1.05)
             p.translate(-self.width() / 2, -self.height() / 2)
 
+        hc = QColor(self.parent_view.get_setting('highlight_color', '#50FA7B'))
         if self._hover:
-            p.setBrush(QColor(255, 255, 255, 20))
+            p.setBrush(QColor(hc.red(), hc.green(), hc.blue(), 30))
             p.setPen(Qt.PenStyle.NoPen)
             p.drawRoundedRect(self.rect().adjusted(2, 2, -2, -2), 16, 16)
         if is_selected:
-            p.setBrush(QColor(80, 250, 123, 100))
+            p.setBrush(QColor(hc.red(), hc.green(), hc.blue(), 80))
             p.setPen(Qt.PenStyle.NoPen)
             p.drawRoundedRect(self.rect().adjusted(2, 2, -2, -2), 16, 16)
         if self.app_data.get('pinned'):
@@ -168,19 +180,28 @@ class AppIcon(QWidget):
             self.parent_view.active_drag_app = self.app_data
             self.parent_view.refresh()
             
+            # Install global filter to catch wheel events during drag
+            QApplication.instance().installEventFilter(self.parent_view)
+            
             # If sandbox, restrict drag to internal move only
+            if hasattr(self.parent_view.parent_icon, 'dashboard'):
+                self.parent_view.parent_icon.dashboard._setup_drag_hook()
+
             if getattr(self.parent_view, 'is_sandbox', False):
                 res = drag.exec(Qt.DropAction.MoveAction)
             else:
-                res = drag.exec(Qt.DropAction.MoveAction | Qt.DropAction.CopyAction)
+                # Force MoveAction to signify that the file will be relocated, not duplicated.
+                res = drag.exec(Qt.DropAction.MoveAction)
 
-            if getattr(self.parent_view, 'is_sandbox', False):
-                # Never move to desktop in sandbox
-                pass
-            elif not self.is_internal and res in (Qt.DropAction.MoveAction, Qt.DropAction.CopyAction, Qt.DropAction.TargetMoveAction) and not self.parent_view.geometry().contains(QCursor.pos()):
-                self.parent_view.move_to_desktop(selected_apps_data)
+            if not self.is_internal and res in (Qt.DropAction.MoveAction, Qt.DropAction.CopyAction, Qt.DropAction.TargetMoveAction) and not self.parent_view.geometry().contains(QCursor.pos()):
+                if not getattr(self.parent_view, 'is_sandbox', False):
+                    self.parent_view.move_to_desktop(selected_apps_data)
 
         finally:
+            if hasattr(self.parent_view.parent_icon, 'dashboard'):
+                self.parent_view.parent_icon.dashboard._remove_drag_hook()
+
+            QApplication.instance().removeEventFilter(self.parent_view)
             self.parent_view.is_dragging = False
             self.parent_view.active_drag_app = None
             self.parent_view.selected_apps.clear()

@@ -14,6 +14,8 @@ Pandora is a desktop productivity and customization application built with Pytho
 * **App Icon**: A shortcut or executable file contained within a Pandora.
 * **Morph Animation**: The visual transition when a collapsed desktop folder expands into its grid view.
 * **Dashboard**: The central settings and management UI.
+* **Radial HUD**: The circular quick-access menu for system tools.
+* **Info Pill**: The centralized guidance HUD at the bottom of the dashboard.
 
 ---
 
@@ -30,13 +32,15 @@ Pandora operates as a standalone desktop utility on the Windows operating system
 * **Live Preview**: A sandbox environment within the settings dashboard to preview customizations in real-time.
 * **App Search and Sorting**: Quick search inside an opened folder and multiple sorting options (Name, Type, Size, Date, Custom).
 * **Batch Launching**: Ability to launch all contents of a folder simultaneously.
+* **Radial HUD Tools**: Multi-layered circular menu for volume control, screen warmth, and rapid system shortcuts.
+* **Advanced Guidance**: Centralized Info Pill system with marquee support for contextual help.
 
 ### 2.3 User Classes and Characteristics
 * **Power Users/Gamers**: Users who want a clean desktop but quick access to games and tools, appreciating high-fidelity animations and visual aesthetics.
 * **Customization Enthusiasts**: Users who heavily theme their desktop environments and require deep aesthetic control over widgets.
 
 ### 2.4 Operating Environment
-* **Platform**: Windows Operating System (relies on WinAPI for specific visual hooks and shortcut parsing).
+* **Platform**: Windows Operating System (relies on WinAPI for specific visual hooks and monitor gamma control).
 * **Framework**: Python 3.x with PyQt6.
 
 ---
@@ -71,12 +75,21 @@ Pandora operates as a standalone desktop utility on the Windows operating system
   * The user shall be able to upload custom images as folder covers.
   * The system shall allow users to reset settings to default values.
 
-### 3.4 Data Persistence and Storage
-* **Description**: Handling of configuration and internal shortcut storage.
+### 3.4 Radial HUD and System Tools
+* **Description**: A quick-access circular menu triggered by a hotkey.
 * **Functional Requirements**:
-  * The system shall save all configurations, folder states, and layout positions in a local `config.json` file.
-  * The system shall extract and cache icons from executables and shortcuts for fast rendering.
-  * Dragged and dropped items shall be moved to an `internal_storage` directory to keep the user's native desktop clean.
+  * The menu shall support multiple layers of tools, navigable via the mouse wheel.
+  * The system shall provide real-time feedback for Volume and Night Light adjustments via a dedicated arc HUD.
+  * The menu shall feature interactive "slice" animations with glassmorphism styling.
+  * The system shall include a "Night Light" filter using WinAPI `SetDeviceGammaRamp` for safety and performance.
+  * The screenshot tool shall save captures as high-quality PNGs in the user's `Pictures/Pandora` folder after a 200ms delay.
+
+### 3.5 Info Pill Guidance System
+* **Description**: A persistent status HUD at the bottom right of the Dashboard.
+* **Functional Requirements**:
+  * The system shall display context-aware tooltips and guidance information in a floating pill.
+  * For long descriptions, the system shall implement an automatic marquee (scrolling text) effect.
+  * The pill shall use entry/exit animations to maintain a non-intrusive presence.
 
 ---
 
@@ -89,7 +102,7 @@ Pandora operates as a standalone desktop utility on the Windows operating system
 
 ### 4.2 Usability Requirements
 * The application must remain accessible via a system tray icon at all times.
-* The dashboard UI must employ modern, dark-themed styling with clear contrast and interactive feedback (animated buttons, tooltips).
+* The dashboard UI must employ modern, dark-themed styling with clear contrast and interactive feedback (animated buttons, Info Pill).
 * The application shall prevent overlapping edge-cases by confining folder dragging within the screen's available geometry.
 
 ### 4.3 Reliability
@@ -98,3 +111,7 @@ Pandora operates as a standalone desktop utility on the Windows operating system
 
 ### 4.4 Portability
 * While currently targeted and optimized for Windows (using `win32com` and `WinAPI`), the core Qt architecture should be maintained in a way that minimizes cross-platform friction where possible.
+
+### 4.5 Visual Standards
+* The application shall employ a "Trackless" UI aesthetic, replacing standard scrollbars with minimalist thumbs.
+* All interactive feedback (Info Pill, Radial HUD) must use glassmorphism and the established Pandora Cyan accent.
