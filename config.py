@@ -80,8 +80,15 @@ class ConfigManager:
         defaults = {
             "general_settings": {
                 "sync_grid_size": True,
-                "grid_size": 110,
+                "pagination_style": "Pill & Dots",
+                "grid_size": 115,
                 "edge_padding": 0,
+                "edge_padding_t": 0,
+                "edge_padding_b": 0,
+                "edge_padding_l": 0,
+                "edge_padding_r": 0,
+                "edge_padding_v": 0,
+                "edge_padding_h": 0,
                 "show_grid_on_drag": True,
                 "grid_animated_color": True,
                 "grid_wave_entrance": True,
@@ -89,12 +96,54 @@ class ConfigManager:
                 "grid_opacity": 100,
                 "preferred_template": None,
                 "left_click_action": "Launch App (if fanned)",
-                "middle_click_action": "Open Folder"
+                "middle_click_action": "Open Folder",
+                "theme": "Dark",
+                "theme_intensity": 100,
+                "warmth_intensity": 60,
+                "folder_darkness": "Dark",
+                "gap_size": 75,
+                "art_style": "Gaussian Blur",
+                "color": "#ffffff",
+                "display_effects": {},
+                "sort_order": "asc",
+                "sort_type": "name",
+                "clock_mode": "digital",
+                "format_24h": True,
+                "show_date": True,
+                "show_seconds": False,
+                "world_clocks": [],
+                "active_clock_label": "LOCAL TIME",
+                "active_clock_tz": "",
+                "show_controls": True,
+                "show_timeline": True,
+                "visualizer": "None",
+                "show_arc_hud": True,
+                "dashboard_theme": "Dark",
+                "desktop_accents": [],
+                "dashboard_blur_level": "Low",
+                "link_pad_v": True,
+                "link_pad_h": True,
+                "folder_theme": "Default",
+                "folder_custom_color": "#161B22FF",
+                "keybinds": {}
             },
-            "radial_menu": {
+            "halo": {
                 "enabled": True,
                 "activation_key": 0xC0, # Tilde
                 "activation_modifiers": 0,
+                "max_bound": 300,
+                "hub_ratio": 50,
+                "brightness": 50,
+                "blur_level": "High",
+                "layer_anim_style": "Z-Depth + Spring",
+                "pill_mode": "Name",
+                "pill_icon_path": "",
+                "hold_mode": "Hold",
+                "theme": "Dark",
+                "gap_size": 90,
+                "opacity": 185,
+                "show_arc_hud": False,
+                "indicator_anim": "Crossfade",
                 "menus": [
                     {
                         "name": "Layer 1",
@@ -115,49 +164,19 @@ class ConfigManager:
                     }
                 ]
             },
-            "templates": {
-                "grid": {
-                    "Default": {
-                        "size_preset": "Medium",
-                        "folder_size": 80,
-                        "mini_icon_size": 18,
-                        "font_size": 10,
-                        "expanded_icon_size": 48,
-                        "glow_intensity": 20,
-                        "glow_color": "#ffffff",
-                        "bg_color": "#141414",
-                        "title_color": "#ffffff",
-                        "highlight_color": "#ffffff",
-                        "opacity": 80,
-                        "radius": 20,
-                        "cover_blur": 0,
-                        "cover_opacity": 255,
-                        "hover_speed": "Fluid",
-                        "morph_speed": "Fluid",
-                        "mini_highlight_shape": "Circle"
-                    }
-                },
-                "flower": {
-                    "Default": {
-                        "size_preset": "Medium",
-                        "folder_size": 80,
-                        "mini_icon_size": 18,
-                        "font_size": 10,
-                        "expanded_icon_size": 48,
-                        "glow_intensity": 20,
-                        "glow_color": "#ffffff",
-                        "bg_color": "#141414",
-                        "title_color": "#ffffff",
-                        "highlight_color": "#ffffff",
-                        "opacity": 80,
-                        "radius": 10,
-                        "cover_blur": 0,
-                        "cover_opacity": 255,
-                        "hover_speed": "Fluid",
-                        "morph_speed": "Fluid",
-                        "mini_highlight_shape": "Circle"
-                    }
-                }
+            "hub_config": {
+                "switching_mode": "middle_click", # middle_click, custom_buttons, region_scroll
+                "custom_up": "0x26", # Up Arrow
+                "custom_down": "0x28", # Down Arrow
+                "scroll_region": "upper", # upper, lower
+                "layers": [],
+                "low_res_blur_strength": 25,
+                "low_res_art_style": "Gaussian Blur",
+                "mouse_sens": 100,
+                "scroll_sens": 50,
+                "hold_mode": "Hold",
+                "mosaic_shape": "Square",
+                "mosaic_style": "Flat"
             },
             "folders": []
         }
@@ -167,36 +186,25 @@ class ConfigManager:
                     data = json.load(f)
                     
                     # --- MIGRATION LOGIC ---
-                    # 1. Migrate global_settings to general_settings and Default Grid template
+                    # 1. Migrate global_settings to general_settings
                     if "global_settings" in data:
                         old = data.pop("global_settings")
                         data.setdefault("general_settings", {})
                         data["general_settings"]["grid_size"] = old.get("grid_size", 110)
                         data["general_settings"]["edge_padding"] = old.get("edge_padding", 0)
-                        
-                        # Use the rest for the default grid template
-                        t_grid = data.setdefault("templates", {}).setdefault("grid", {})
-                        t_grid["Default"] = {
-                            k: v for k, v in old.items() 
-                            if k not in ["grid_size", "edge_padding", "show_cover", "show_title", "grid_snap"]
-                        }
+                        data["general_settings"]["edge_padding_t"] = old.get("edge_padding_t", old.get("edge_padding", 0))
+                        data["general_settings"]["edge_padding_b"] = old.get("edge_padding_b", old.get("edge_padding", 0))
+                        data["general_settings"]["edge_padding_l"] = old.get("edge_padding_l", old.get("edge_padding", 0))
+                        data["general_settings"]["edge_padding_r"] = old.get("edge_padding_r", old.get("edge_padding", 0))
                     
-                    # 2. Ensure all default templates exist
-                    for t_type, t_dict in defaults['templates'].items():
-                        for t_name, t_vals in t_dict.items():
-                            data.setdefault('templates', {}).setdefault(t_type, {}).setdefault(t_name, t_vals)
-                    
-                    # 3. Ensure general_settings exists
+                    # 2. Ensure general_settings exists
                     for k, v in defaults['general_settings'].items():
                         data.setdefault('general_settings', {}).setdefault(k, v)
                     
-                    # 4. Migrate folders to have template info
+                    data.setdefault('folders', [])
+                    
+                    # 3. Migrate folders
                     for folder in data.get('folders', []):
-                        if 'template_type' not in folder:
-                            folder['template_type'] = 'grid'
-                        if 'template_name' not in folder:
-                            folder['template_name'] = 'Default'
-                        # Promote root settings if they were in old global/custom
                         if 'show_title' not in folder: folder['show_title'] = True
                         if 'show_cover' not in folder: folder['show_cover'] = False
                         if 'grid_snap' not in folder: folder['grid_snap'] = False
@@ -228,7 +236,7 @@ class ConfigManager:
                         # Validate existing entries
                         for app in existing_apps:
                             p = app.get('path', '')
-                            if os.path.exists(p):
+                            if p.startswith('pandora://') or os.path.exists(p):
                                 synced_apps.append(app)
                                 seen_files.add(os.path.basename(p))
                         
@@ -242,13 +250,32 @@ class ConfigManager:
                         
                         folder['apps'] = synced_apps
                                     
-                    # 7. Migrate radial_menu tools to menus array
-                    rm = data.setdefault("radial_menu", {})
-                    if "tools" in rm:
-                        tools = rm.pop("tools")
-                        rm["menus"] = [{"name": "Layer 1", "tools": tools}]
-                    elif "menus" not in rm:
-                        rm["menus"] = [{"name": "Layer 1", "tools": defaults["radial_menu"]["menus"][0]["tools"]}]
+                    # 7. Migrate branding names (radial_menu -> halo, dead_zones_config -> hub_config)
+                    if "radial_menu" in data:
+                        data["halo"] = data.pop("radial_menu")
+                    if "dead_zones_config" in data:
+                        data["hub_config"] = data.pop("dead_zones_config")
+                        
+                    # 8. Migrate halo tools to menus array (9 fixed layers)
+                    halo = data.setdefault("halo", {})
+                    if "tools" in halo:
+                        tools = halo.pop("tools")
+                        halo["menus"] = [{"name": "L1", "tools": tools}]
+                    elif "menus" not in halo:
+                        halo["menus"] = [{"name": "L1", "tools": defaults["halo"]["menus"][0]["tools"]}]
+                        
+                    while len(halo["menus"]) < 9:
+                        idx = len(halo["menus"]) + 1
+                        halo["menus"].append({"name": f"L{idx}", "tools": []})
+                    
+                    if "deadzone" in halo:
+                        halo.pop("deadzone")
+                    if "max_bound" not in halo:
+                        halo["max_bound"] = 300
+                    if "hub_ratio" not in halo:
+                        halo["hub_ratio"] = 50
+                    if "brightness" not in halo:
+                        halo["brightness"] = 50
                         
                     return data
             return defaults

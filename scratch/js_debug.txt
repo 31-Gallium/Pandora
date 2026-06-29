@@ -1,0 +1,918 @@
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+Blur fired in Electron
+HIDE from python blur
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+HIDE from move
+update_rect received: width=988
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=988
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=986
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=986
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=986
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=986
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=986
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=986
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=986
+HIDE from move
+update_rect received: width=986
+HIDE from move
+update_rect received: width=986
+Blur fired in Electron
+update_rect received: width=986
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=986
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=986
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=986
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+HIDE from move
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout
+Blur fired in Electron
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+Blur fired in Electron
+HIDE from blur timeout
+update_rect received: width=0
+HIDE from update_rect width 0
+HIDE from move
+Blur fired in Electron
+HIDE from blur timeout

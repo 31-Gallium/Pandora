@@ -1,0 +1,822 @@
+
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1520, target_y: 214
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1432, 'y': 251, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1432, target_y: 251
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1464, 'y': 237, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1464, target_y: 237
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1463, 'y': 230, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1463, 'y': 230, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1463, target_y: 230
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1459, 'y': 281, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1459, 'y': 281, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1459, target_y: 281
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1393, 'y': 244, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1393, target_y: 244
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1393, 'y': 244, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1393, target_y: 244
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1292, 'y': 204, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1292, target_y: 204
+Finished do_fade_in
+CMD received: {'action': 'show', 'x': 1292, 'y': 204, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1292, target_y: 204
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1491, 'y': 214, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1491, target_y: 214
+Finished do_fade_in
+CMD received: {'action': 'show', 'x': 1491, 'y': 214, 'width': 400, 'height': 636}
+Executing do_fade_in. target_x: 1491, target_y: 214
+Finished do_fade_in
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1369, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1369, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1490, 'y': 213, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1490, 'y': 213, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1375, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1375, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1375, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1329, 'y': 260, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1582, 'y': 272, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1582, 'y': 272, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1285, 'y': 280, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1285, 'y': 280, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1299, 'y': 313, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1299, 'y': 313, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1299, 'y': 313, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1299, 'y': 313, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1321, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1321, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1375, 'y': 303, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1375, 'y': 303, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1375, 'y': 303, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1398, 'y': 224, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1398, 'y': 224, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1398, 'y': 224, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1394, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1394, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1394, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1326, 'y': 243, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1479, 'y': 213, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1667, 'y': 206, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1353, 'y': 228, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1730, 'y': 229, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1830, 'y': 205, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1435, 'y': 245, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1249, 'y': 284, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1443, 'y': 202, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1133, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1387, 'y': 222, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1387, 'y': 222, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1387, 'y': 222, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1428, 'y': 220, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1428, 'y': 220, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1408, 'y': 243, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1340, 'y': 221, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1340, 'y': 221, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1437, 'y': 300, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1354, 'y': 258, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1354, 'y': 258, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1509, 'y': 236, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1314, 'y': 279, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1314, 'y': 279, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1314, 'y': 279, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1393, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1393, 'y': 233, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1341, 'y': 242, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1509, 'y': 243, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1509, 'y': 243, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1518, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1518, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1518, 'y': 241, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1431, 'y': 440, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1386, 'y': 262, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1193, 'y': 317, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1431, 'y': 440, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1453, 'y': 300, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1567, 'y': 354, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1193, 'y': 317, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 952, 'y': 263, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1567, 'y': 354, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1015, 'y': 397, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1508, 'y': 231, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1508, 'y': 231, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1314, 'y': 200, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1314, 'y': 200, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1402, 'y': 302, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1402, 'y': 302, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1402, 'y': 302, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1402, 'y': 302, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1301, 'y': 670, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1301, 'y': 670, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1280, 'y': 228, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1400, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1400, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1400, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1400, 'y': 250, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1401, 'y': 267, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1401, 'y': 267, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1401, 'y': 267, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1401, 'y': 267, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1581, 'y': 122, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1581, 'y': 122, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1581, 'y': 122, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1276, 'y': 274, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1276, 'y': 274, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1214, 'y': 273, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1214, 'y': 273, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1214, 'y': 273, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1423, 'y': 285, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1423, 'y': 285, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1423, 'y': 285, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1350, 'y': 235, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1418, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1341, 'y': 211, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1341, 'y': 211, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 903, 'y': 190, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 967, 'y': 171, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 967, 'y': 171, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1414, 'y': 207, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1462, 'y': 215, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1420, 'y': 248, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1420, 'y': 248, 'width': 400, 'height': 634}
+CMD received: {'action': 'show', 'x': 1420, 'y': 248, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1420, 'y': 248, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1420, 'y': 248, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 215, 'width': 400, 'height': 634}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'show', 'x': 1520, 'y': 214, 'width': 400, 'height': 636}
+CMD received: {'action': 'hide'}
+CMD received: {'action': 'hide'}

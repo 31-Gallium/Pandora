@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pandora Dashboard - UI Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="shell">
+    <!-- ═══ DASHBOARD LOADER ═══ -->
+    <div id="dashboard-loader" style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); transition: opacity 0.3s ease; border-radius: 12px;">
+        <svg width="40" height="40" viewBox="0 0 50 50" stroke="var(--accent)" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="80" stroke-dashoffset="0">
+            <circle cx="25" cy="25" r="20" style="animation: spin 1s linear infinite; transform-origin: center;"></circle>
+        </svg>
+        <style>
+            @keyframes spin { 100% { transform: rotate(360deg); } }
+        </style>
+    </div>
+    <!-- ═══ TITLE BAR ═══ -->
+    <div class="titlebar">
+        <div class="page-pill-wrapper">
+            <div class="page-pill" id="page-pill">
+                <span class="pill-dot"></span>
+                <span id="pill-text">General</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 2px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="pill-dropdown" id="pill-dropdown">
+                <svg style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:110;">
+                    <rect x="0" y="0" width="100%" height="100%" rx="12" ry="12" fill="none" stroke="var(--accent)" stroke-width="2" pathLength="100" stroke-dasharray="100 0" stroke-dashoffset="0" id="scroll-border-rect" style="transition: stroke-dasharray 0.2s, stroke-dashoffset 0.1s; opacity: 0;" />
+                </svg>
+                <div class="pill-search-container">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="pill-search-input" placeholder="Search settings..." autocomplete="off">
+                </div>
+                <div id="pill-dropdown-default">
+                    <div class="pill-dropdown-item" data-target="general">
+                        <span class="dd-dot" style="background: var(--accent-general);"></span> General
+                    </div>
+
+                    <div class="pill-dropdown-item" data-target="folders">
+                        <span class="dd-dot" style="background: var(--accent-folders);"></span> Folders
+                    </div>
+                    <div class="pill-dropdown-item" data-target="halo">
+                        <span class="dd-dot" style="background: var(--accent-halo);"></span> Halo Menu
+                    </div>
+                </div>
+                <div id="pill-dropdown-results" style="display: none; flex-direction: column; gap: 2px; max-height: 200px; overflow-y: auto; overflow-x: hidden; padding-right: 4px;">
+                    <!-- Search results injected here -->
+                </div>
+            </div>
+        </div>
+        <div class="window-controls">
+            <button class="win-btn min" id="min-btn">─</button>
+            <button class="win-btn close" id="close-btn">✕</button>
+        </div>
+    </div>
+
+    <!-- ═══ BODY ═══ -->
+    <div class="body-wrap">
+
+        <!-- ═══ SIDEBAR ═══ -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo-area" id="toggle-sidebar">
+                <svg width="24" height="24" viewBox="0 0 642.707 732.33" fill="none" style="transition: all 0.3s ease;">
+                    <g id="Layer_4">
+                        <polygon points="321.354 707.33 25.02 543.667 25 188.656 321.354 321.333 321.354 707.33" fill="var(--accent)" opacity=".6"/>
+                        <polygon points="617.688 543.667 321.354 707.33 321.354 321.333 617.684 196.165 617.688 543.667" fill="var(--accent)" opacity=".6"/>
+                        <polygon points="617.684 196.165 321.354 321.333 25 188.656 321.354 25 617.684 196.165" fill="var(--accent)" opacity=".6"/>
+                    </g>
+                    <g id="Layer_1">
+                        <path d="M395.354,284.333l-74,37M321.354,321.333l-74.001-37M321.354,321.333v92.667M395.354,62l-74-37-74.001,37M99.02,580.667l-74-37v-92.667M543.688,580.667l74-37v-92.667" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                        <g opacity=".4">
+                            <path d="M617.684,188.656l-74,37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M617.684,188.66l-74-37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M617.707,188.656v92.667" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M25,188.66l74-37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M25,188.656l74,37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M25,188.656v92.667" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M321.331,707.33l-74-37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M321.354,707.33l74-37" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                            <path d="M321.354,707.33v-92.667" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+                        </g>
+                    </g>
+                </svg>
+                <span class="logo-name">PANDORA</span>
+            </div>
+
+            <div class="nav-item active" data-tab="general" data-label="General" data-color="var(--accent-general)">
+                <div class="nav-icon" style="-webkit-mask-image: url('../assets/general.svg');"></div>
+                <span class="nav-label">General</span>
+            </div>
+
+            <div class="nav-item" data-tab="folders" data-label="Folders" data-color="var(--accent-folders)">
+                <div class="nav-icon" style="-webkit-mask-image: url('../assets/folders.svg');"></div>
+                <span class="nav-label">Folders</span>
+            </div>
+            <div class="nav-item" data-tab="halo" data-label="Halo Menu" data-color="var(--accent-halo)">
+                <div class="nav-icon" style="-webkit-mask-image: url('../assets/halo.svg');"></div>
+                <span class="nav-label">Halo Menu</span>
+            </div>
+        </nav>
+
+        <!-- ═══ MAIN ═══ -->
+        <div class="main-wrapper">
+            <main class="main" id="main-panel">
+
+            <!-- ════════════════════════════════════════════════
+                 GENERAL
+                 ════════════════════════════════════════════════ -->
+            
+            <div class="tab-page active" id="tab-general" data-accent="var(--accent-general)" style="--section-accent: var(--accent-general);">
+
+                <div class="section-header">
+                    <span class="sh-text">Appearance</span>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Size of the alignment grid on your desktop">Grid Size</span><span class="range-val" id="v-gs">110</span></div>
+                        <input type="range" min="40" max="200" value="110" data-val="v-gs">
+                    </div>
+                    
+                    <div class="control-item">
+                        <div class="control-row">
+                            <span class="control-label has-tip" data-tip="Uniform padding for all edges">Edge Padding</span>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button class="link-btn" id="expand-ep-all" title="Advanced Options">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+                                </button>
+                                <span class="range-val" id="v-ep-all">15</span>
+                            </div>
+                        </div>
+                        <input type="range" min="0" max="100" value="15" data-val="v-ep-all">
+                        
+                        <div class="slider-children" id="children-ep" style="display: none; padding-left: 12px; margin-top: 12px; border-left: 2px solid var(--panel-border);">
+                            <div class="control-item" style="margin-bottom: 12px;">
+                                <div class="control-row">
+                                    <span class="control-label">Vertical Padding</span>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <button class="link-btn" id="expand-ep-v" title="Advanced Options">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+                                        </button>
+                                        <span class="range-val" id="v-ep-v">15</span>
+                                    </div>
+                                </div>
+                                <input type="range" min="0" max="100" value="15" data-val="v-ep-v">
+                                
+                                <div class="slider-children" id="children-ep-v" style="display: none; padding-left: 12px; margin-top: 12px; border-left: 2px solid var(--panel-border);">
+                                    <div class="control-item" style="margin-bottom: 8px;">
+                                        <div class="control-row"><span class="control-label">Padding Top</span><span class="range-val" id="v-ep-t">15</span></div>
+                                        <input type="range" min="0" max="100" value="15" data-val="v-ep-t">
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="control-row"><span class="control-label">Padding Bottom</span><span class="range-val" id="v-ep-b">15</span></div>
+                                        <input type="range" min="0" max="100" value="15" data-val="v-ep-b">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="control-item">
+                                <div class="control-row">
+                                    <span class="control-label">Horizontal Padding</span>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <button class="link-btn" id="expand-ep-h" title="Advanced Options">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+                                        </button>
+                                        <span class="range-val" id="v-ep-h">15</span>
+                                    </div>
+                                </div>
+                                <input type="range" min="0" max="100" value="15" data-val="v-ep-h">
+                                
+                                <div class="slider-children" id="children-ep-h" style="display: none; padding-left: 12px; margin-top: 12px; border-left: 2px solid var(--panel-border);">
+                                    <div class="control-item" style="margin-bottom: 8px;">
+                                        <div class="control-row"><span class="control-label">Padding Left</span><span class="range-val" id="v-ep-l">15</span></div>
+                                        <input type="range" min="0" max="100" value="15" data-val="v-ep-l">
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="control-row"><span class="control-label">Padding Right</span><span class="range-val" id="v-ep-r">15</span></div>
+                                        <input type="range" min="0" max="100" value="15" data-val="v-ep-r">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Opacity of the grid overlay">Grid Visibility</span><span class="range-val" id="v-gv">100</span></div>
+                        <input type="range" min="10" max="100" value="100" data-val="v-gv">
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-row" id="set-theme-intensity">
+                            <span class="control-label has-tip" data-tip="Opacity and strength of the folder's background color">Theme Intensity</span>
+                            <select>
+                                <option>Subtle</option>
+                                <option>Balanced</option>
+                                <option selected>Intense</option>
+                                <option>Solid</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-item mt-16">
+                        <div class="control-row" id="set-folder-theme">
+                            <span class="control-label has-tip" data-tip="The primary color style of the folder base">Folder Theme</span>
+                            <select>
+                                <option selected>Default</option>
+                                <option>Desktop</option>
+                                <option>Custom</option>
+                            </select>
+                        </div>
+                        
+                        <div id="custom-color-container" class="custom-color-container">
+                            <span class="control-label" style="margin-bottom: 12px; display: block;">Custom Base Color</span>
+                            
+                            <div class="advanced-picker-container">
+                                <div class="picker-wheel-area" id="cw-area">
+                                    <div class="color-wheel">
+                                        <div class="color-wheel-saturation"></div>
+                                        <div class="color-wheel-value" id="cw-value-overlay"></div>
+                                        <div class="color-wheel-thumb" id="cw-thumb"></div>
+                                    </div>
+                                </div>
+                                <div class="picker-sliders-area">
+                                    <div class="slider-row">
+                                        <span class="slider-label">Lightness</span>
+                                        <div class="slider-track value-track" id="cw-val-track">
+                                            <div class="slider-thumb" id="cw-val-thumb" style="left: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="slider-row">
+                                        <span class="slider-label">Opacity</span>
+                                        <div class="slider-track alpha-track" id="cw-alpha-track">
+                                            <div class="alpha-track-bg"></div>
+                                            <div class="slider-thumb" id="cw-alpha-thumb" style="left: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="preview-row">
+                                        <div class="hex-preview-large">
+                                            <div class="hex-preview-color" id="custom-hex-preview"></div>
+                                        </div>
+                                        <span class="hex-hash">#</span>
+                                        <input type="text" id="custom-theme-hex-input" class="hex-input-large" value="161B22FF" maxlength="8" spellcheck="false">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <style>
+                                .custom-color-container {
+                                    overflow: hidden;
+                                    max-height: 0;
+                                    opacity: 0;
+                                    margin-top: 0;
+                                    padding-top: 0;
+                                    border-top: 1px solid transparent;
+                                    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin-top 0.4s ease, padding-top 0.4s ease;
+                                }
+                                .custom-color-container.expanded {
+                                    max-height: 250px;
+                                    opacity: 1;
+                                    margin-top: 16px;
+                                    padding-top: 16px;
+                                    border-top: 1px solid var(--panel-border);
+                                }
+                                .advanced-picker-container { display: flex; gap: 16px; margin-bottom: 8px; align-items: stretch; }
+                                .picker-wheel-area { position: relative; width: 100px; height: 100px; flex-shrink: 0; }
+                                .color-wheel { 
+                                    width: 100%; height: 100%; border-radius: 50%; 
+                                    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+                                    position: relative; cursor: crosshair; overflow: hidden;
+                                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                                }
+                                .color-wheel-saturation { 
+                                    position: absolute; inset: 0; border-radius: 50%; 
+                                    background: radial-gradient(circle closest-side, #ffffff, transparent); 
+                                    pointer-events: none;
+                                }
+                                .color-wheel-value {
+                                    position: absolute; inset: 0; border-radius: 50%;
+                                    background: rgba(0,0,0,0);
+                                    pointer-events: none;
+                                }
+                                .color-wheel-thumb {
+                                    position: absolute; width: 12px; height: 12px; border-radius: 50%;
+                                    border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);
+                                    transform: translate(-50%, -50%); pointer-events: none; left: 50%; top: 50%;
+                                }
+                                .picker-sliders-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+                                .slider-row { display: flex; align-items: center; gap: 8px; }
+                                .slider-track { 
+                                    position: relative; height: 12px; flex-grow: 1; border-radius: 6px; 
+                                    cursor: pointer; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+                                }
+                                .value-track { background: linear-gradient(to right, black, white); }
+                                .alpha-track { position: relative; overflow: hidden; }
+                                .alpha-track-bg { 
+                                    position: absolute; inset: 0;
+                                    background-image: conic-gradient(rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+                                    background-size: 12px 12px; z-index: 1;
+                                }
+                                .alpha-track::after {
+                                    content: ''; position: absolute; inset: 0; z-index: 2;
+                                    background: linear-gradient(to right, transparent, var(--alpha-color, #fff));
+                                    pointer-events: none;
+                                }
+                                .slider-thumb {
+                                    position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+                                    background: white; border: 1px solid #ccc; box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+                                    transform: translate(-50%, -50%); z-index: 3; pointer-events: none;
+                                }
+                                .slider-label { font-size: 11px; color: var(--text-dim); width: 55px; }
+                                .preview-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+                                .hex-preview-large { 
+                                    width: 24px; height: 24px; border-radius: 6px; 
+                                    border: 1px solid rgba(255,255,255,0.2); 
+                                    background-image: conic-gradient(rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+                                    background-size: 8px 8px;
+                                    position: relative; overflow: hidden;
+                                }
+                                .hex-preview-color { position: absolute; inset: 0; background: #161B22; }
+                                .hex-hash { color: var(--text-dim); font-family: monospace; font-size: 14px; margin-left: 4px; }
+                                .hex-input-large {
+                                    background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border);
+                                    border-radius: 4px; color: var(--text-main); font-family: monospace;
+                                    font-size: 13px; padding: 4px 6px; width: 75px; outline: none; text-transform: uppercase;
+                                    transition: border-color 0.2s;
+                                }
+                                .hex-input-large:focus { border-color: var(--accent); }
+                            </style>
+                        </div>
+                    </div>
+
+                    <div class="control-item mt-16">
+                        <div class="control-row" id="set-dashboard-theme">
+                            <span class="control-label">Dashboard Theme</span>
+                            <select><option selected>Dark</option><option>Light</option><option>Gray</option><option>Desktop</option></select>
+                        </div>
+                    </div>
+                    
+                    <div class="control-item mt-16">
+                        <div class="control-row" id="set-pagination-style">
+                            <span class="control-label has-tip" data-tip="Style of the folder page indicator">Pagination Style</span>
+                            <select><option selected>Pill & Dots</option><option>Progress Line</option><option>Floating Progress Arc</option><option>Floating Mini Preview</option><option>None</option></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group mt-32">
+                    <div class="toggle-row" id="set-show-grid-drag">
+                        <span class="control-label has-tip" data-tip="Show the alignment grid when dragging folders">Show Grid on Drag</span>
+                        <label class="toggle"><input type="checkbox" checked><span class="track"></span></label>
+                    </div>
+                    <div class="toggle-row" id="set-anim-grid-color">
+                        <span class="control-label has-tip" data-tip="Animate the grid color with a hue cycle">Animated Grid Color</span>
+                        <label class="toggle"><input type="checkbox" checked><span class="track"></span></label>
+                    </div>
+                    <div class="toggle-row" id="set-wave-ent">
+                        <span class="control-label has-tip" data-tip="Staggered ripple animation when grid appears">Wave Entrance</span>
+                        <label class="toggle"><input type="checkbox" checked><span class="track"></span></label>
+                    </div>
+                    <div class="toggle-row" id="set-wave-color">
+                        <span class="control-label has-tip" data-tip="Fade grid color during wave animation">Wave Color Fade</span>
+                        <label class="toggle"><input type="checkbox" checked><span class="track"></span></label>
+                    </div>
+                </div>
+
+
+                <div class="section-header" style="--section-accent: var(--accent-display);">
+                    <span class="sh-text">Display Effects</span>
+                </div>
+                <div class="control-group" style="--section-accent: var(--accent-display);">
+                    <div class="control-row" id="set-filter-preset">
+                        <span class="control-label">Filter Preset</span>
+                        <div class="custom-select" style="width:120px;">
+                            <select><option>Reading</option><option selected>Sunset</option><option>Movie</option><option>Eye Saver</option></select>
+                        </div>
+                    </div>
+                    <div class="control-item mt-16">
+                        <div class="control-row"><span class="control-label">Warmth Intensity</span><span class="range-val" id="v-wi">50</span></div>
+                        <input type="range" min="0" max="100" value="50" data-val="v-wi">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- ════════════════════════════════════════════════
+                 FOLDERS
+                 ════════════════════════════════════════════════ -->
+            <div class="tab-page" id="tab-folders" data-accent="var(--accent-folders)">
+                <div id="fld-list">
+                    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 style="font-size:16px;font-weight:500;">Your Folders</h3>
+                        <button class="keybind-key" id="btn-add-folder" style="padding: 6px 12px; font-weight:500; color:var(--text-1); cursor:pointer;">+ Add New</button>
+                    </div>
+                    <div id="fld-list-content" class="flex-col gap-8"></div>
+                </div>
+                
+                <div id="fld-editor" style="display:none; --section-accent: var(--accent-folders);">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+                        <div style="display:flex;align-items:center;">
+                            <button class="back-btn" onclick="hideEditor('fld')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+                            <h3 style="font-size:16px;font-weight:500;margin-left:16px;" id="fld-title">Editing Folder</h3>
+                        </div>
+                    </div>
+                    <div class="editor-sandbox-layout">
+                        <div class="editor-controls-col">
+                            <div class="editor-section" style="margin-bottom: 24px;">
+                                <h4>Folder Settings</h4>
+                                <div class="control-group">
+                                    <div class="control-row">
+                                        <span class="control-label">Folder Name</span>
+                                        <input type="text" id="i-fld-name" class="premium-input" style="width:120px;">
+                                    </div>
+                                    <div class="toggle-row mt-8">
+                                        <span class="control-label">Snap to Grid</span>
+                                        <label class="toggle"><input type="checkbox" id="i-fld-gridsnap"><span class="track"></span></label>
+                                    </div>
+                                    <div class="toggle-row">
+                                        <span class="control-label">Show Hover Pill</span>
+                                        <label class="toggle"><input type="checkbox" id="i-fld-showtitle"><span class="track"></span></label>
+                                    </div>
+                                    <div class="toggle-row">
+                                        <span class="control-label">Show App Names</span>
+                                        <label class="toggle"><input type="checkbox" id="i-fld-showappnames"><span class="track"></span></label>
+                                    </div>
+                                    <div class="control-row mt-8" id="row-pill-mode">
+                                        <span class="control-label">Pill Display Mode</span>
+                                        <div style="display:flex; background:var(--bg-3); border-radius:6px; padding:2px; gap:2px;">
+                                            <button id="btn-mode-text" class="pill-mode-btn" style="background:var(--accent-folders); border:none; padding:4px 12px; border-radius:4px; cursor:pointer;"><div style="-webkit-mask-image: url('../assets/text.svg'); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor; width: 16px; height: 16px; display: inline-block; vertical-align:middle;"></div></button>
+                                            <button id="btn-mode-icon" class="pill-mode-btn" style="background:transparent; border:none; padding:4px 12px; border-radius:4px; cursor:pointer;"><div style="-webkit-mask-image: url('../assets/Pandora.svg'); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor; width: 16px; height: 16px; display: inline-block; vertical-align:middle; opacity: 0.5;"></div></button>
+                                        </div>
+                                    </div>
+                                    <div class="control-row mt-8" id="row-pill-icon">
+                                        <span class="control-label">Pill Icon Path</span>
+                                        <div style="display:flex; gap:4px;">
+                                            <input type="text" id="i-fld-pillicon" class="premium-input" placeholder="assets/icon.svg" style="width:120px;">
+                                            <button id="btn-pick-icon" style="background:var(--bg-3); border:1px solid var(--border-color); border-radius:4px; padding:4px 8px; cursor:pointer;"><div style="-webkit-mask-image: url('../assets/browse.svg'); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor; width: 14px; height: 14px; display: inline-block; vertical-align:middle;"></div></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════════════════════════════════════
+                 HALO
+                 ════════════════════════════════════════════════ -->
+            
+            <div class="tab-page" id="tab-halo" data-accent="var(--accent-halo)" style="--section-accent: var(--accent-halo);">
+
+                <div class="section-header">
+                    <span class="sh-text">Activation & Behavior</span>
+                </div>
+                <div class="control-group">
+                    <div class="control-row" id="set-halo-act-key"><span class="control-label">Activation Key</span><button class="keybind-key" style="color:var(--accent-halo);border-color:var(--accent-halo);">~ / `</button></div>
+                    <div class="control-row" id="set-halo-act-mode"><span class="control-label">Activation Mode</span><select><option selected>Hold</option><option>Toggle</option></select></div>
+                    <div class="control-row" id="set-halo-theme"><span class="control-label">Visual Theme</span><select><option selected>Dark</option><option>Desktop</option><option>Gray</option></select></div>
+                    <div class="control-item mt-16" id="halo-brightness-container">
+                        <div class="control-row"><span class="control-label">Brightness</span><span class="range-val" id="v-hb">50</span></div>
+                        <input type="range" min="0" max="100" value="50" data-val="v-hb">
+                    </div>
+                    <div class="control-row" id="set-halo-blur-level"><span class="control-label">Blur Level</span><select><option value="Low">Low</option><option value="Medium">Medium</option><option value="High" selected>High</option></select></div>
+                    <div class="control-row" id="set-halo-arc"><span class="control-label">HUD Arc Gap</span><select><option>0</option><option>15</option><option>30</option><option>45</option><option>60</option><option selected>75</option><option>90</option></select></div>
+                    <div class="toggle-row" style="margin-top: 12px;"><span class="control-label has-tip" data-tip="Show numeric value and icon in the arc gap">Show HUD Text</span><label class="toggle"><input type="checkbox" id="set-halo-show-hud" checked><span class="track"></span></label></div>
+                </div>
+
+                <div class="section-header">
+                    <span class="sh-text">Dimensions & Feel</span>
+                </div>
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Overall diameter of the radial menu">Menu Diameter</span><span class="range-val" id="v-md">300</span></div>
+                        <input type="range" min="100" max="800" value="300" data-val="v-md">
+                    </div>
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Ratio of the inner dead zone to outer ring">Hub Ratio (%)</span><span class="range-val" id="v-hr">50</span></div>
+                        <input type="range" min="0" max="95" value="50" data-val="v-hr">
+                    </div>
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Background opacity of the halo overlay">BG Opacity</span><span class="range-val" id="v-bo">185</span></div>
+                        <input type="range" min="50" max="255" value="185" data-val="v-bo">
+                    </div>
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="How quickly the menu responds to mouse wheel">Scroll Sensitivity</span><span class="range-val" id="v-ss">50</span></div>
+                        <input type="range" min="1" max="100" value="50" data-val="v-ss">
+                    </div>
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label has-tip" data-tip="Multiplier for mouse movement in the halo">Mouse Sensitivity</span><span class="range-val" id="v-ms">100</span></div>
+                        <input type="range" min="10" max="200" value="100" data-val="v-ms">
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <span class="sh-text">Halo Layout</span>
+                </div>
+
+                <div class="halo-sandbox" id="halo-sandbox">
+                    <!-- Radial Preview -->
+                    <div class="halo-radial-wrap">
+                        <svg class="halo-radial-svg" id="halo-radial-svg" viewBox="0 0 500 500">
+                            <defs>
+                                <filter id="halo-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                </filter>
+                            </defs>
+                        </svg>
+                        <div class="halo-center-hub" id="halo-center-hub">
+                            <div class="halo-center-layer-select" id="halo-layer-trigger">
+                                <span class="halo-center-layer-sub">L</span>
+                                <span class="halo-center-layer-num" id="halo-center-num">1</span>
+                                <svg class="halo-center-layer-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                <div class="halo-layer-dropdown" id="halo-layer-dropdown"></div>
+                            </div>
+                            <select id="halo-layer-select" style="display:none;"></select>
+                            <button class="halo-center-add-slice" id="halo-add-slice" title="Add Slice (max 8)">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                SLICE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="--section-accent: var(--accent-hub);">
+                    <span class="sh-text">Media Widget Settings</span>
+                </div>
+                <div class="control-group">
+                    <div class="control-row"><span class="control-label">Art Style</span><select id="set-media-art"><option value="Gaussian Blur">Gaussian Blur</option><option value="8-Bit Mosaic">8-Bit Mosaic</option></select></div>
+                    <div class="control-row"><span class="control-label">Visualizer</span><select id="set-media-vis"><option value="None">None</option><option value="Edge Ring EQ">Edge Ring EQ</option><option value="Breathing Blur">Breathing Blur</option><option value="Voxel Wiggle">Voxel Wiggle</option><option value="Size Pulsing">Size Pulsing</option><option value="Brightness Strobing">Brightness Strobing</option></select></div>
+                    <div class="control-row"><span class="control-label">Mosaic Style</span><select id="set-media-mosaic"><option value="Flat" selected>Flat</option><option value="Extrusion">Extrusion</option></select></div>
+                    <div class="control-row"><span class="control-label">Mosaic Shape</span><select id="set-media-mosaic-shape"><option value="Square" selected>Square</option><option value="Circles">Circles</option><option value="Hexagons">Hexagons</option><option value="Rounded">Rounded</option><option value="Diamonds">Diamonds</option></select></div>
+                    <div class="control-item">
+                        <div class="control-row"><span class="control-label">Effect Strength</span><span class="range-val" id="v-media-strength">25</span></div>
+                        <input type="range" min="0" max="100" value="25" data-val="v-media-strength" id="i-media-strength">
+                    </div>
+                    <div class="toggle-row mt-16"><span class="control-label">Show Timeline</span><label class="toggle"><input type="checkbox" id="set-media-timeline" checked><span class="track"></span></label></div>
+                    <div class="toggle-row"><span class="control-label">Show Title</span><label class="toggle"><input type="checkbox" id="set-media-title" checked><span class="track"></span></label></div>
+                    <div class="toggle-row"><span class="control-label">Show Controls</span><label class="toggle"><input type="checkbox" id="set-media-controls" checked><span class="track"></span></label></div>
+                </div>
+
+                <div class="section-header" style="--section-accent: var(--accent-hub);">
+                    <span class="sh-text">Time Widget Settings</span>
+                </div>
+                <div class="control-group">
+                    <div class="control-row"><span class="control-label">Clock Mode</span><select id="set-time-mode"><option value="digital">Digital</option><option value="analog">Analog</option></select></div>
+                    <div class="toggle-row"><span class="control-label">24-Hour Format</span><label class="toggle"><input type="checkbox" id="set-time-24h" checked><span class="track"></span></label></div>
+                    <div class="toggle-row"><span class="control-label">Show Date</span><label class="toggle"><input type="checkbox" id="set-time-date" checked><span class="track"></span></label></div>
+                    <div class="toggle-row"><span class="control-label">Show Seconds</span><label class="toggle"><input type="checkbox" id="set-time-seconds"><span class="track"></span></label></div>
+                </div>
+            </div>
+
+            <!-- Command Bank Overlay (outside tab pages, fixed) -->
+            <div class="halo-cmd-overlay" id="halo-cmd-overlay">
+                <div class="halo-cmd-panel">
+                    <div class="halo-cmd-header">
+                        <h4>ASSIGN TOOL</h4>
+                        <button class="halo-cmd-close" id="halo-cmd-close">✕</button>
+                    </div>
+                    <div class="halo-cmd-grid" id="halo-cmd-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button class="halo-cmd-remove" id="halo-cmd-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        Remove from Slice
+                    </button>
+                </div>
+            </div>
+
+            </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="renderer.js"></script>
+</body>
+</html>

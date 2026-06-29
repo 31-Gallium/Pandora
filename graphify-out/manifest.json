@@ -1,0 +1,1862 @@
+{
+  "config.py": {
+    "mtime": 1779813457.0572073,
+    "ast_hash": "162834ab8f864bfbff2864aefc0bb0c6",
+    "semantic_hash": "162834ab8f864bfbff2864aefc0bb0c6"
+  },
+  "core_services/ipc_server.py": {
+    "mtime": 1779566775.5281866,
+    "ast_hash": "fe264c302784868b61cfe4eba6956727",
+    "semantic_hash": "fe264c302784868b61cfe4eba6956727"
+  },
+  "core_services/media_daemon.py": {
+    "mtime": 1780773381.8452294,
+    "ast_hash": "c6ddc06787809e1417081bb1e4a9a52c",
+    "semantic_hash": "c6ddc06787809e1417081bb1e4a9a52c"
+  },
+  "electron_dashboard/main.js": {
+    "mtime": 1779825831.6828134,
+    "ast_hash": "8dea4add9893e6657f820da06cf31f1a",
+    "semantic_hash": "8dea4add9893e6657f820da06cf31f1a"
+  },
+  "electron_dashboard/package.json": {
+    "mtime": 1779570432.721846,
+    "ast_hash": "a65b869b6714a3af23ede0fa81c03a86",
+    "semantic_hash": "a65b869b6714a3af23ede0fa81c03a86"
+  },
+  "electron_dashboard/renderer.js": {
+    "mtime": 1781704497.110489,
+    "ast_hash": "ecdbe3cc6b3e96ee78bea98cf36f3a8d",
+    "semantic_hash": ""
+  },
+  "electron_dashboard/sandbox_server.py": {
+    "mtime": 1779741726.214351,
+    "ast_hash": "dab8c87797c28918828d537694847668",
+    "semantic_hash": "dab8c87797c28918828d537694847668"
+  },
+  "electron_dashboard/ui_dashboard_common.js": {
+    "mtime": 1781709240.7186491,
+    "ast_hash": "428878a6e841fb181a21bf8715bab916",
+    "semantic_hash": ""
+  },
+  "electron_dashboard/ui_dashboard_folders.js": {
+    "mtime": 1779833177.7451518,
+    "ast_hash": "93685ef7c655ebc796530148fa74a22b",
+    "semantic_hash": "93685ef7c655ebc796530148fa74a22b"
+  },
+  "electron_dashboard/ui_dashboard_general.js": {
+    "mtime": 1779825470.5022197,
+    "ast_hash": "0c52580dbd20838d874ccf399f0bec61",
+    "semantic_hash": "0c52580dbd20838d874ccf399f0bec61"
+  },
+  "electron_dashboard/ui_dashboard_halo.js": {
+    "mtime": 1781709249.5729012,
+    "ast_hash": "abe614f18913c5040e3fc034269dc4d0",
+    "semantic_hash": ""
+  },
+  "electron_dashboard/ui_dashboard_templates.js": {
+    "mtime": 1779833191.3088367,
+    "ast_hash": "e4a5df2ce74fc541e5a2f5ba648dd264",
+    "semantic_hash": "e4a5df2ce74fc541e5a2f5ba648dd264"
+  },
+  "hub.py": {
+    "mtime": 1781705722.5560367,
+    "ast_hash": "52fda17c856a58f40314b19f1dd05cec",
+    "semantic_hash": ""
+  },
+  "hub_modules/__init__.py": {
+    "mtime": 1781450699.99097,
+    "ast_hash": "6589eb48206732f41889ca1cbc0e47ff",
+    "semantic_hash": ""
+  },
+  "hub_modules/base.py": {
+    "mtime": 1778769588.308021,
+    "ast_hash": "2f206864e82885a6b63005ed564ff39a",
+    "semantic_hash": "2f206864e82885a6b63005ed564ff39a"
+  },
+  "hub_modules/clock.py": {
+    "mtime": 1779537363.184108,
+    "ast_hash": "4cbd77354ceb1b527416493e6549cd58",
+    "semantic_hash": "4cbd77354ceb1b527416493e6549cd58"
+  },
+  "hub_modules/default.py": {
+    "mtime": 1778769588.3126194,
+    "ast_hash": "0a0e2c271cb3e420e7d59709c32de407",
+    "semantic_hash": "0a0e2c271cb3e420e7d59709c32de407"
+  },
+  "hub_modules/media.py": {
+    "mtime": 1781709187.970456,
+    "ast_hash": "1e6466fb4a66afebc0c94e962158bb36",
+    "semantic_hash": ""
+  },
+  "main.py": {
+    "mtime": 1781710504.9197612,
+    "ast_hash": "e6df0951dba9b5f6a11e52210d76970c",
+    "semantic_hash": ""
+  },
+  "scratch/analyze_ast.js": {
+    "mtime": 1779834302.7243507,
+    "ast_hash": "75e5243f6b69f5827e4f32b745b20a59",
+    "semantic_hash": "75e5243f6b69f5827e4f32b745b20a59"
+  },
+  "scratch/analyze_braces.py": {
+    "mtime": 1779833890.278963,
+    "ast_hash": "5802111d531562adeffaee76ba48e32c",
+    "semantic_hash": "5802111d531562adeffaee76ba48e32c"
+  },
+  "scratch/bring_to_front.py": {
+    "mtime": 1779834512.501822,
+    "ast_hash": "3bc3f2f9c734f26063c03c9be715f584",
+    "semantic_hash": "3bc3f2f9c734f26063c03c9be715f584"
+  },
+  "scratch/check_parity.py": {
+    "mtime": 1779814431.996345,
+    "ast_hash": "c7b964e90a6c9b8f2685393ed8718279",
+    "semantic_hash": "c7b964e90a6c9b8f2685393ed8718279"
+  },
+  "scratch/check_pycaw_api.py": {
+    "mtime": 1778616550.4580793,
+    "ast_hash": "bbce37d5f57d5ff16bf5089a747506a7",
+    "semantic_hash": "bbce37d5f57d5ff16bf5089a747506a7"
+  },
+  "scratch/check_pycaw_api_v2.py": {
+    "mtime": 1778616561.0837233,
+    "ast_hash": "f5e9f08a16dbc4563af129ee030a9849",
+    "semantic_hash": "f5e9f08a16dbc4563af129ee030a9849"
+  },
+  "scratch/clean_workspace.py": {
+    "mtime": 1779488813.0099304,
+    "ast_hash": "2b35d229ab34ef6fb8f276f285ebfb56",
+    "semantic_hash": "2b35d229ab34ef6fb8f276f285ebfb56"
+  },
+  "scratch/click_halo.py": {
+    "mtime": 1780761246.401914,
+    "ast_hash": "7445ae053b2acc8189445835c155e797",
+    "semantic_hash": "7445ae053b2acc8189445835c155e797"
+  },
+  "scratch/click_slice.py": {
+    "mtime": 1780759433.7883306,
+    "ast_hash": "4864ced908050f173dfac22d4a688d4d",
+    "semantic_hash": "4864ced908050f173dfac22d4a688d4d"
+  },
+  "scratch/debug_mute.py": {
+    "mtime": 1778616017.0082533,
+    "ast_hash": "8e21bde3058c1629834468c3e4a4084e",
+    "semantic_hash": "8e21bde3058c1629834468c3e4a4084e"
+  },
+  "scratch/dump.json": {
+    "mtime": 1779511082.4114304,
+    "ast_hash": "b8e61105ef06eff28bf103dd0bdf3122",
+    "semantic_hash": "b8e61105ef06eff28bf103dd0bdf3122"
+  },
+  "scratch/extract.py": {
+    "mtime": 1779825301.2421443,
+    "ast_hash": "e642ff430b9ab043720bdad11e4f0b49",
+    "semantic_hash": "e642ff430b9ab043720bdad11e4f0b49"
+  },
+  "scratch/find_app_ids.py": {
+    "mtime": 1778620036.5636623,
+    "ast_hash": "5610ec82d3a0bdc12a35fa8a5840d983",
+    "semantic_hash": "5610ec82d3a0bdc12a35fa8a5840d983"
+  },
+  "scratch/find_in_script.py": {
+    "mtime": 1779814514.8534236,
+    "ast_hash": "cd1dfc1a533f63659f8d5a97bca4d79f",
+    "semantic_hash": "cd1dfc1a533f63659f8d5a97bca4d79f"
+  },
+  "scratch/find_panes.py": {
+    "mtime": 1779826297.709694,
+    "ast_hash": "2a30c45cfbce61c07fa0e03c31b5c1b6",
+    "semantic_hash": "2a30c45cfbce61c07fa0e03c31b5c1b6"
+  },
+  "scratch/find_scope.py": {
+    "mtime": 1780758332.333954,
+    "ast_hash": "f2b08ee8e816445634dac07b682d6ff8",
+    "semantic_hash": "f2b08ee8e816445634dac07b682d6ff8"
+  },
+  "scratch/find_sliders.py": {
+    "mtime": 1779825403.3406348,
+    "ast_hash": "f89ec246c0d9f45828126395009d82d8",
+    "semantic_hash": "f89ec246c0d9f45828126395009d82d8"
+  },
+  "scratch/find_tabs.py": {
+    "mtime": 1779826279.3239627,
+    "ast_hash": "17400d9d72b15892d450ae94c1b6cb3f",
+    "semantic_hash": "17400d9d72b15892d450ae94c1b6cb3f"
+  },
+  "scratch/find_tabs2.py": {
+    "mtime": 1779826341.9902577,
+    "ast_hash": "75e9fa4ea41ab2ddebcc02f9338e4659",
+    "semantic_hash": "75e9fa4ea41ab2ddebcc02f9338e4659"
+  },
+  "scratch/fix_css.py": {
+    "mtime": 1779825608.1679955,
+    "ast_hash": "f4cea9ccf228bbcd175ce3628f965cd2",
+    "semantic_hash": "f4cea9ccf228bbcd175ce3628f965cd2"
+  },
+  "scratch/fix_index.py": {
+    "mtime": 1779826414.380939,
+    "ast_hash": "7fcdd11ae7704842417daf297dee0288",
+    "semantic_hash": "7fcdd11ae7704842417daf297dee0288"
+  },
+  "scratch/fix_renderer.py": {
+    "mtime": 1779826180.0920222,
+    "ast_hash": "037ff537fea76994b1c0b4fe7060a6c6",
+    "semantic_hash": "037ff537fea76994b1c0b4fe7060a6c6"
+  },
+  "scratch/focus_electron.py": {
+    "mtime": 1780758226.862401,
+    "ast_hash": "1b1ea140d4fbd4b49a0b4463251849c6",
+    "semantic_hash": "1b1ea140d4fbd4b49a0b4463251849c6"
+  },
+  "scratch/map_ids.py": {
+    "mtime": 1779826260.7011693,
+    "ast_hash": "d3fd41018922526d723ad758a0421e8e",
+    "semantic_hash": "d3fd41018922526d723ad758a0421e8e"
+  },
+  "scratch/minimize_all.py": {
+    "mtime": 1779835006.9096262,
+    "ast_hash": "09701262ce2e636c6373c708f34835c9",
+    "semantic_hash": "09701262ce2e636c6373c708f34835c9"
+  },
+  "scratch/move_css.py": {
+    "mtime": 1779825529.0720727,
+    "ast_hash": "de1f584742aa10d9fe7b1affcd379c40",
+    "semantic_hash": "de1f584742aa10d9fe7b1affcd379c40"
+  },
+  "scratch/parse_html.py": {
+    "mtime": 1780758719.8897893,
+    "ast_hash": "e4017e70e2baa5bf0f79ccbc8780bb7f",
+    "semantic_hash": "e4017e70e2baa5bf0f79ccbc8780bb7f"
+  },
+  "scratch/print_sections.py": {
+    "mtime": 1779818100.24961,
+    "ast_hash": "affa5496c9989a2f7b934b4d6e967717",
+    "semantic_hash": "affa5496c9989a2f7b934b4d6e967717"
+  },
+  "scratch/rewrite_js.py": {
+    "mtime": 1779825440.971852,
+    "ast_hash": "cf73648767a283a75a7c178556b5c4fa",
+    "semantic_hash": "cf73648767a283a75a7c178556b5c4fa"
+  },
+  "scratch/rewrite_ui.py": {
+    "mtime": 1779636075.1645265,
+    "ast_hash": "396a558368b140e96bc4ce00d9a965fa",
+    "semantic_hash": "396a558368b140e96bc4ce00d9a965fa"
+  },
+  "scratch/screenshot.py": {
+    "mtime": 1780761388.9516273,
+    "ast_hash": "63b3b54b744bb732610f5d821bf95c1c",
+    "semantic_hash": "63b3b54b744bb732610f5d821bf95c1c"
+  },
+  "scratch/search_clock_settings.py": {
+    "mtime": 1779814573.5256119,
+    "ast_hash": "435db5a853d625052f9e1aa4f2345a73",
+    "semantic_hash": "435db5a853d625052f9e1aa4f2345a73"
+  },
+  "scratch/search_code.py": {
+    "mtime": 1779814452.60376,
+    "ast_hash": "7c8f099077abf57b9cee9efa50e2b932",
+    "semantic_hash": "7c8f099077abf57b9cee9efa50e2b932"
+  },
+  "scratch/search_elements.py": {
+    "mtime": 1779814439.4202864,
+    "ast_hash": "e87635dc68d4eb24a86558c15dddc9bb",
+    "semantic_hash": "e87635dc68d4eb24a86558c15dddc9bb"
+  },
+  "scratch/search_js.py": {
+    "mtime": 1779814501.1166916,
+    "ast_hash": "9107ea69ff57d34db04fd4850900935c",
+    "semantic_hash": "9107ea69ff57d34db04fd4850900935c"
+  },
+  "scratch/search_js_bindings.py": {
+    "mtime": 1779814521.9395275,
+    "ast_hash": "c4e181440298a409c7e56fb03dc4892f",
+    "semantic_hash": "c4e181440298a409c7e56fb03dc4892f"
+  },
+  "scratch/search_js_config.py": {
+    "mtime": 1779814550.464306,
+    "ast_hash": "f6b43cc5855f6ea3730f78de966cac45",
+    "semantic_hash": "f6b43cc5855f6ea3730f78de966cac45"
+  },
+  "scratch/search_js_slider.py": {
+    "mtime": 1779814529.058074,
+    "ast_hash": "f7e5e605f65c6320cdd0fe210c14c374",
+    "semantic_hash": "f7e5e605f65c6320cdd0fe210c14c374"
+  },
+  "scratch/search_js_specific.py": {
+    "mtime": 1779814566.5513158,
+    "ast_hash": "a6cafe99e8d917230547c2b062255324",
+    "semantic_hash": "a6cafe99e8d917230547c2b062255324"
+  },
+  "scratch/search_tpl_elements.py": {
+    "mtime": 1779814557.5609853,
+    "ast_hash": "2ea370f451e394405bc55b6aa50b6858",
+    "semantic_hash": "2ea370f451e394405bc55b6aa50b6858"
+  },
+  "scratch/step2_rewrite.py": {
+    "mtime": 1779825460.0996685,
+    "ast_hash": "fa26ba1d21b1f0dbd4b718e99e05e211",
+    "semantic_hash": "fa26ba1d21b1f0dbd4b718e99e05e211"
+  },
+  "scratch/step3_rewrite.py": {
+    "mtime": 1779825480.4146645,
+    "ast_hash": "24fd8c73b3a679046e93f9b33c0b4789",
+    "semantic_hash": "24fd8c73b3a679046e93f9b33c0b4789"
+  },
+  "scratch/take_ss.py": {
+    "mtime": 1779825640.4397824,
+    "ast_hash": "0eb010c4bfbfcf25ba4f4bdbab65781c",
+    "semantic_hash": "0eb010c4bfbfcf25ba4f4bdbab65781c"
+  },
+  "scratch/take_ss_focused.py": {
+    "mtime": 1779834980.3729541,
+    "ast_hash": "93d372d9dc24d35fff3e238053279576",
+    "semantic_hash": "93d372d9dc24d35fff3e238053279576"
+  },
+  "scratch/test_add_item.py": {
+    "mtime": 1779485752.070422,
+    "ast_hash": "7bc1c28b8bf71c7c5ff345c0231717db",
+    "semantic_hash": "7bc1c28b8bf71c7c5ff345c0231717db"
+  },
+  "scratch/test_mute.py": {
+    "mtime": 1778615830.9740243,
+    "ast_hash": "3c3a7500bf6c951cec1f6f380969de4a",
+    "semantic_hash": "3c3a7500bf6c951cec1f6f380969de4a"
+  },
+  "scratch/test_pyqt.py": {
+    "mtime": 1779655853.9879289,
+    "ast_hash": "13ea7e4119c999cf59582552bc920674",
+    "semantic_hash": "13ea7e4119c999cf59582552bc920674"
+  },
+  "scratch/test_pyqt_paint.py": {
+    "mtime": 1779656055.2911634,
+    "ast_hash": "8f920cea468d654980a34e52339d60f2",
+    "semantic_hash": "8f920cea468d654980a34e52339d60f2"
+  },
+  "scratch/test_pyqt_solid.py": {
+    "mtime": 1779655877.751627,
+    "ast_hash": "c51091cafcd1c6aa16f831e385565385",
+    "semantic_hash": "c51091cafcd1c6aa16f831e385565385"
+  },
+  "scratch/test_transient.py": {
+    "mtime": 1779739794.8076677,
+    "ast_hash": "2268467400ce7aefbf73d1168e65498d",
+    "semantic_hash": "2268467400ce7aefbf73d1168e65498d"
+  },
+  "scratch/test_vol_match.py": {
+    "mtime": 1778786645.3988888,
+    "ast_hash": "60476207289e9e72fd9e2a441e60da36",
+    "semantic_hash": "60476207289e9e72fd9e2a441e60da36"
+  },
+  "utils.py": {
+    "mtime": 1781445597.568803,
+    "ast_hash": "010706f3ae92fba52b70613c1c2344b1",
+    "semantic_hash": "010706f3ae92fba52b70613c1c2344b1"
+  },
+  "README.md": {
+    "mtime": 1778625552.864295,
+    "ast_hash": "92ced82c88cb82e32ba2ec210e5b39b5",
+    "semantic_hash": "92ced82c88cb82e32ba2ec210e5b39b5"
+  },
+  "SRS.md": {
+    "mtime": 1778625545.547199,
+    "ast_hash": "cb19faa8159940a3d7e5a4e3c9d7ca50",
+    "semantic_hash": "cb19faa8159940a3d7e5a4e3c9d7ca50"
+  },
+  "electron_dashboard/index.html": {
+    "mtime": 1781708345.566862,
+    "ast_hash": "2aa987426eb16e0867d5f85a05756267",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1773075916.0,
+    "ast_hash": "18e9206cd8f4185a3edb1301b98fcdda",
+    "semantic_hash": "18e9206cd8f4185a3edb1301b98fcdda"
+  },
+  "scratch/dashboard_trace_out.txt": {
+    "mtime": 1779396705.1195493,
+    "ast_hash": "2ee7b03cc7488e09f96543e900dad1ef",
+    "semantic_hash": "2ee7b03cc7488e09f96543e900dad1ef"
+  },
+  "scratch/js_debug.txt": {
+    "mtime": 1779817528.506928,
+    "ast_hash": "d1733f69ab51fb24a1afea118aa4991a",
+    "semantic_hash": "d1733f69ab51fb24a1afea118aa4991a"
+  },
+  "scratch/sandbox_debug.txt": {
+    "mtime": 1779818082.7061098,
+    "ast_hash": "5bdd2dad1a1960aba056a5dcb5b04413",
+    "semantic_hash": "5bdd2dad1a1960aba056a5dcb5b04413"
+  },
+  "scratch/sandbox_stderr.txt": {
+    "mtime": 1779817955.6393027,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "scratch/sandbox_stdout.txt": {
+    "mtime": 1779817955.6393027,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "scratch/trace_output.txt": {
+    "mtime": 1779485446.7507367,
+    "ast_hash": "abf6a7ad7aa5f3dbbff8b85e4d488aad",
+    "semantic_hash": "abf6a7ad7aa5f3dbbff8b85e4d488aad"
+  },
+  "assets/Pandora.svg": {
+    "mtime": 1778334162.0,
+    "ast_hash": "b1b0ee5766b2c504bc80f7b5987e7892",
+    "semantic_hash": "b1b0ee5766b2c504bc80f7b5987e7892"
+  },
+  "assets/add.svg": {
+    "mtime": 1778344570.0,
+    "ast_hash": "37353da0440bae0218d20ee5de932d87",
+    "semantic_hash": "37353da0440bae0218d20ee5de932d87"
+  },
+  "assets/back.svg": {
+    "mtime": 1779554938.9161556,
+    "ast_hash": "0a3cf2b20c2108dcf0b6fd59970d57b9",
+    "semantic_hash": "0a3cf2b20c2108dcf0b6fd59970d57b9"
+  },
+  "assets/battery.svg": {
+    "mtime": 1778618869.991894,
+    "ast_hash": "8bb7485afc6fa06790d6b07113e9b39b",
+    "semantic_hash": "8bb7485afc6fa06790d6b07113e9b39b"
+  },
+  "assets/browse.svg": {
+    "mtime": 1779482664.0528345,
+    "ast_hash": "c96576e7a7ae40087bc2a6e404fb82d9",
+    "semantic_hash": "c96576e7a7ae40087bc2a6e404fb82d9"
+  },
+  "assets/browser.svg": {
+    "mtime": 1778613198.7942388,
+    "ast_hash": "0e5475bb4c54aa25ce52ba9d007030f2",
+    "semantic_hash": "0e5475bb4c54aa25ce52ba9d007030f2"
+  },
+  "assets/calculator.svg": {
+    "mtime": 1778613913.06426,
+    "ast_hash": "85ce7bd018a3f7b390d2546ef062ba1a",
+    "semantic_hash": "85ce7bd018a3f7b390d2546ef062ba1a"
+  },
+  "assets/charging.svg": {
+    "mtime": 1778618873.8201346,
+    "ast_hash": "d221920598664031c2e3c8a74b789a02",
+    "semantic_hash": "d221920598664031c2e3c8a74b789a02"
+  },
+  "assets/circle.svg": {
+    "mtime": 1778611975.1033483,
+    "ast_hash": "06590da3a1877c47a8bf9989f6f176ca",
+    "semantic_hash": "06590da3a1877c47a8bf9989f6f176ca"
+  },
+  "assets/clock.svg": {
+    "mtime": 1778704699.1694765,
+    "ast_hash": "62ac90a5296d02c792d521be99ede351",
+    "semantic_hash": "62ac90a5296d02c792d521be99ede351"
+  },
+  "assets/cloud.svg": {
+    "mtime": 1778704792.9255097,
+    "ast_hash": "f5b06f218d275793bc4079d38f4ffd84",
+    "semantic_hash": "f5b06f218d275793bc4079d38f4ffd84"
+  },
+  "assets/delete.svg": {
+    "mtime": 1778344454.0,
+    "ast_hash": "bd0aa8eebf141476a2319f3296a6ff44",
+    "semantic_hash": "bd0aa8eebf141476a2319f3296a6ff44"
+  },
+  "assets/duplicate.svg": {
+    "mtime": 1778344352.0,
+    "ast_hash": "e146e95afb546ff85d0e84ba86b0e81e",
+    "semantic_hash": "e146e95afb546ff85d0e84ba86b0e81e"
+  },
+  "assets/empty recycle bin.svg": {
+    "mtime": 1778613607.1210482,
+    "ast_hash": "18410f2ee83274ca28c9c271957545d1",
+    "semantic_hash": "18410f2ee83274ca28c9c271957545d1"
+  },
+  "assets/file explorer.svg": {
+    "mtime": 1778613269.0313873,
+    "ast_hash": "5b8f2a0c336f9aeff23457bcb58c3a81",
+    "semantic_hash": "5b8f2a0c336f9aeff23457bcb58c3a81"
+  },
+  "assets/fog.svg": {
+    "mtime": 1778704925.4220674,
+    "ast_hash": "26da9333ef859723f5183687ec941999",
+    "semantic_hash": "26da9333ef859723f5183687ec941999"
+  },
+  "assets/folders.svg": {
+    "mtime": 1778339304.0,
+    "ast_hash": "6e4c3eba0124f54fce613a9361a8423a",
+    "semantic_hash": "6e4c3eba0124f54fce613a9361a8423a"
+  },
+  "assets/general.svg": {
+    "mtime": 1778339280.0,
+    "ast_hash": "39f78ab4c8f78a5c915a169080801714",
+    "semantic_hash": "39f78ab4c8f78a5c915a169080801714"
+  },
+  "assets/halo.svg": {
+    "mtime": 1778772244.3448365,
+    "ast_hash": "e0dac87e5c6bab07606ad6f1f48ce95a",
+    "semantic_hash": "e0dac87e5c6bab07606ad6f1f48ce95a"
+  },
+  "assets/hold.svg": {
+    "mtime": 1778612771.8198488,
+    "ast_hash": "a63fe1976b5e5052819717fbb46de09c",
+    "semantic_hash": "a63fe1976b5e5052819717fbb46de09c"
+  },
+  "assets/hub.svg": {
+    "mtime": 1778772229.4195735,
+    "ast_hash": "2e72d7cff17e7ce823190a486cf063c5",
+    "semantic_hash": "2e72d7cff17e7ce823190a486cf063c5"
+  },
+  "assets/launcher.svg": {
+    "mtime": 1778704991.7995317,
+    "ast_hash": "a6c0f72674d1b01799e8fa3f2fa85d47",
+    "semantic_hash": "a6c0f72674d1b01799e8fa3f2fa85d47"
+  },
+  "assets/music.svg": {
+    "mtime": 1778704610.5834796,
+    "ast_hash": "9727f18a1edbc0decedc22f7b1d853ee",
+    "semantic_hash": "9727f18a1edbc0decedc22f7b1d853ee"
+  },
+  "assets/mute.svg": {
+    "mtime": 1778613489.1349876,
+    "ast_hash": "7c6e971464a0a9de87efed21885cee4e",
+    "semantic_hash": "7c6e971464a0a9de87efed21885cee4e"
+  },
+  "assets/next.svg": {
+    "mtime": 1778615474.8064165,
+    "ast_hash": "cec1fe18e77ab0d192aaf626dc2860c9",
+    "semantic_hash": "cec1fe18e77ab0d192aaf626dc2860c9"
+  },
+  "assets/night light.svg": {
+    "mtime": 1778613437.9564402,
+    "ast_hash": "e9d3a271a9ed61c61ef361c87952e5a8",
+    "semantic_hash": "e9d3a271a9ed61c61ef361c87952e5a8"
+  },
+  "assets/notepad.svg": {
+    "mtime": 1778613848.625806,
+    "ast_hash": "f7de6a586895ac195e2db455b8a90e3e",
+    "semantic_hash": "f7de6a586895ac195e2db455b8a90e3e"
+  },
+  "assets/pause.svg": {
+    "mtime": 1778704642.413533,
+    "ast_hash": "d427d3a447ae19666aa1247653256c87",
+    "semantic_hash": "d427d3a447ae19666aa1247653256c87"
+  },
+  "assets/play.svg": {
+    "mtime": 1778704631.9731176,
+    "ast_hash": "4cd3cc49423be858c4684ac3b072ea02",
+    "semantic_hash": "4cd3cc49423be858c4684ac3b072ea02"
+  },
+  "assets/power.svg": {
+    "mtime": 1778613866.176138,
+    "ast_hash": "f249d08b7359fef50c07b19c3b5e2e11",
+    "semantic_hash": "f249d08b7359fef50c07b19c3b5e2e11"
+  },
+  "assets/prev.svg": {
+    "mtime": 1778614268.0492783,
+    "ast_hash": "316059e5e8c89d29e9e7506e5c634318",
+    "semantic_hash": "316059e5e8c89d29e9e7506e5c634318"
+  },
+  "assets/rain.svg": {
+    "mtime": 1778704888.728692,
+    "ast_hash": "80fe5a77653885b064af32c1c927b74c",
+    "semantic_hash": "80fe5a77653885b064af32c1c927b74c"
+  },
+  "assets/rename.svg": {
+    "mtime": 1778344386.0,
+    "ast_hash": "a669ae9d550cff1654438ef5629ad4a6",
+    "semantic_hash": "a669ae9d550cff1654438ef5629ad4a6"
+  },
+  "assets/reset.svg": {
+    "mtime": 1778345144.0,
+    "ast_hash": "711d280b7b8070751f781c8b8f6313e6",
+    "semantic_hash": "711d280b7b8070751f781c8b8f6313e6"
+  },
+  "assets/rounded square.svg": {
+    "mtime": 1778611977.7890582,
+    "ast_hash": "96afefc1eec6809ae6c88a500849c525",
+    "semantic_hash": "96afefc1eec6809ae6c88a500849c525"
+  },
+  "assets/screenshot.svg": {
+    "mtime": 1778613382.3144815,
+    "ast_hash": "43203b9b67e331c02f3c51ff74cf6384",
+    "semantic_hash": "43203b9b67e331c02f3c51ff74cf6384"
+  },
+  "assets/search.svg": {
+    "mtime": 1778613638.3449013,
+    "ast_hash": "17c5bc71e358a76ca02d65c207af33c8",
+    "semantic_hash": "17c5bc71e358a76ca02d65c207af33c8"
+  },
+  "assets/snow.svg": {
+    "mtime": 1778704905.264498,
+    "ast_hash": "ed621933e47e1c9a45b1a7608dc6abe1",
+    "semantic_hash": "ed621933e47e1c9a45b1a7608dc6abe1"
+  },
+  "assets/square.svg": {
+    "mtime": 1778611980.3767447,
+    "ast_hash": "668e6c255beee39586960162cb9e4583",
+    "semantic_hash": "668e6c255beee39586960162cb9e4583"
+  },
+  "assets/sticky notes.svg": {
+    "mtime": 1778613844.8365574,
+    "ast_hash": "a9c3613911644d801232667d734dbea1",
+    "semantic_hash": "a9c3613911644d801232667d734dbea1"
+  },
+  "assets/stopwatch.svg": {
+    "mtime": 1778704711.2343683,
+    "ast_hash": "666499c0bc32da4ad4cd9ce4b05b9215",
+    "semantic_hash": "666499c0bc32da4ad4cd9ce4b05b9215"
+  },
+  "assets/storm.svg": {
+    "mtime": 1778704914.9534369,
+    "ast_hash": "bcc93f036f302789a5aa6defe81300ee",
+    "semantic_hash": "bcc93f036f302789a5aa6defe81300ee"
+  },
+  "assets/sun.svg": {
+    "mtime": 1778704770.862684,
+    "ast_hash": "0fc94003a3a92bb38bcd975676165653",
+    "semantic_hash": "0fc94003a3a92bb38bcd975676165653"
+  },
+  "assets/tap.svg": {
+    "mtime": 1778612766.4116673,
+    "ast_hash": "521feb04717ca4fb57d82e019b5be0d9",
+    "semantic_hash": "521feb04717ca4fb57d82e019b5be0d9"
+  },
+  "assets/task manager.svg": {
+    "mtime": 1778613775.5488591,
+    "ast_hash": "fc8a211f20fb693c30bcd262d1f8cd0a",
+    "semantic_hash": "fc8a211f20fb693c30bcd262d1f8cd0a"
+  },
+  "assets/template.svg": {
+    "mtime": 1778334444.0,
+    "ast_hash": "5ed313a99c9d3acffa8e08e434211948",
+    "semantic_hash": "5ed313a99c9d3acffa8e08e434211948"
+  },
+  "assets/terminal.svg": {
+    "mtime": 1778613929.7997868,
+    "ast_hash": "eaf3ea8e914d464fcf5f3b9046538b46",
+    "semantic_hash": "eaf3ea8e914d464fcf5f3b9046538b46"
+  },
+  "assets/timer.svg": {
+    "mtime": 1778704755.6527207,
+    "ast_hash": "05e4d428c016596cc16106999c5f3d6e",
+    "semantic_hash": "05e4d428c016596cc16106999c5f3d6e"
+  },
+  "assets/toggle grid.svg": {
+    "mtime": 1778613336.8931484,
+    "ast_hash": "9faa104ed16e709a04643c9be85d32f8",
+    "semantic_hash": "9faa104ed16e709a04643c9be85d32f8"
+  },
+  "assets/unmute.svg": {
+    "mtime": 1778613552.5805078,
+    "ast_hash": "790b5faeaa7418000977b080ed73a8ad",
+    "semantic_hash": "790b5faeaa7418000977b080ed73a8ad"
+  },
+  "assets/upload.svg": {
+    "mtime": 1778338980.0,
+    "ast_hash": "5e634320bc42eafefc0c227af2135b8f",
+    "semantic_hash": "5e634320bc42eafefc0c227af2135b8f"
+  },
+  "assets/volume down.svg": {
+    "mtime": 1778619043.6963787,
+    "ast_hash": "2783e33c02c2d09d3bf09ad4a0f1fd89",
+    "semantic_hash": "2783e33c02c2d09d3bf09ad4a0f1fd89"
+  },
+  "assets/volume up.svg": {
+    "mtime": 1778619046.107218,
+    "ast_hash": "32d08a471f2c5215b73e457a84323729",
+    "semantic_hash": "32d08a471f2c5215b73e457a84323729"
+  },
+  "browser_out.png": {
+    "mtime": 1781445293.409966,
+    "ast_hash": "2836533f70b51d4325f2fb2fb006cc38",
+    "semantic_hash": "2836533f70b51d4325f2fb2fb006cc38"
+  },
+  "debug_icon.png": {
+    "mtime": 1781444776.9346309,
+    "ast_hash": "397ee36057dda727f011ad5298dc54a2",
+    "semantic_hash": "397ee36057dda727f011ad5298dc54a2"
+  },
+  "scratch/click_slice.png": {
+    "mtime": 1780759445.3424098,
+    "ast_hash": "bcbd8d5b86befb2087f2e98f2cee3ddd",
+    "semantic_hash": "bcbd8d5b86befb2087f2e98f2cee3ddd"
+  },
+  "scratch/current_screen.png": {
+    "mtime": 1780758178.0742843,
+    "ast_hash": "8e8cce77ab8df19424bdd22583e3d35d",
+    "semantic_hash": "8e8cce77ab8df19424bdd22583e3d35d"
+  },
+  "scratch/desktop_ss.png": {
+    "mtime": 1779655732.8726432,
+    "ast_hash": "33f084190a90b767f6d2f34fda638ea6",
+    "semantic_hash": "33f084190a90b767f6d2f34fda638ea6"
+  },
+  "scratch/electron_ss.png": {
+    "mtime": 1780758249.6590593,
+    "ast_hash": "14d34466685ba13aab7fd2652d36da51",
+    "semantic_hash": "14d34466685ba13aab7fd2652d36da51"
+  },
+  "scratch/electron_ss2.png": {
+    "mtime": 1780758451.7350552,
+    "ast_hash": "cb28b1f82aff6ed05539407d5fe46180",
+    "semantic_hash": "cb28b1f82aff6ed05539407d5fe46180"
+  },
+  "scratch/halo_tab.png": {
+    "mtime": 1780761258.657668,
+    "ast_hash": "115f40614496391f50964e8e0966287a",
+    "semantic_hash": "115f40614496391f50964e8e0966287a"
+  },
+  "scratch/real_screenshot.png": {
+    "mtime": 1780761398.8447335,
+    "ast_hash": "dc593a3d746941f81594f60cee5ba7f2",
+    "semantic_hash": "dc593a3d746941f81594f60cee5ba7f2"
+  },
+  "backup_ui_refactor/app_icon.py": {
+    "mtime": 1778518042.0,
+    "ast_hash": "06ac2a628895bd88a1105645c6e4032f",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/folder_icon.py": {
+    "mtime": 1781453055.5256712,
+    "ast_hash": "e97336138c2c48907ec1b385e88ce250",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/folder_view.py": {
+    "mtime": 1779833205.813537,
+    "ast_hash": "58dc5a3dfe6df64fb819e97c1d9aa036",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/grid_overlay.py": {
+    "mtime": 1778334798.0,
+    "ast_hash": "8ec9f7730e5fa82649c0686aa8212778",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/halo.py": {
+    "mtime": 1781706462.2617378,
+    "ast_hash": "efa935373576c181b8aa89f608cf5314",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/layout_logic.py": {
+    "mtime": 1779488785.0231905,
+    "ast_hash": "5744797dc05be08e3c73c669fab83123",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/logic.py": {
+    "mtime": 1779488807.3229632,
+    "ast_hash": "0a92e5bde2dd351c4583f49f2e5bf0b1",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/main.py": {
+    "mtime": 1779834542.487188,
+    "ast_hash": "8cd9842768aa7d1549a471d431ce48fc",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/ui_app_selector.py": {
+    "mtime": 1779553839.5980444,
+    "ast_hash": "4ff7bf7d07b8cbe31691c9967f55baec",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/ui_common.py": {
+    "mtime": 1779553333.730066,
+    "ast_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/ui_dz_grid.py": {
+    "mtime": 1779552233.198904,
+    "ast_hash": "6e932b900882a7d4fef36442e2a572ee",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/ui_utils.py": {
+    "mtime": 1779833249.3371985,
+    "ast_hash": "8b5e3c798bca29951bee7fcbd8c8d064",
+    "semantic_hash": ""
+  },
+  "backup_ui_refactor/ws_server.py": {
+    "mtime": 1781705969.242329,
+    "ast_hash": "3467f503290873c795e3a798d2efad23",
+    "semantic_hash": ""
+  },
+  "core_services/ws_server.py": {
+    "mtime": 1781705969.242329,
+    "ast_hash": "3467f503290873c795e3a798d2efad23",
+    "semantic_hash": ""
+  },
+  "scratch/ast_extract.py": {
+    "mtime": 1781446139.7288086,
+    "ast_hash": "1cc115d541df6004b9367f8878b87f0c",
+    "semantic_hash": ""
+  },
+  "scratch/build.py": {
+    "mtime": 1781446184.821332,
+    "ast_hash": "1c417413e8630e6b7821883ce91b9c0a",
+    "semantic_hash": ""
+  },
+  "scratch/cleanup.py": {
+    "mtime": 1781446235.364537,
+    "ast_hash": "d448702cc4b283161db6db79bd77fda9",
+    "semantic_hash": ""
+  },
+  "scratch/debug_frontend_cfg.json": {
+    "mtime": 1781703958.425737,
+    "ast_hash": "845aada0798838c7fc9848c7e672d71e",
+    "semantic_hash": ""
+  },
+  "scratch/label.py": {
+    "mtime": 1781446206.6549997,
+    "ast_hash": "90e50151bf57c28f847a261d5ed7c6a5",
+    "semantic_hash": ""
+  },
+  "scratch/merge.py": {
+    "mtime": 1781446116.567427,
+    "ast_hash": "c7d226f1e25c2d57206a6407263bdf1e",
+    "semantic_hash": ""
+  },
+  "scratch/rewrite_halo.py": {
+    "mtime": 1781450666.0475876,
+    "ast_hash": "84c7d8efd0f4f0db630e10429b01e5c5",
+    "semantic_hash": ""
+  },
+  "scratch/test_all_devices.py": {
+    "mtime": 1781706418.6841092,
+    "ast_hash": "9a90a80d54f7515fa7b040e34e977e6e",
+    "semantic_hash": ""
+  },
+  "scratch/test_peak.py": {
+    "mtime": 1781706370.8649845,
+    "ast_hash": "0f48934a8099105cc14b46467e027c32",
+    "semantic_hash": ""
+  },
+  "scratch/test_raw_peak.py": {
+    "mtime": 1781706391.697388,
+    "ast_hash": "6e15383a34fdfe9d570de748b4b60b2c",
+    "semantic_hash": ""
+  },
+  "ui/__init__.py": {
+    "mtime": 1781710484.6049478,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "ui/app_icon.py": {
+    "mtime": 1781710552.8867085,
+    "ast_hash": "40aac6c31b5c8450221de62bf9ee15cc",
+    "semantic_hash": ""
+  },
+  "ui/folder_icon.py": {
+    "mtime": 1781710514.5957088,
+    "ast_hash": "aed93044dde2b1ef60d4105a1015c5f6",
+    "semantic_hash": ""
+  },
+  "ui/folder_view.py": {
+    "mtime": 1781710526.3893948,
+    "ast_hash": "f7e7604c492aff97a2c904bcd106b9f8",
+    "semantic_hash": ""
+  },
+  "ui/grid_overlay.py": {
+    "mtime": 1778334798.0,
+    "ast_hash": "8ec9f7730e5fa82649c0686aa8212778",
+    "semantic_hash": ""
+  },
+  "ui/halo.py": {
+    "mtime": 1781706462.2617378,
+    "ast_hash": "efa935373576c181b8aa89f608cf5314",
+    "semantic_hash": ""
+  },
+  "ui/layout_logic.py": {
+    "mtime": 1779488785.0231905,
+    "ast_hash": "5744797dc05be08e3c73c669fab83123",
+    "semantic_hash": ""
+  },
+  "ui/logic.py": {
+    "mtime": 1781710540.2171168,
+    "ast_hash": "72a6a28daccbd9517fd064b37255aba6",
+    "semantic_hash": ""
+  },
+  "ui/ui_common.py": {
+    "mtime": 1779553333.730066,
+    "ast_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7",
+    "semantic_hash": ""
+  },
+  "ui/ui_utils.py": {
+    "mtime": 1781710569.1775298,
+    "ast_hash": "0bb28c5f1b8d2c693c39dca33a1bac31",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\app_icon.py": {
+    "mtime": 1778518042.0,
+    "ast_hash": "06ac2a628895bd88a1105645c6e4032f",
+    "semantic_hash": "06ac2a628895bd88a1105645c6e4032f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\folder_icon.py": {
+    "mtime": 1781453055.5256712,
+    "ast_hash": "e97336138c2c48907ec1b385e88ce250",
+    "semantic_hash": "e97336138c2c48907ec1b385e88ce250"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\folder_view.py": {
+    "mtime": 1779833205.813537,
+    "ast_hash": "58dc5a3dfe6df64fb819e97c1d9aa036",
+    "semantic_hash": "58dc5a3dfe6df64fb819e97c1d9aa036"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\grid_overlay.py": {
+    "mtime": 1778334798.0,
+    "ast_hash": "8ec9f7730e5fa82649c0686aa8212778",
+    "semantic_hash": "8ec9f7730e5fa82649c0686aa8212778"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\halo.py": {
+    "mtime": 1781706462.2617378,
+    "ast_hash": "efa935373576c181b8aa89f608cf5314",
+    "semantic_hash": "efa935373576c181b8aa89f608cf5314"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\layout_logic.py": {
+    "mtime": 1779488785.0231905,
+    "ast_hash": "5744797dc05be08e3c73c669fab83123",
+    "semantic_hash": "5744797dc05be08e3c73c669fab83123"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\logic.py": {
+    "mtime": 1779488807.3229632,
+    "ast_hash": "0a92e5bde2dd351c4583f49f2e5bf0b1",
+    "semantic_hash": "0a92e5bde2dd351c4583f49f2e5bf0b1"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\main.py": {
+    "mtime": 1779834542.487188,
+    "ast_hash": "8cd9842768aa7d1549a471d431ce48fc",
+    "semantic_hash": "8cd9842768aa7d1549a471d431ce48fc"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\ui_app_selector.py": {
+    "mtime": 1779553839.5980444,
+    "ast_hash": "4ff7bf7d07b8cbe31691c9967f55baec",
+    "semantic_hash": "4ff7bf7d07b8cbe31691c9967f55baec"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\ui_common.py": {
+    "mtime": 1779553333.730066,
+    "ast_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7",
+    "semantic_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\ui_dz_grid.py": {
+    "mtime": 1779552233.198904,
+    "ast_hash": "6e932b900882a7d4fef36442e2a572ee",
+    "semantic_hash": "6e932b900882a7d4fef36442e2a572ee"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\ui_utils.py": {
+    "mtime": 1779833249.3371985,
+    "ast_hash": "8b5e3c798bca29951bee7fcbd8c8d064",
+    "semantic_hash": "8b5e3c798bca29951bee7fcbd8c8d064"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\backup_ui_refactor\\ws_server.py": {
+    "mtime": 1781705969.242329,
+    "ast_hash": "3467f503290873c795e3a798d2efad23",
+    "semantic_hash": "3467f503290873c795e3a798d2efad23"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\config.py": {
+    "mtime": 1779813457.0572073,
+    "ast_hash": "162834ab8f864bfbff2864aefc0bb0c6",
+    "semantic_hash": "162834ab8f864bfbff2864aefc0bb0c6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\core_services\\ipc_server.py": {
+    "mtime": 1779566775.5281866,
+    "ast_hash": "fe264c302784868b61cfe4eba6956727",
+    "semantic_hash": "fe264c302784868b61cfe4eba6956727"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\core_services\\media_daemon.py": {
+    "mtime": 1781982415.478516,
+    "ast_hash": "24c202b7ec03ee653a8b75b1fc53f2d9",
+    "semantic_hash": "24c202b7ec03ee653a8b75b1fc53f2d9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\core_services\\ws_server.py": {
+    "mtime": 1781705969.242329,
+    "ast_hash": "3467f503290873c795e3a798d2efad23",
+    "semantic_hash": "3467f503290873c795e3a798d2efad23"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\main.js": {
+    "mtime": 1779825831.6828134,
+    "ast_hash": "8dea4add9893e6657f820da06cf31f1a",
+    "semantic_hash": "8dea4add9893e6657f820da06cf31f1a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\package.json": {
+    "mtime": 1779570432.721846,
+    "ast_hash": "a65b869b6714a3af23ede0fa81c03a86",
+    "semantic_hash": "a65b869b6714a3af23ede0fa81c03a86"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\renderer.js": {
+    "mtime": 1781704497.110489,
+    "ast_hash": "ecdbe3cc6b3e96ee78bea98cf36f3a8d",
+    "semantic_hash": "ecdbe3cc6b3e96ee78bea98cf36f3a8d"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\sandbox_server.py": {
+    "mtime": 1779741726.214351,
+    "ast_hash": "dab8c87797c28918828d537694847668",
+    "semantic_hash": "dab8c87797c28918828d537694847668"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\ui_dashboard_common.js": {
+    "mtime": 1782032324.3296587,
+    "ast_hash": "fdd503cd4dda482fa79d3b160aa77e89",
+    "semantic_hash": "fdd503cd4dda482fa79d3b160aa77e89"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\ui_dashboard_folders.js": {
+    "mtime": 1779833177.7451518,
+    "ast_hash": "93685ef7c655ebc796530148fa74a22b",
+    "semantic_hash": "93685ef7c655ebc796530148fa74a22b"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\ui_dashboard_general.js": {
+    "mtime": 1779825470.5022197,
+    "ast_hash": "0c52580dbd20838d874ccf399f0bec61",
+    "semantic_hash": "0c52580dbd20838d874ccf399f0bec61"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\ui_dashboard_halo.js": {
+    "mtime": 1782025382.4016614,
+    "ast_hash": "06edcaeb2117f9a1c1bb3c5fcb6df4ef",
+    "semantic_hash": "06edcaeb2117f9a1c1bb3c5fcb6df4ef"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\ui_dashboard_templates.js": {
+    "mtime": 1779833191.3088367,
+    "ast_hash": "e4a5df2ce74fc541e5a2f5ba648dd264",
+    "semantic_hash": "e4a5df2ce74fc541e5a2f5ba648dd264"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\fix.py": {
+    "mtime": 1782021476.5029924,
+    "ast_hash": "2434c3d6b5336e63366b35a41c28e610",
+    "semantic_hash": "2434c3d6b5336e63366b35a41c28e610"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\fix_main.py": {
+    "mtime": 1782021512.671237,
+    "ast_hash": "4532a91a0ed2a8a565a0c5dbc352433b",
+    "semantic_hash": "4532a91a0ed2a8a565a0c5dbc352433b"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub.py": {
+    "mtime": 1781705722.5560367,
+    "ast_hash": "52fda17c856a58f40314b19f1dd05cec",
+    "semantic_hash": "52fda17c856a58f40314b19f1dd05cec"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub_modules\\__init__.py": {
+    "mtime": 1781450699.99097,
+    "ast_hash": "6589eb48206732f41889ca1cbc0e47ff",
+    "semantic_hash": "6589eb48206732f41889ca1cbc0e47ff"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub_modules\\base.py": {
+    "mtime": 1778769588.308021,
+    "ast_hash": "2f206864e82885a6b63005ed564ff39a",
+    "semantic_hash": "2f206864e82885a6b63005ed564ff39a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub_modules\\clock.py": {
+    "mtime": 1779537363.184108,
+    "ast_hash": "4cbd77354ceb1b527416493e6549cd58",
+    "semantic_hash": "4cbd77354ceb1b527416493e6549cd58"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub_modules\\default.py": {
+    "mtime": 1778769588.3126194,
+    "ast_hash": "0a0e2c271cb3e420e7d59709c32de407",
+    "semantic_hash": "0a0e2c271cb3e420e7d59709c32de407"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\hub_modules\\media.py": {
+    "mtime": 1782024013.4911432,
+    "ast_hash": "a5b8d792b091d7573bfcf031dc889392",
+    "semantic_hash": "a5b8d792b091d7573bfcf031dc889392"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\main.py": {
+    "mtime": 1782021545.1615617,
+    "ast_hash": "c0d26bafe3edd72e227eadd774f9956b",
+    "semantic_hash": "c0d26bafe3edd72e227eadd774f9956b"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\analyze_ast.js": {
+    "mtime": 1779834302.7243507,
+    "ast_hash": "75e5243f6b69f5827e4f32b745b20a59",
+    "semantic_hash": "75e5243f6b69f5827e4f32b745b20a59"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\analyze_braces.py": {
+    "mtime": 1779833890.278963,
+    "ast_hash": "5802111d531562adeffaee76ba48e32c",
+    "semantic_hash": "5802111d531562adeffaee76ba48e32c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\ast_extract.py": {
+    "mtime": 1781446139.7288086,
+    "ast_hash": "1cc115d541df6004b9367f8878b87f0c",
+    "semantic_hash": "1cc115d541df6004b9367f8878b87f0c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\bring_to_front.py": {
+    "mtime": 1779834512.501822,
+    "ast_hash": "3bc3f2f9c734f26063c03c9be715f584",
+    "semantic_hash": "3bc3f2f9c734f26063c03c9be715f584"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\build.py": {
+    "mtime": 1781446184.821332,
+    "ast_hash": "1c417413e8630e6b7821883ce91b9c0a",
+    "semantic_hash": "1c417413e8630e6b7821883ce91b9c0a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\check_parity.py": {
+    "mtime": 1779814431.996345,
+    "ast_hash": "c7b964e90a6c9b8f2685393ed8718279",
+    "semantic_hash": "c7b964e90a6c9b8f2685393ed8718279"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\check_pycaw_api.py": {
+    "mtime": 1778616550.4580793,
+    "ast_hash": "bbce37d5f57d5ff16bf5089a747506a7",
+    "semantic_hash": "bbce37d5f57d5ff16bf5089a747506a7"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\check_pycaw_api_v2.py": {
+    "mtime": 1778616561.0837233,
+    "ast_hash": "f5e9f08a16dbc4563af129ee030a9849",
+    "semantic_hash": "f5e9f08a16dbc4563af129ee030a9849"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\clean_workspace.py": {
+    "mtime": 1779488813.0099304,
+    "ast_hash": "2b35d229ab34ef6fb8f276f285ebfb56",
+    "semantic_hash": "2b35d229ab34ef6fb8f276f285ebfb56"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\cleanup.py": {
+    "mtime": 1781446235.364537,
+    "ast_hash": "d448702cc4b283161db6db79bd77fda9",
+    "semantic_hash": "d448702cc4b283161db6db79bd77fda9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\click_halo.py": {
+    "mtime": 1780761246.401914,
+    "ast_hash": "7445ae053b2acc8189445835c155e797",
+    "semantic_hash": "7445ae053b2acc8189445835c155e797"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\click_slice.py": {
+    "mtime": 1780759433.7883306,
+    "ast_hash": "4864ced908050f173dfac22d4a688d4d",
+    "semantic_hash": "4864ced908050f173dfac22d4a688d4d"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\debug_frontend_cfg.json": {
+    "mtime": 1781703958.425737,
+    "ast_hash": "845aada0798838c7fc9848c7e672d71e",
+    "semantic_hash": "845aada0798838c7fc9848c7e672d71e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\debug_mute.py": {
+    "mtime": 1778616017.0082533,
+    "ast_hash": "8e21bde3058c1629834468c3e4a4084e",
+    "semantic_hash": "8e21bde3058c1629834468c3e4a4084e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\detect_incremental.py": {
+    "mtime": 1782054356.96863,
+    "ast_hash": "c7c151b652c5323d8f4d8c91c82583d3",
+    "semantic_hash": "c7c151b652c5323d8f4d8c91c82583d3"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\dump.json": {
+    "mtime": 1779511082.4114304,
+    "ast_hash": "b8e61105ef06eff28bf103dd0bdf3122",
+    "semantic_hash": "b8e61105ef06eff28bf103dd0bdf3122"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\extract.py": {
+    "mtime": 1779825301.2421443,
+    "ast_hash": "e642ff430b9ab043720bdad11e4f0b49",
+    "semantic_hash": "e642ff430b9ab043720bdad11e4f0b49"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_app_ids.py": {
+    "mtime": 1778620036.5636623,
+    "ast_hash": "5610ec82d3a0bdc12a35fa8a5840d983",
+    "semantic_hash": "5610ec82d3a0bdc12a35fa8a5840d983"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_in_script.py": {
+    "mtime": 1779814514.8534236,
+    "ast_hash": "cd1dfc1a533f63659f8d5a97bca4d79f",
+    "semantic_hash": "cd1dfc1a533f63659f8d5a97bca4d79f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_panes.py": {
+    "mtime": 1779826297.709694,
+    "ast_hash": "2a30c45cfbce61c07fa0e03c31b5c1b6",
+    "semantic_hash": "2a30c45cfbce61c07fa0e03c31b5c1b6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_scope.py": {
+    "mtime": 1780758332.333954,
+    "ast_hash": "f2b08ee8e816445634dac07b682d6ff8",
+    "semantic_hash": "f2b08ee8e816445634dac07b682d6ff8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_sliders.py": {
+    "mtime": 1779825403.3406348,
+    "ast_hash": "f89ec246c0d9f45828126395009d82d8",
+    "semantic_hash": "f89ec246c0d9f45828126395009d82d8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_tabs.py": {
+    "mtime": 1779826279.3239627,
+    "ast_hash": "17400d9d72b15892d450ae94c1b6cb3f",
+    "semantic_hash": "17400d9d72b15892d450ae94c1b6cb3f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\find_tabs2.py": {
+    "mtime": 1779826341.9902577,
+    "ast_hash": "75e9fa4ea41ab2ddebcc02f9338e4659",
+    "semantic_hash": "75e9fa4ea41ab2ddebcc02f9338e4659"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\fix_css.py": {
+    "mtime": 1779825608.1679955,
+    "ast_hash": "f4cea9ccf228bbcd175ce3628f965cd2",
+    "semantic_hash": "f4cea9ccf228bbcd175ce3628f965cd2"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\fix_index.py": {
+    "mtime": 1779826414.380939,
+    "ast_hash": "7fcdd11ae7704842417daf297dee0288",
+    "semantic_hash": "7fcdd11ae7704842417daf297dee0288"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\fix_renderer.py": {
+    "mtime": 1779826180.0920222,
+    "ast_hash": "037ff537fea76994b1c0b4fe7060a6c6",
+    "semantic_hash": "037ff537fea76994b1c0b4fe7060a6c6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\focus_electron.py": {
+    "mtime": 1780758226.862401,
+    "ast_hash": "1b1ea140d4fbd4b49a0b4463251849c6",
+    "semantic_hash": "1b1ea140d4fbd4b49a0b4463251849c6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\label.py": {
+    "mtime": 1781446206.6549997,
+    "ast_hash": "90e50151bf57c28f847a261d5ed7c6a5",
+    "semantic_hash": "90e50151bf57c28f847a261d5ed7c6a5"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\map_ids.py": {
+    "mtime": 1779826260.7011693,
+    "ast_hash": "d3fd41018922526d723ad758a0421e8e",
+    "semantic_hash": "d3fd41018922526d723ad758a0421e8e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\merge.py": {
+    "mtime": 1781446116.567427,
+    "ast_hash": "c7d226f1e25c2d57206a6407263bdf1e",
+    "semantic_hash": "c7d226f1e25c2d57206a6407263bdf1e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\minimize_all.py": {
+    "mtime": 1779835006.9096262,
+    "ast_hash": "09701262ce2e636c6373c708f34835c9",
+    "semantic_hash": "09701262ce2e636c6373c708f34835c9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\move_css.py": {
+    "mtime": 1779825529.0720727,
+    "ast_hash": "de1f584742aa10d9fe7b1affcd379c40",
+    "semantic_hash": "de1f584742aa10d9fe7b1affcd379c40"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\parse_html.py": {
+    "mtime": 1780758719.8897893,
+    "ast_hash": "e4017e70e2baa5bf0f79ccbc8780bb7f",
+    "semantic_hash": "e4017e70e2baa5bf0f79ccbc8780bb7f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\print_sections.py": {
+    "mtime": 1779818100.24961,
+    "ast_hash": "affa5496c9989a2f7b934b4d6e967717",
+    "semantic_hash": "affa5496c9989a2f7b934b4d6e967717"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\rewrite_halo.py": {
+    "mtime": 1781450666.0475876,
+    "ast_hash": "84c7d8efd0f4f0db630e10429b01e5c5",
+    "semantic_hash": "84c7d8efd0f4f0db630e10429b01e5c5"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\rewrite_hook_signals.py": {
+    "mtime": 1781983582.915876,
+    "ast_hash": "ef11a8e372c4c37eccd63f61557fc0ff",
+    "semantic_hash": "ef11a8e372c4c37eccd63f61557fc0ff"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\rewrite_js.py": {
+    "mtime": 1779825440.971852,
+    "ast_hash": "cf73648767a283a75a7c178556b5c4fa",
+    "semantic_hash": "cf73648767a283a75a7c178556b5c4fa"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\rewrite_ui.py": {
+    "mtime": 1779636075.1645265,
+    "ast_hash": "396a558368b140e96bc4ce00d9a965fa",
+    "semantic_hash": "396a558368b140e96bc4ce00d9a965fa"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\screenshot.py": {
+    "mtime": 1780761388.9516273,
+    "ast_hash": "63b3b54b744bb732610f5d821bf95c1c",
+    "semantic_hash": "63b3b54b744bb732610f5d821bf95c1c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_clock_settings.py": {
+    "mtime": 1779814573.5256119,
+    "ast_hash": "435db5a853d625052f9e1aa4f2345a73",
+    "semantic_hash": "435db5a853d625052f9e1aa4f2345a73"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_code.py": {
+    "mtime": 1779814452.60376,
+    "ast_hash": "7c8f099077abf57b9cee9efa50e2b932",
+    "semantic_hash": "7c8f099077abf57b9cee9efa50e2b932"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_elements.py": {
+    "mtime": 1779814439.4202864,
+    "ast_hash": "e87635dc68d4eb24a86558c15dddc9bb",
+    "semantic_hash": "e87635dc68d4eb24a86558c15dddc9bb"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_js.py": {
+    "mtime": 1779814501.1166916,
+    "ast_hash": "9107ea69ff57d34db04fd4850900935c",
+    "semantic_hash": "9107ea69ff57d34db04fd4850900935c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_js_bindings.py": {
+    "mtime": 1779814521.9395275,
+    "ast_hash": "c4e181440298a409c7e56fb03dc4892f",
+    "semantic_hash": "c4e181440298a409c7e56fb03dc4892f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_js_config.py": {
+    "mtime": 1779814550.464306,
+    "ast_hash": "f6b43cc5855f6ea3730f78de966cac45",
+    "semantic_hash": "f6b43cc5855f6ea3730f78de966cac45"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_js_slider.py": {
+    "mtime": 1779814529.058074,
+    "ast_hash": "f7e5e605f65c6320cdd0fe210c14c374",
+    "semantic_hash": "f7e5e605f65c6320cdd0fe210c14c374"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_js_specific.py": {
+    "mtime": 1779814566.5513158,
+    "ast_hash": "a6cafe99e8d917230547c2b062255324",
+    "semantic_hash": "a6cafe99e8d917230547c2b062255324"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\search_tpl_elements.py": {
+    "mtime": 1779814557.5609853,
+    "ast_hash": "2ea370f451e394405bc55b6aa50b6858",
+    "semantic_hash": "2ea370f451e394405bc55b6aa50b6858"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\step2_rewrite.py": {
+    "mtime": 1779825460.0996685,
+    "ast_hash": "fa26ba1d21b1f0dbd4b718e99e05e211",
+    "semantic_hash": "fa26ba1d21b1f0dbd4b718e99e05e211"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\step3_rewrite.py": {
+    "mtime": 1779825480.4146645,
+    "ast_hash": "24fd8c73b3a679046e93f9b33c0b4789",
+    "semantic_hash": "24fd8c73b3a679046e93f9b33c0b4789"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\take_ss.py": {
+    "mtime": 1779825640.4397824,
+    "ast_hash": "0eb010c4bfbfcf25ba4f4bdbab65781c",
+    "semantic_hash": "0eb010c4bfbfcf25ba4f4bdbab65781c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\take_ss_focused.py": {
+    "mtime": 1779834980.3729541,
+    "ast_hash": "93d372d9dc24d35fff3e238053279576",
+    "semantic_hash": "93d372d9dc24d35fff3e238053279576"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_add_item.py": {
+    "mtime": 1779485752.070422,
+    "ast_hash": "7bc1c28b8bf71c7c5ff345c0231717db",
+    "semantic_hash": "7bc1c28b8bf71c7c5ff345c0231717db"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_all_devices.py": {
+    "mtime": 1781706418.6841092,
+    "ast_hash": "9a90a80d54f7515fa7b040e34e977e6e",
+    "semantic_hash": "9a90a80d54f7515fa7b040e34e977e6e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_blur.py": {
+    "mtime": 1781958257.495547,
+    "ast_hash": "2eec4e693a4059291326e3702546702a",
+    "semantic_hash": "2eec4e693a4059291326e3702546702a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_halo_anim.py": {
+    "mtime": 1781956169.5781229,
+    "ast_hash": "843892c017cad75c9f11282c00604093",
+    "semantic_hash": "843892c017cad75c9f11282c00604093"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_icon.py": {
+    "mtime": 1781715199.6952624,
+    "ast_hash": "45469fa890538014a8dcfe21866087bc",
+    "semantic_hash": "45469fa890538014a8dcfe21866087bc"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_mute.py": {
+    "mtime": 1778615830.9740243,
+    "ast_hash": "3c3a7500bf6c951cec1f6f380969de4a",
+    "semantic_hash": "3c3a7500bf6c951cec1f6f380969de4a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_peak.py": {
+    "mtime": 1781706370.8649845,
+    "ast_hash": "0f48934a8099105cc14b46467e027c32",
+    "semantic_hash": "0f48934a8099105cc14b46467e027c32"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_pyqt.py": {
+    "mtime": 1779655853.9879289,
+    "ast_hash": "13ea7e4119c999cf59582552bc920674",
+    "semantic_hash": "13ea7e4119c999cf59582552bc920674"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_pyqt_paint.py": {
+    "mtime": 1779656055.2911634,
+    "ast_hash": "8f920cea468d654980a34e52339d60f2",
+    "semantic_hash": "8f920cea468d654980a34e52339d60f2"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_pyqt_solid.py": {
+    "mtime": 1779655877.751627,
+    "ast_hash": "c51091cafcd1c6aa16f831e385565385",
+    "semantic_hash": "c51091cafcd1c6aa16f831e385565385"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_raw_peak.py": {
+    "mtime": 1781706391.697388,
+    "ast_hash": "6e15383a34fdfe9d570de748b4b60b2c",
+    "semantic_hash": "6e15383a34fdfe9d570de748b4b60b2c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_session_eq.py": {
+    "mtime": 1781975553.0216708,
+    "ast_hash": "9795745787e65a9e5a7344c0e32b1809",
+    "semantic_hash": "9795745787e65a9e5a7344c0e32b1809"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_session_id.py": {
+    "mtime": 1781975518.110283,
+    "ast_hash": "79446c1cb1e1f96bc1ef1a01a118d633",
+    "semantic_hash": "79446c1cb1e1f96bc1ef1a01a118d633"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_session_order.py": {
+    "mtime": 1781975607.5666127,
+    "ast_hash": "f707d633bdb28a215e015403d77598be",
+    "semantic_hash": "f707d633bdb28a215e015403d77598be"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_transient.py": {
+    "mtime": 1779739794.8076677,
+    "ast_hash": "2268467400ce7aefbf73d1168e65498d",
+    "semantic_hash": "2268467400ce7aefbf73d1168e65498d"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_vol_match.py": {
+    "mtime": 1778786645.3988888,
+    "ast_hash": "60476207289e9e72fd9e2a441e60da36",
+    "semantic_hash": "60476207289e9e72fd9e2a441e60da36"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\test_ws.py": {
+    "mtime": 1781956250.84013,
+    "ast_hash": "1b86a9739934a64fdef381d041ee3981",
+    "semantic_hash": "1b86a9739934a64fdef381d041ee3981"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\__init__.py": {
+    "mtime": 1781710484.6049478,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\app_icon.py": {
+    "mtime": 1781710552.8867085,
+    "ast_hash": "40aac6c31b5c8450221de62bf9ee15cc",
+    "semantic_hash": "40aac6c31b5c8450221de62bf9ee15cc"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\folder_icon.py": {
+    "mtime": 1781710514.5957088,
+    "ast_hash": "aed93044dde2b1ef60d4105a1015c5f6",
+    "semantic_hash": "aed93044dde2b1ef60d4105a1015c5f6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\folder_view.py": {
+    "mtime": 1781710526.3893948,
+    "ast_hash": "f7e7604c492aff97a2c904bcd106b9f8",
+    "semantic_hash": "f7e7604c492aff97a2c904bcd106b9f8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\grid_overlay.py": {
+    "mtime": 1778334798.0,
+    "ast_hash": "8ec9f7730e5fa82649c0686aa8212778",
+    "semantic_hash": "8ec9f7730e5fa82649c0686aa8212778"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\halo.py": {
+    "mtime": 1782033384.7463467,
+    "ast_hash": "4e7baaaadd3c4e0d3e578b79a4f5c021",
+    "semantic_hash": "4e7baaaadd3c4e0d3e578b79a4f5c021"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\layout_logic.py": {
+    "mtime": 1779488785.0231905,
+    "ast_hash": "5744797dc05be08e3c73c669fab83123",
+    "semantic_hash": "5744797dc05be08e3c73c669fab83123"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\logic.py": {
+    "mtime": 1781710540.2171168,
+    "ast_hash": "72a6a28daccbd9517fd064b37255aba6",
+    "semantic_hash": "72a6a28daccbd9517fd064b37255aba6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\ui_common.py": {
+    "mtime": 1779553333.730066,
+    "ast_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7",
+    "semantic_hash": "7e8eff4e5e9b5a5d29e9bbe5785045c7"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\ui\\ui_utils.py": {
+    "mtime": 1781710569.1775298,
+    "ast_hash": "0bb28c5f1b8d2c693c39dca33a1bac31",
+    "semantic_hash": "0bb28c5f1b8d2c693c39dca33a1bac31"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\utils.py": {
+    "mtime": 1782032399.53189,
+    "ast_hash": "987b504072b5e65559f02062eb05b92d",
+    "semantic_hash": "987b504072b5e65559f02062eb05b92d"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\README.md": {
+    "mtime": 1778625552.864295,
+    "ast_hash": "92ced82c88cb82e32ba2ec210e5b39b5",
+    "semantic_hash": "92ced82c88cb82e32ba2ec210e5b39b5"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\SRS.md": {
+    "mtime": 1778625545.547199,
+    "ast_hash": "cb19faa8159940a3d7e5a4e3c9d7ca50",
+    "semantic_hash": "cb19faa8159940a3d7e5a4e3c9d7ca50"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\crash_log.txt": {
+    "mtime": 1781987063.0105686,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\electron_dashboard\\index.html": {
+    "mtime": 1782026304.4285846,
+    "ast_hash": "8550fc04dd3c2bc6371c384d59615188",
+    "semantic_hash": "8550fc04dd3c2bc6371c384d59615188"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\output.txt": {
+    "mtime": 1782027938.859069,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\requirements.txt": {
+    "mtime": 1773075916.0,
+    "ast_hash": "18e9206cd8f4185a3edb1301b98fcdda",
+    "semantic_hash": "18e9206cd8f4185a3edb1301b98fcdda"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\dashboard_trace_out.txt": {
+    "mtime": 1779396705.1195493,
+    "ast_hash": "2ee7b03cc7488e09f96543e900dad1ef",
+    "semantic_hash": "2ee7b03cc7488e09f96543e900dad1ef"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\js_debug.txt": {
+    "mtime": 1779817528.506928,
+    "ast_hash": "d1733f69ab51fb24a1afea118aa4991a",
+    "semantic_hash": "d1733f69ab51fb24a1afea118aa4991a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\sandbox_debug.txt": {
+    "mtime": 1779818082.7061098,
+    "ast_hash": "5bdd2dad1a1960aba056a5dcb5b04413",
+    "semantic_hash": "5bdd2dad1a1960aba056a5dcb5b04413"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\sandbox_stderr.txt": {
+    "mtime": 1779817955.6393027,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\sandbox_stdout.txt": {
+    "mtime": 1779817955.6393027,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\trace_output.txt": {
+    "mtime": 1779485446.7507367,
+    "ast_hash": "abf6a7ad7aa5f3dbbff8b85e4d488aad",
+    "semantic_hash": "abf6a7ad7aa5f3dbbff8b85e4d488aad"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\traceback_dump.txt": {
+    "mtime": 1782027950.4560552,
+    "ast_hash": "3a563ec8c559813902c0c0537c68162a",
+    "semantic_hash": "3a563ec8c559813902c0c0537c68162a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\vector_debug.txt": {
+    "mtime": 1782020875.9780743,
+    "ast_hash": "2db8fcdf2743665b06b1c454b174ad7f",
+    "semantic_hash": "2db8fcdf2743665b06b1c454b174ad7f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\Pandora.svg": {
+    "mtime": 1778334162.0,
+    "ast_hash": "b1b0ee5766b2c504bc80f7b5987e7892",
+    "semantic_hash": "b1b0ee5766b2c504bc80f7b5987e7892"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\add.svg": {
+    "mtime": 1778344570.0,
+    "ast_hash": "37353da0440bae0218d20ee5de932d87",
+    "semantic_hash": "37353da0440bae0218d20ee5de932d87"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\back.svg": {
+    "mtime": 1779554938.9161556,
+    "ast_hash": "0a3cf2b20c2108dcf0b6fd59970d57b9",
+    "semantic_hash": "0a3cf2b20c2108dcf0b6fd59970d57b9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\battery.svg": {
+    "mtime": 1778618869.991894,
+    "ast_hash": "8bb7485afc6fa06790d6b07113e9b39b",
+    "semantic_hash": "8bb7485afc6fa06790d6b07113e9b39b"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\browse.svg": {
+    "mtime": 1779482664.0528345,
+    "ast_hash": "c96576e7a7ae40087bc2a6e404fb82d9",
+    "semantic_hash": "c96576e7a7ae40087bc2a6e404fb82d9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\browser.svg": {
+    "mtime": 1778613198.7942388,
+    "ast_hash": "0e5475bb4c54aa25ce52ba9d007030f2",
+    "semantic_hash": "0e5475bb4c54aa25ce52ba9d007030f2"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\calculator.svg": {
+    "mtime": 1778613913.06426,
+    "ast_hash": "85ce7bd018a3f7b390d2546ef062ba1a",
+    "semantic_hash": "85ce7bd018a3f7b390d2546ef062ba1a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\charging.svg": {
+    "mtime": 1778618873.8201346,
+    "ast_hash": "d221920598664031c2e3c8a74b789a02",
+    "semantic_hash": "d221920598664031c2e3c8a74b789a02"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\circle.svg": {
+    "mtime": 1778611975.1033483,
+    "ast_hash": "06590da3a1877c47a8bf9989f6f176ca",
+    "semantic_hash": "06590da3a1877c47a8bf9989f6f176ca"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\clock.svg": {
+    "mtime": 1778704699.1694765,
+    "ast_hash": "62ac90a5296d02c792d521be99ede351",
+    "semantic_hash": "62ac90a5296d02c792d521be99ede351"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\cloud.svg": {
+    "mtime": 1778704792.9255097,
+    "ast_hash": "f5b06f218d275793bc4079d38f4ffd84",
+    "semantic_hash": "f5b06f218d275793bc4079d38f4ffd84"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\delete.svg": {
+    "mtime": 1778344454.0,
+    "ast_hash": "bd0aa8eebf141476a2319f3296a6ff44",
+    "semantic_hash": "bd0aa8eebf141476a2319f3296a6ff44"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\duplicate.svg": {
+    "mtime": 1778344352.0,
+    "ast_hash": "e146e95afb546ff85d0e84ba86b0e81e",
+    "semantic_hash": "e146e95afb546ff85d0e84ba86b0e81e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\empty recycle bin.svg": {
+    "mtime": 1778613607.1210482,
+    "ast_hash": "18410f2ee83274ca28c9c271957545d1",
+    "semantic_hash": "18410f2ee83274ca28c9c271957545d1"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\file explorer.svg": {
+    "mtime": 1778613269.0313873,
+    "ast_hash": "5b8f2a0c336f9aeff23457bcb58c3a81",
+    "semantic_hash": "5b8f2a0c336f9aeff23457bcb58c3a81"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\fog.svg": {
+    "mtime": 1778704925.4220674,
+    "ast_hash": "26da9333ef859723f5183687ec941999",
+    "semantic_hash": "26da9333ef859723f5183687ec941999"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\folders.svg": {
+    "mtime": 1778339304.0,
+    "ast_hash": "6e4c3eba0124f54fce613a9361a8423a",
+    "semantic_hash": "6e4c3eba0124f54fce613a9361a8423a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\general.svg": {
+    "mtime": 1778339280.0,
+    "ast_hash": "39f78ab4c8f78a5c915a169080801714",
+    "semantic_hash": "39f78ab4c8f78a5c915a169080801714"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\halo.svg": {
+    "mtime": 1778772244.3448365,
+    "ast_hash": "e0dac87e5c6bab07606ad6f1f48ce95a",
+    "semantic_hash": "e0dac87e5c6bab07606ad6f1f48ce95a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\hold.svg": {
+    "mtime": 1778612771.8198488,
+    "ast_hash": "a63fe1976b5e5052819717fbb46de09c",
+    "semantic_hash": "a63fe1976b5e5052819717fbb46de09c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\hub.svg": {
+    "mtime": 1778772229.4195735,
+    "ast_hash": "2e72d7cff17e7ce823190a486cf063c5",
+    "semantic_hash": "2e72d7cff17e7ce823190a486cf063c5"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\launcher.svg": {
+    "mtime": 1778704991.7995317,
+    "ast_hash": "a6c0f72674d1b01799e8fa3f2fa85d47",
+    "semantic_hash": "a6c0f72674d1b01799e8fa3f2fa85d47"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\music.svg": {
+    "mtime": 1778704610.5834796,
+    "ast_hash": "9727f18a1edbc0decedc22f7b1d853ee",
+    "semantic_hash": "9727f18a1edbc0decedc22f7b1d853ee"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\mute.svg": {
+    "mtime": 1778613489.1349876,
+    "ast_hash": "7c6e971464a0a9de87efed21885cee4e",
+    "semantic_hash": "7c6e971464a0a9de87efed21885cee4e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\next.svg": {
+    "mtime": 1778615474.8064165,
+    "ast_hash": "cec1fe18e77ab0d192aaf626dc2860c9",
+    "semantic_hash": "cec1fe18e77ab0d192aaf626dc2860c9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\night light.svg": {
+    "mtime": 1778613437.9564402,
+    "ast_hash": "e9d3a271a9ed61c61ef361c87952e5a8",
+    "semantic_hash": "e9d3a271a9ed61c61ef361c87952e5a8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\notepad.svg": {
+    "mtime": 1778613848.625806,
+    "ast_hash": "f7de6a586895ac195e2db455b8a90e3e",
+    "semantic_hash": "f7de6a586895ac195e2db455b8a90e3e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\pause.svg": {
+    "mtime": 1778704642.413533,
+    "ast_hash": "d427d3a447ae19666aa1247653256c87",
+    "semantic_hash": "d427d3a447ae19666aa1247653256c87"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\play.svg": {
+    "mtime": 1778704631.9731176,
+    "ast_hash": "4cd3cc49423be858c4684ac3b072ea02",
+    "semantic_hash": "4cd3cc49423be858c4684ac3b072ea02"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\power.svg": {
+    "mtime": 1778613866.176138,
+    "ast_hash": "f249d08b7359fef50c07b19c3b5e2e11",
+    "semantic_hash": "f249d08b7359fef50c07b19c3b5e2e11"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\prev.svg": {
+    "mtime": 1778614268.0492783,
+    "ast_hash": "316059e5e8c89d29e9e7506e5c634318",
+    "semantic_hash": "316059e5e8c89d29e9e7506e5c634318"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\rain.svg": {
+    "mtime": 1778704888.728692,
+    "ast_hash": "80fe5a77653885b064af32c1c927b74c",
+    "semantic_hash": "80fe5a77653885b064af32c1c927b74c"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\rename.svg": {
+    "mtime": 1778344386.0,
+    "ast_hash": "a669ae9d550cff1654438ef5629ad4a6",
+    "semantic_hash": "a669ae9d550cff1654438ef5629ad4a6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\reset.svg": {
+    "mtime": 1778345144.0,
+    "ast_hash": "711d280b7b8070751f781c8b8f6313e6",
+    "semantic_hash": "711d280b7b8070751f781c8b8f6313e6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\rounded square.svg": {
+    "mtime": 1778611977.7890582,
+    "ast_hash": "96afefc1eec6809ae6c88a500849c525",
+    "semantic_hash": "96afefc1eec6809ae6c88a500849c525"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\screenshot.svg": {
+    "mtime": 1778613382.3144815,
+    "ast_hash": "43203b9b67e331c02f3c51ff74cf6384",
+    "semantic_hash": "43203b9b67e331c02f3c51ff74cf6384"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\search.svg": {
+    "mtime": 1778613638.3449013,
+    "ast_hash": "17c5bc71e358a76ca02d65c207af33c8",
+    "semantic_hash": "17c5bc71e358a76ca02d65c207af33c8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\snow.svg": {
+    "mtime": 1778704905.264498,
+    "ast_hash": "ed621933e47e1c9a45b1a7608dc6abe1",
+    "semantic_hash": "ed621933e47e1c9a45b1a7608dc6abe1"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\square.svg": {
+    "mtime": 1778611980.3767447,
+    "ast_hash": "668e6c255beee39586960162cb9e4583",
+    "semantic_hash": "668e6c255beee39586960162cb9e4583"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\sticky notes.svg": {
+    "mtime": 1778613844.8365574,
+    "ast_hash": "a9c3613911644d801232667d734dbea1",
+    "semantic_hash": "a9c3613911644d801232667d734dbea1"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\stopwatch.svg": {
+    "mtime": 1778704711.2343683,
+    "ast_hash": "666499c0bc32da4ad4cd9ce4b05b9215",
+    "semantic_hash": "666499c0bc32da4ad4cd9ce4b05b9215"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\storm.svg": {
+    "mtime": 1778704914.9534369,
+    "ast_hash": "bcc93f036f302789a5aa6defe81300ee",
+    "semantic_hash": "bcc93f036f302789a5aa6defe81300ee"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\sun.svg": {
+    "mtime": 1778704770.862684,
+    "ast_hash": "0fc94003a3a92bb38bcd975676165653",
+    "semantic_hash": "0fc94003a3a92bb38bcd975676165653"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\tap.svg": {
+    "mtime": 1778612766.4116673,
+    "ast_hash": "521feb04717ca4fb57d82e019b5be0d9",
+    "semantic_hash": "521feb04717ca4fb57d82e019b5be0d9"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\task manager.svg": {
+    "mtime": 1778613775.5488591,
+    "ast_hash": "fc8a211f20fb693c30bcd262d1f8cd0a",
+    "semantic_hash": "fc8a211f20fb693c30bcd262d1f8cd0a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\template.svg": {
+    "mtime": 1778334444.0,
+    "ast_hash": "5ed313a99c9d3acffa8e08e434211948",
+    "semantic_hash": "5ed313a99c9d3acffa8e08e434211948"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\terminal.svg": {
+    "mtime": 1778613929.7997868,
+    "ast_hash": "eaf3ea8e914d464fcf5f3b9046538b46",
+    "semantic_hash": "eaf3ea8e914d464fcf5f3b9046538b46"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\timer.svg": {
+    "mtime": 1778704755.6527207,
+    "ast_hash": "05e4d428c016596cc16106999c5f3d6e",
+    "semantic_hash": "05e4d428c016596cc16106999c5f3d6e"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\toggle grid.svg": {
+    "mtime": 1778613336.8931484,
+    "ast_hash": "9faa104ed16e709a04643c9be85d32f8",
+    "semantic_hash": "9faa104ed16e709a04643c9be85d32f8"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\unmute.svg": {
+    "mtime": 1778613552.5805078,
+    "ast_hash": "790b5faeaa7418000977b080ed73a8ad",
+    "semantic_hash": "790b5faeaa7418000977b080ed73a8ad"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\upload.svg": {
+    "mtime": 1778338980.0,
+    "ast_hash": "5e634320bc42eafefc0c227af2135b8f",
+    "semantic_hash": "5e634320bc42eafefc0c227af2135b8f"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\volume down.svg": {
+    "mtime": 1778619043.6963787,
+    "ast_hash": "2783e33c02c2d09d3bf09ad4a0f1fd89",
+    "semantic_hash": "2783e33c02c2d09d3bf09ad4a0f1fd89"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\assets\\volume up.svg": {
+    "mtime": 1778619046.107218,
+    "ast_hash": "32d08a471f2c5215b73e457a84323729",
+    "semantic_hash": "32d08a471f2c5215b73e457a84323729"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\browser_out.png": {
+    "mtime": 1781445293.409966,
+    "ast_hash": "2836533f70b51d4325f2fb2fb006cc38",
+    "semantic_hash": "2836533f70b51d4325f2fb2fb006cc38"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\debug_icon.png": {
+    "mtime": 1781444776.9346309,
+    "ast_hash": "397ee36057dda727f011ad5298dc54a2",
+    "semantic_hash": "397ee36057dda727f011ad5298dc54a2"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\icon_4DF9E0F8_Netflix_mcm4njqhnhss8_Netflix_App.png": {
+    "mtime": 1781981393.5762143,
+    "ast_hash": "cec921e77be792c77a7185fa8c5262b2",
+    "semantic_hash": "cec921e77be792c77a7185fa8c5262b2"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\icon_Chrome.png": {
+    "mtime": 1781981393.7266996,
+    "ast_hash": "1cc331d10a22f421f2c1a519836f0896",
+    "semantic_hash": "1cc331d10a22f421f2c1a519836f0896"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\icon_Chrome__crx_cinhimbnkkghhklpknlkffjgod.png": {
+    "mtime": 1781981393.75466,
+    "ast_hash": "314f2b696156f2eddc312d2aefd410a1",
+    "semantic_hash": "314f2b696156f2eddc312d2aefd410a1"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\click_slice.png": {
+    "mtime": 1780759445.3424098,
+    "ast_hash": "bcbd8d5b86befb2087f2e98f2cee3ddd",
+    "semantic_hash": "bcbd8d5b86befb2087f2e98f2cee3ddd"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\current_screen.png": {
+    "mtime": 1780758178.0742843,
+    "ast_hash": "8e8cce77ab8df19424bdd22583e3d35d",
+    "semantic_hash": "8e8cce77ab8df19424bdd22583e3d35d"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\desktop_ss.png": {
+    "mtime": 1779655732.8726432,
+    "ast_hash": "33f084190a90b767f6d2f34fda638ea6",
+    "semantic_hash": "33f084190a90b767f6d2f34fda638ea6"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\electron_ss.png": {
+    "mtime": 1780758249.6590593,
+    "ast_hash": "14d34466685ba13aab7fd2652d36da51",
+    "semantic_hash": "14d34466685ba13aab7fd2652d36da51"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\electron_ss2.png": {
+    "mtime": 1780758451.7350552,
+    "ast_hash": "cb28b1f82aff6ed05539407d5fe46180",
+    "semantic_hash": "cb28b1f82aff6ed05539407d5fe46180"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\halo_tab.png": {
+    "mtime": 1780761258.657668,
+    "ast_hash": "115f40614496391f50964e8e0966287a",
+    "semantic_hash": "115f40614496391f50964e8e0966287a"
+  },
+  "C:\\Users\\Base\\Desktop\\Seb\\Pandora\\scratch\\real_screenshot.png": {
+    "mtime": 1780761398.8447335,
+    "ast_hash": "dc593a3d746941f81594f60cee5ba7f2",
+    "semantic_hash": "dc593a3d746941f81594f60cee5ba7f2"
+  }
+}

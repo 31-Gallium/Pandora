@@ -1,0 +1,315 @@
+{
+  "folders": [
+    {
+      "id": "folder_1",
+      "name": "New",
+      "pos": [
+        1689,
+        255
+      ],
+      "apps": [
+        {
+          "name": "..lnk",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\..lnk",
+          "pinned": false
+        },
+        {
+          "name": "Brave",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Brave.lnk",
+          "pinned": false
+        },
+        {
+          "name": "Google Chrome",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Google Chrome.lnk",
+          "pinned": false
+        },
+        {
+          "name": "Google Photos",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Google Photos.lnk",
+          "pinned": false
+        },
+        {
+          "name": "Netflix",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Netflix.lnk",
+          "pinned": false
+        },
+        {
+          "name": "Recordly",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Recordly.lnk",
+          "pinned": false
+        },
+        {
+          "name": "Stremio",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\Stremio.lnk",
+          "pinned": false
+        },
+        {
+          "name": "TecnoPcManager",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\TecnoPcManager.lnk",
+          "pinned": false
+        },
+        {
+          "name": "uTorrent Web",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\uTorrent Web.lnk",
+          "pinned": false
+        },
+        {
+          "name": "VLC media player",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\VLC media player.lnk",
+          "pinned": false
+        },
+        {
+          "name": "µTorrent",
+          "path": "C:\\Users\\Base\\AppData\\Roaming\\Pandora\\internal_storage\\folder_1\\µTorrent.lnk",
+          "pinned": false
+        }
+      ],
+      "color": "#ffffff",
+      "sort_type": "custom",
+      "use_custom_settings": true,
+      "custom_settings": {},
+      "sort_order": "asc",
+      "template_type": "grid",
+      "template_name": "Default",
+      "show_title": true,
+      "show_cover": false,
+      "grid_snap": true,
+      "use_custom": false,
+      "size_preset": "Medium",
+      "folder_size": 82
+    },
+    {
+      "id": "folder_2",
+      "name": "New",
+      "pos": [
+        479,
+        35
+      ],
+      "apps": [],
+      "color": "#ffffff",
+      "use_custom_settings": true,
+      "custom_settings": {},
+      "sort_type": "custom",
+      "template_type": "grid",
+      "template_name": "Default",
+      "show_title": true,
+      "show_cover": false,
+      "grid_snap": true,
+      "use_custom": false,
+      "size_preset": "Custom",
+      "folder_size": 105
+    }
+  ],
+  "general_settings": {
+    "grid_size": 110,
+    "edge_padding": 0,
+    "sync_grid_size": true,
+    "show_grid_on_drag": true,
+    "grid_animated_color": true,
+    "grid_wave_entrance": true,
+    "grid_wave_fade": true,
+    "grid_opacity": 100,
+    "preferred_template": null,
+    "left_click_action": "Launch App (if fanned)",
+    "middle_click_action": "Open Folder"
+  },
+  "templates": {
+    "grid": {
+      "Default": {
+        "size_preset": "Medium",
+        "folder_size": 95,
+        "mini_icon_size": 18,
+        "font_size": 10,
+        "expanded_icon_size": 48,
+        "glow_intensity": 20,
+        "glow_color": "#ffffff",
+        "bg_color": "#141414",
+        "title_color": "#ffffff",
+        "highlight_color": "#ffffff",
+        "opacity": 80,
+        "radius": 10,
+        "cover_blur": 0,
+        "cover_opacity": 255,
+        "hover_speed": "Fluid",
+        "morph_speed": "Fluid",
+        "mini_highlight_shape": "Circle"
+      }
+    },
+    "flower": {
+      "Default": {
+        "size_preset": "Medium",
+        "folder_size": 80,
+        "mini_icon_size": 18,
+        "font_size": 10,
+        "expanded_icon_size": 48,
+        "glow_intensity": 20,
+        "glow_color": "#ffffff",
+        "bg_color": "#141414",
+        "title_color": "#ffffff",
+        "highlight_color": "#ffffff",
+        "opacity": 80,
+        "radius": 10,
+        "cover_blur": 0,
+        "cover_opacity": 255,
+        "hover_speed": "Fluid",
+        "morph_speed": "Fluid",
+        "mini_highlight_shape": "Circle"
+      }
+    }
+  },
+  "halo": {
+    "menus": [
+      {
+        "name": "L1",
+        "tools": [
+          {
+            "id": "browser",
+            "icon": "../assets/browser.svg",
+            "label": "Browser"
+          },
+          {
+            "id": "files",
+            "icon": "../assets/file explorer.svg",
+            "label": "Files"
+          },
+          {
+            "id": "toggle grid",
+            "icon": "../assets/toggle grid.svg",
+            "label": "Toggle Grid"
+          },
+          {
+            "id": "snip",
+            "icon": "../assets/screenshot.svg",
+            "label": "Snip"
+          },
+          {
+            "id": "night light",
+            "icon": "../assets/night light.svg",
+            "label": "Night Light"
+          },
+          {
+            "id": "mute",
+            "icon": "../assets/mute.svg",
+            "label": "Mute"
+          },
+          {
+            "id": "pandora",
+            "icon": "../assets/Pandora.svg",
+            "label": "Pandora"
+          },
+          {
+            "id": "tasks",
+            "icon": "../assets/task manager.svg",
+            "label": "Tasks"
+          },
+          {
+            "id": "sticky notes",
+            "icon": "../assets/sticky notes.svg",
+            "label": "Sticky Notes"
+          },
+          {
+            "id": "power",
+            "icon": "../assets/power.svg",
+            "label": "Power"
+          },
+          {
+            "id": "empty trash",
+            "icon": "../assets/empty recycle bin.svg",
+            "label": "Empty Trash"
+          }
+        ]
+      },
+      {
+        "name": "L2",
+        "tools": []
+      },
+      {
+        "name": "L3",
+        "tools": []
+      },
+      {
+        "name": "L4",
+        "tools": []
+      },
+      {
+        "name": "L5",
+        "tools": []
+      },
+      {
+        "name": "L6",
+        "tools": []
+      },
+      {
+        "name": "L7",
+        "tools": []
+      },
+      {
+        "name": "L8",
+        "tools": []
+      },
+      {
+        "name": "L9",
+        "tools": []
+      }
+    ],
+    "max_bound": 300,
+    "hub_ratio": 50,
+    "hold_mode": "Hold",
+    "theme": "Dark",
+    "gap_size": 75,
+    "opacity": 185,
+    "activation_key": 192
+  },
+  "hub_config": {
+    "layers": [
+      {
+        "id": "e8de977b-99ee-49ed-9112-3954da3ae9a5",
+        "type": "media",
+        "name": "Media Player",
+        "icon": "../assets/music.svg",
+        "settings": {
+          "art_style": "8-Bit Mosaic",
+          "mosaic_style": "Extrusion",
+          "visualizer": "Voxel Wiggle",
+          "effect_strength": 80,
+          "show_timeline": true,
+          "show_title": true,
+          "show_controls": true
+        }
+      },
+      {
+        "id": "2689e07b-1f81-4d01-8019-b5483a1059f8",
+        "type": "time",
+        "name": "Clock",
+        "icon": "../assets/clock.svg",
+        "settings": {
+          "clock_mode": "digital",
+          "show_date": true,
+          "format_24h": true,
+          "show_seconds": false,
+          "active_clock_tz": "",
+          "active_clock_label": "Local Time",
+          "world_clocks": []
+        }
+      },
+      {
+        "id": "19b73c0e-04bf-477b-9c5c-b55bed301e58",
+        "type": "weather",
+        "name": "Weather",
+        "icon": "../assets/sun.svg",
+        "settings": {
+          "provider": "free",
+          "location": "",
+          "use_metric": true,
+          "api_key": ""
+        }
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}

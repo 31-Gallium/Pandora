@@ -1,0 +1,1333 @@
+{
+  "communities": {
+    "0": [
+      "electron_dashboard_renderer",
+      "electron_dashboard_renderer_connectwebsocket",
+      "electron_dashboard_renderer_currentconfig",
+      "electron_dashboard_renderer_folderstab",
+      "electron_dashboard_renderer_generaltab",
+      "electron_dashboard_renderer_getconfig",
+      "electron_dashboard_renderer_halotab",
+      "electron_dashboard_renderer_initglobalui",
+      "electron_dashboard_renderer_ipcrenderer",
+      "electron_dashboard_renderer_sendconfigupdate",
+      "electron_dashboard_renderer_tabs",
+      "electron_dashboard_renderer_templatestab",
+      "electron_dashboard_renderer_websocket",
+      "electron_dashboard_ui_dashboard_common",
+      "electron_dashboard_ui_dashboard_common_bindinput",
+      "electron_dashboard_ui_dashboard_common_bindslider",
+      "electron_dashboard_ui_dashboard_common_closeallselect",
+      "electron_dashboard_ui_dashboard_common_getvkname",
+      "electron_dashboard_ui_dashboard_common_initglobalui",
+      "electron_dashboard_ui_dashboard_common_ipcrenderer",
+      "electron_dashboard_ui_dashboard_common_setcheckboxvalue",
+      "electron_dashboard_ui_dashboard_common_setinputvalue",
+      "electron_dashboard_ui_dashboard_common_setslidervalue",
+      "electron_dashboard_ui_dashboard_common_synccustomselect",
+      "electron_dashboard_ui_dashboard_common_vkmap",
+      "electron_dashboard_ui_dashboard_folders",
+      "electron_dashboard_ui_dashboard_folders_folderstab",
+      "electron_dashboard_ui_dashboard_folders_folderstab_constructor",
+      "electron_dashboard_ui_dashboard_folders_folderstab_hideeditor",
+      "electron_dashboard_ui_dashboard_folders_folderstab_init",
+      "electron_dashboard_ui_dashboard_folders_folderstab_rendereditor",
+      "electron_dashboard_ui_dashboard_folders_folderstab_showeditor",
+      "electron_dashboard_ui_dashboard_folders_folderstab_updateui",
+      "electron_dashboard_ui_dashboard_folders_getvkname_bindinput_bindslider_setinputvalue_setcheckboxvalue_setslidervalue_synccustomselect",
+      "electron_dashboard_ui_dashboard_general",
+      "electron_dashboard_ui_dashboard_general_generaltab",
+      "electron_dashboard_ui_dashboard_general_generaltab_constructor",
+      "electron_dashboard_ui_dashboard_general_generaltab_init",
+      "electron_dashboard_ui_dashboard_general_generaltab_updateui",
+      "electron_dashboard_ui_dashboard_general_getvkname_bindinput_bindslider_setinputvalue_setcheckboxvalue_setslidervalue",
+      "electron_dashboard_ui_dashboard_halo",
+      "electron_dashboard_ui_dashboard_halo_getvkname_bindinput_bindslider_setinputvalue_setcheckboxvalue_setslidervalue_synccustomselect",
+      "electron_dashboard_ui_dashboard_halo_halotab",
+      "electron_dashboard_ui_dashboard_halo_halotab_bindwidget",
+      "electron_dashboard_ui_dashboard_halo_halotab_constructor",
+      "electron_dashboard_ui_dashboard_halo_halotab_getwidgetsettings",
+      "electron_dashboard_ui_dashboard_halo_halotab_init",
+      "electron_dashboard_ui_dashboard_halo_halotab_updatemediavisibility",
+      "electron_dashboard_ui_dashboard_halo_halotab_updateui",
+      "electron_dashboard_ui_dashboard_templates",
+      "electron_dashboard_ui_dashboard_templates_getvkname_bindinput_bindslider_setinputvalue_setcheckboxvalue_setslidervalue_synccustomselect",
+      "electron_dashboard_ui_dashboard_templates_templatestab",
+      "electron_dashboard_ui_dashboard_templates_templatestab_constructor",
+      "electron_dashboard_ui_dashboard_templates_templatestab_hideeditor",
+      "electron_dashboard_ui_dashboard_templates_templatestab_init",
+      "electron_dashboard_ui_dashboard_templates_templatestab_showeditor",
+      "electron_dashboard_ui_dashboard_templates_templatestab_updateui"
+    ],
+    "1": [
+      "basehubmodule",
+      "hub_modules_base",
+      "hub_modules_base_basehubmodule",
+      "hub_modules_base_basehubmodule_cleanup",
+      "hub_modules_base_basehubmodule_draw",
+      "hub_modules_base_basehubmodule_init",
+      "hub_modules_base_basehubmodule_load_settings",
+      "hub_modules_base_basehubmodule_on_mouse_press",
+      "hub_modules_base_basehubmodule_on_mouse_release",
+      "hub_modules_base_basehubmodule_on_wheel",
+      "hub_modules_base_rationale_11",
+      "hub_modules_base_rationale_2",
+      "hub_modules_base_rationale_24",
+      "hub_modules_clock",
+      "hub_modules_clock_rationale_10",
+      "hub_modules_clock_rationale_300",
+      "hub_modules_clock_rationale_334",
+      "hub_modules_clock_timehub",
+      "hub_modules_clock_timehub_cleanup",
+      "hub_modules_clock_timehub_draw",
+      "hub_modules_clock_timehub_draw_analog",
+      "hub_modules_clock_timehub_draw_digital",
+      "hub_modules_clock_timehub_init",
+      "hub_modules_clock_timehub_lock_timezone",
+      "hub_modules_clock_timehub_on_key_press",
+      "hub_modules_clock_timehub_on_key_release",
+      "hub_modules_clock_timehub_on_mouse_press",
+      "hub_modules_clock_timehub_swap_timezones_with_slice",
+      "hub_modules_clock_timehub_update_override_tools",
+      "hub_modules_default",
+      "hub_modules_init",
+      "hub_modules_media",
+      "hub_modules_media_get_shape_vertices",
+      "hub_modules_media_mediahub",
+      "hub_modules_media_mediahub_cleanup",
+      "hub_modules_media_mediahub_clear_cache",
+      "hub_modules_media_mediahub_draw",
+      "hub_modules_media_mediahub_extract_color",
+      "hub_modules_media_mediahub_get_fallback_thumbnail",
+      "hub_modules_media_mediahub_get_pandora_icon_image",
+      "hub_modules_media_mediahub_get_round_thumbnail",
+      "hub_modules_media_mediahub_init",
+      "hub_modules_media_mediahub_load_settings",
+      "hub_modules_media_mediahub_on_key_press",
+      "hub_modules_media_mediahub_on_key_release",
+      "hub_modules_media_mediahub_on_mouse_leave",
+      "hub_modules_media_mediahub_on_mouse_move",
+      "hub_modules_media_mediahub_on_mouse_press",
+      "hub_modules_media_mediahub_on_mouse_release",
+      "hub_modules_media_mediahub_on_wheel",
+      "qimage"
+    ],
+    "2": [
+      "qwidget",
+      "scratch_test_blur",
+      "scratch_test_blur_blurtest",
+      "scratch_test_blur_blurtest_animate",
+      "scratch_test_blur_blurtest_init",
+      "scratch_test_blur_blurtest_paintevent",
+      "scratch_test_pyqt_paint",
+      "scratch_test_pyqt_paint_save_ss",
+      "scratch_test_pyqt_paint_testwin",
+      "scratch_test_pyqt_paint_testwin_init",
+      "scratch_test_pyqt_paint_testwin_paintevent",
+      "ui_folder_view_folderview",
+      "ui_folder_view_folderview_animate_morph",
+      "ui_folder_view_folderview_apply_mask",
+      "ui_folder_view_folderview_apply_sort",
+      "ui_folder_view_folderview_changeevent",
+      "ui_folder_view_folderview_dragenterevent",
+      "ui_folder_view_folderview_dragleaveevent",
+      "ui_folder_view_folderview_dragmoveevent",
+      "ui_folder_view_folderview_dropevent",
+      "ui_folder_view_folderview_eventfilter",
+      "ui_folder_view_folderview_exit_rename",
+      "ui_folder_view_folderview_get_setting",
+      "ui_folder_view_folderview_hide_morph",
+      "ui_folder_view_folderview_init",
+      "ui_folder_view_folderview_keypressevent",
+      "ui_folder_view_folderview_launch_all",
+      "ui_folder_view_folderview_launch_first",
+      "ui_folder_view_folderview_morph_finished",
+      "ui_folder_view_folderview_mousepressevent",
+      "ui_folder_view_folderview_move_to_desktop",
+      "ui_folder_view_folderview_on_search",
+      "ui_folder_view_folderview_paintevent",
+      "ui_folder_view_folderview_refresh",
+      "ui_folder_view_folderview_resizeevent",
+      "ui_folder_view_folderview_save_title",
+      "ui_folder_view_folderview_schedule_mask",
+      "ui_folder_view_folderview_scroll_to_page",
+      "ui_folder_view_folderview_set_sort_type",
+      "ui_folder_view_folderview_show_morph",
+      "ui_folder_view_folderview_show_sort_menu",
+      "ui_folder_view_folderview_showevent",
+      "ui_folder_view_folderview_start_rename",
+      "ui_folder_view_folderview_toggle_search",
+      "ui_folder_view_folderview_toggle_sort",
+      "ui_folder_view_folderview_update_morph_speed",
+      "ui_folder_view_folderview_wheelevent"
+    ],
+    "3": [
+      "backup_ui_refactor_ui_common",
+      "backup_ui_refactor_ui_common_animatedbutton",
+      "backup_ui_refactor_ui_common_animatedbutton_init",
+      "backup_ui_refactor_ui_common_animatedmenu",
+      "backup_ui_refactor_ui_common_animatedmenu_exec",
+      "backup_ui_refactor_ui_common_animatedmenu_init",
+      "backup_ui_refactor_ui_common_custominputdialog",
+      "backup_ui_refactor_ui_common_custominputdialog_get_text",
+      "backup_ui_refactor_ui_common_custominputdialog_init",
+      "backup_ui_refactor_ui_common_dropdownbutton",
+      "backup_ui_refactor_ui_common_dropdownbutton_init",
+      "backup_ui_refactor_ui_common_dropdownbutton_mark_menu_closing",
+      "backup_ui_refactor_ui_common_dropdownbutton_paintevent",
+      "backup_ui_refactor_ui_common_dropdownbutton_refresh_menu",
+      "backup_ui_refactor_ui_common_dropdownbutton_settextvalue",
+      "backup_ui_refactor_ui_common_dropdownbutton_show_menu",
+      "backup_ui_refactor_ui_common_dropdownbutton_update_text",
+      "backup_ui_refactor_ui_common_dropdownbutton_update_theme_style",
+      "backup_ui_refactor_ui_common_flowlayout_init",
+      "qdialog",
+      "qmenu",
+      "qpushbutton",
+      "ui_ui_common_animatedbutton",
+      "ui_ui_common_animatedbutton_init",
+      "ui_ui_common_animatedmenu_exec",
+      "ui_ui_common_animatedmenu_init",
+      "ui_ui_common_custominputdialog",
+      "ui_ui_common_custominputdialog_get_text",
+      "ui_ui_common_custominputdialog_init",
+      "ui_ui_common_dropdownbutton",
+      "ui_ui_common_dropdownbutton_init",
+      "ui_ui_common_dropdownbutton_mark_menu_closing",
+      "ui_ui_common_dropdownbutton_paintevent",
+      "ui_ui_common_dropdownbutton_refresh_menu",
+      "ui_ui_common_dropdownbutton_settextvalue",
+      "ui_ui_common_dropdownbutton_show_menu",
+      "ui_ui_common_dropdownbutton_update_text",
+      "ui_ui_common_dropdownbutton_update_theme_style",
+      "ui_ui_common_flowlayout_init"
+    ],
+    "4": [
+      "backup_ui_refactor_folder_view_folderview",
+      "backup_ui_refactor_folder_view_folderview_animate_morph",
+      "backup_ui_refactor_folder_view_folderview_apply_mask",
+      "backup_ui_refactor_folder_view_folderview_apply_sort",
+      "backup_ui_refactor_folder_view_folderview_changeevent",
+      "backup_ui_refactor_folder_view_folderview_dragenterevent",
+      "backup_ui_refactor_folder_view_folderview_dragleaveevent",
+      "backup_ui_refactor_folder_view_folderview_dragmoveevent",
+      "backup_ui_refactor_folder_view_folderview_dropevent",
+      "backup_ui_refactor_folder_view_folderview_eventfilter",
+      "backup_ui_refactor_folder_view_folderview_exit_rename",
+      "backup_ui_refactor_folder_view_folderview_get_setting",
+      "backup_ui_refactor_folder_view_folderview_hide_morph",
+      "backup_ui_refactor_folder_view_folderview_init",
+      "backup_ui_refactor_folder_view_folderview_keypressevent",
+      "backup_ui_refactor_folder_view_folderview_launch_all",
+      "backup_ui_refactor_folder_view_folderview_launch_first",
+      "backup_ui_refactor_folder_view_folderview_morph_finished",
+      "backup_ui_refactor_folder_view_folderview_mousepressevent",
+      "backup_ui_refactor_folder_view_folderview_move_to_desktop",
+      "backup_ui_refactor_folder_view_folderview_on_search",
+      "backup_ui_refactor_folder_view_folderview_paintevent",
+      "backup_ui_refactor_folder_view_folderview_refresh",
+      "backup_ui_refactor_folder_view_folderview_resizeevent",
+      "backup_ui_refactor_folder_view_folderview_save_title",
+      "backup_ui_refactor_folder_view_folderview_schedule_mask",
+      "backup_ui_refactor_folder_view_folderview_scroll_to_page",
+      "backup_ui_refactor_folder_view_folderview_set_sort_type",
+      "backup_ui_refactor_folder_view_folderview_show_morph",
+      "backup_ui_refactor_folder_view_folderview_show_sort_menu",
+      "backup_ui_refactor_folder_view_folderview_showevent",
+      "backup_ui_refactor_folder_view_folderview_start_rename",
+      "backup_ui_refactor_folder_view_folderview_toggle_search",
+      "backup_ui_refactor_folder_view_folderview_toggle_sort",
+      "backup_ui_refactor_folder_view_folderview_update_morph_speed",
+      "backup_ui_refactor_folder_view_folderview_wheelevent"
+    ],
+    "5": [
+      "core_services_media_daemon_mediadaemon",
+      "core_services_media_daemon_mediadaemon_emit_update",
+      "core_services_media_daemon_mediadaemon_emit_update_as_dict",
+      "core_services_media_daemon_mediadaemon_extract_thumbnail_internal",
+      "core_services_media_daemon_mediadaemon_get_best_session",
+      "core_services_media_daemon_mediadaemon_init",
+      "core_services_media_daemon_mediadaemon_init_gsm",
+      "core_services_media_daemon_mediadaemon_main_loop",
+      "core_services_media_daemon_mediadaemon_next_track",
+      "core_services_media_daemon_mediadaemon_notify_vol_change",
+      "core_services_media_daemon_mediadaemon_on_media_changed",
+      "core_services_media_daemon_mediadaemon_on_playback_changed",
+      "core_services_media_daemon_mediadaemon_on_sessions_changed",
+      "core_services_media_daemon_mediadaemon_on_timeline_changed",
+      "core_services_media_daemon_mediadaemon_peak_polling_thread",
+      "core_services_media_daemon_mediadaemon_play_pause",
+      "core_services_media_daemon_mediadaemon_prev_track",
+      "core_services_media_daemon_mediadaemon_refresh_sessions",
+      "core_services_media_daemon_mediadaemon_run_event_loop",
+      "core_services_media_daemon_mediadaemon_safe_extract_thumbnail",
+      "core_services_media_daemon_mediadaemon_set_session_by_id",
+      "core_services_media_daemon_mediadaemon_set_session_by_id_async",
+      "core_services_media_daemon_mediadaemon_switch_session",
+      "core_services_media_daemon_mediadaemon_switch_session_async",
+      "core_services_media_daemon_mediadaemon_sync_app_volume",
+      "core_services_media_daemon_mediadaemon_sync_full_state",
+      "core_services_media_daemon_mediadaemon_sync_media_properties",
+      "core_services_media_daemon_mediadaemon_sync_playback_state",
+      "core_services_media_daemon_mediadaemon_sync_timeline",
+      "core_services_media_daemon_mediastate",
+      "core_services_media_daemon_rationale_91",
+      "scratch_test_peak",
+      "scratch_test_peak_main"
+    ],
+    "6": [
+      "backup_ui_refactor_grid_overlay_gridoverlay",
+      "backup_ui_refactor_grid_overlay_gridoverlay_get_snap_pos",
+      "backup_ui_refactor_grid_overlay_gridoverlay_init",
+      "backup_ui_refactor_grid_overlay_gridoverlay_on_anim_finished",
+      "backup_ui_refactor_grid_overlay_gridoverlay_paintevent",
+      "backup_ui_refactor_grid_overlay_gridoverlay_set_drag_state",
+      "backup_ui_refactor_grid_overlay_gridoverlay_setvisible",
+      "backup_ui_refactor_grid_overlay_gridoverlay_showevent",
+      "backup_ui_refactor_grid_overlay_gridoverlay_step_anim",
+      "backup_ui_refactor_grid_overlay_gridoverlay_toggle",
+      "backup_ui_refactor_grid_overlay_gridoverlay_upd_entrance",
+      "backup_ui_refactor_ws_server",
+      "backup_ui_refactor_ws_server_rationale_71",
+      "backup_ui_refactor_ws_server_websocketserverthread",
+      "backup_ui_refactor_ws_server_websocketserverthread_broadcast_command",
+      "backup_ui_refactor_ws_server_websocketserverthread_broadcast_config",
+      "backup_ui_refactor_ws_server_websocketserverthread_handler",
+      "backup_ui_refactor_ws_server_websocketserverthread_init",
+      "backup_ui_refactor_ws_server_websocketserverthread_run",
+      "backup_ui_refactor_ws_server_websocketserverthread_run_server",
+      "backup_ui_refactor_ws_server_websocketserverthread_send_command_to_clients",
+      "backup_ui_refactor_ws_server_websocketserverthread_send_config_to_clients",
+      "main_electrondashboardmanager_handle_config_update",
+      "main_electrondashboardmanager_init",
+      "main_globalhook",
+      "main_globalhook_check_mods",
+      "main_globalhook_init",
+      "main_globalhook_parse_key",
+      "main_globalhook_reload_config",
+      "main_globalhook_run_hook_loop",
+      "main_globalhook_set_constraint",
+      "main_globalhook_start"
+    ],
+    "7": [
+      "backup_ui_refactor_ui_app_selector",
+      "backup_ui_refactor_ui_app_selector_appfetcherthread",
+      "backup_ui_refactor_ui_app_selector_appfetcherthread_run",
+      "backup_ui_refactor_ui_app_selector_appselectordialog",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_apply_icon",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_filter_apps",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_get_selected_app",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_init",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_mousemoveevent",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_mousepressevent",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_mousereleaseevent",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_on_apps_error",
+      "backup_ui_refactor_ui_app_selector_appselectordialog_on_apps_loaded",
+      "backup_ui_refactor_ui_app_selector_iconloadersignals",
+      "backup_ui_refactor_ui_app_selector_iconloaderworker",
+      "backup_ui_refactor_ui_app_selector_iconloaderworker_init",
+      "backup_ui_refactor_ui_app_selector_iconloaderworker_run",
+      "core_services_ws_server",
+      "core_services_ws_server_rationale_71",
+      "core_services_ws_server_websocketserverthread",
+      "core_services_ws_server_websocketserverthread_broadcast_command",
+      "core_services_ws_server_websocketserverthread_broadcast_config",
+      "core_services_ws_server_websocketserverthread_handler",
+      "core_services_ws_server_websocketserverthread_init",
+      "core_services_ws_server_websocketserverthread_run",
+      "core_services_ws_server_websocketserverthread_run_server",
+      "core_services_ws_server_websocketserverthread_send_command_to_clients",
+      "core_services_ws_server_websocketserverthread_send_config_to_clients",
+      "qframe",
+      "qrunnable",
+      "qthread"
+    ],
+    "8": [
+      "backup_ui_refactor_ui_common_flowlayout",
+      "backup_ui_refactor_ui_common_flowlayout_additem",
+      "backup_ui_refactor_ui_common_flowlayout_count",
+      "backup_ui_refactor_ui_common_flowlayout_del",
+      "backup_ui_refactor_ui_common_flowlayout_dolayout",
+      "backup_ui_refactor_ui_common_flowlayout_expandingdirections",
+      "backup_ui_refactor_ui_common_flowlayout_hasheightforwidth",
+      "backup_ui_refactor_ui_common_flowlayout_heightforwidth",
+      "backup_ui_refactor_ui_common_flowlayout_horizontalspacing",
+      "backup_ui_refactor_ui_common_flowlayout_itemat",
+      "backup_ui_refactor_ui_common_flowlayout_minimumsize",
+      "backup_ui_refactor_ui_common_flowlayout_setgeometry",
+      "backup_ui_refactor_ui_common_flowlayout_sizehint",
+      "backup_ui_refactor_ui_common_flowlayout_takeat",
+      "backup_ui_refactor_ui_common_flowlayout_verticalspacing",
+      "qlayout",
+      "ui_ui_common_flowlayout",
+      "ui_ui_common_flowlayout_additem",
+      "ui_ui_common_flowlayout_count",
+      "ui_ui_common_flowlayout_del",
+      "ui_ui_common_flowlayout_dolayout",
+      "ui_ui_common_flowlayout_expandingdirections",
+      "ui_ui_common_flowlayout_hasheightforwidth",
+      "ui_ui_common_flowlayout_heightforwidth",
+      "ui_ui_common_flowlayout_horizontalspacing",
+      "ui_ui_common_flowlayout_itemat",
+      "ui_ui_common_flowlayout_minimumsize",
+      "ui_ui_common_flowlayout_setgeometry",
+      "ui_ui_common_flowlayout_sizehint",
+      "ui_ui_common_flowlayout_takeat",
+      "ui_ui_common_flowlayout_verticalspacing"
+    ],
+    "9": [
+      "scratch_test_mute",
+      "ui_halo_halo",
+      "ui_halo_halo_anim_loop",
+      "ui_halo_halo_clear_override_tools",
+      "ui_halo_halo_create_custom_cursor",
+      "ui_halo_halo_current_tools",
+      "ui_halo_halo_cycle_layer",
+      "ui_halo_halo_do_paint",
+      "ui_halo_halo_execute_current",
+      "ui_halo_halo_handle_wheel",
+      "ui_halo_halo_hide_vol_hud",
+      "ui_halo_halo_hideevent",
+      "ui_halo_halo_init",
+      "ui_halo_halo_keypressevent",
+      "ui_halo_halo_keyreleaseevent",
+      "ui_halo_halo_load_blurred_wallpaper",
+      "ui_halo_halo_mousepressevent",
+      "ui_halo_halo_mousereleaseevent",
+      "ui_halo_halo_on_media_update",
+      "ui_halo_halo_paintevent",
+      "ui_halo_halo_process_mouse_pos",
+      "ui_halo_halo_refresh_geometry",
+      "ui_halo_halo_reload_tools",
+      "ui_halo_halo_set_override_tools",
+      "ui_halo_halo_setup_resources",
+      "ui_halo_halo_show_center",
+      "ui_halo_halo_update_mouse",
+      "ui_halo_halo_wheelevent",
+      "utils_get_system_mute"
+    ],
+    "10": [
+      "backup_ui_refactor_folder_icon_foldericon",
+      "backup_ui_refactor_folder_icon_foldericon_contextmenuevent",
+      "backup_ui_refactor_folder_icon_foldericon_dragenterevent",
+      "backup_ui_refactor_folder_icon_foldericon_dropevent",
+      "backup_ui_refactor_folder_icon_foldericon_enterevent",
+      "backup_ui_refactor_folder_icon_foldericon_get_app_at_pos",
+      "backup_ui_refactor_folder_icon_foldericon_get_setting",
+      "backup_ui_refactor_folder_icon_foldericon_init",
+      "backup_ui_refactor_folder_icon_foldericon_leaveevent",
+      "backup_ui_refactor_folder_icon_foldericon_mousemoveevent",
+      "backup_ui_refactor_folder_icon_foldericon_mousepressevent",
+      "backup_ui_refactor_folder_icon_foldericon_mousereleaseevent",
+      "backup_ui_refactor_folder_icon_foldericon_on_page_anim_finished",
+      "backup_ui_refactor_folder_icon_foldericon_open_settings",
+      "backup_ui_refactor_folder_icon_foldericon_paintevent",
+      "backup_ui_refactor_folder_icon_foldericon_remove_self",
+      "backup_ui_refactor_folder_icon_foldericon_set_hover_progress",
+      "backup_ui_refactor_folder_icon_foldericon_set_page_progress",
+      "backup_ui_refactor_folder_icon_foldericon_set_scale",
+      "backup_ui_refactor_folder_icon_foldericon_set_template",
+      "backup_ui_refactor_folder_icon_foldericon_show_context_menu",
+      "backup_ui_refactor_folder_icon_foldericon_showevent",
+      "backup_ui_refactor_folder_icon_foldericon_trigger_pulse",
+      "backup_ui_refactor_folder_icon_foldericon_update_hover_speed",
+      "backup_ui_refactor_folder_icon_foldericon_update_movie",
+      "backup_ui_refactor_folder_icon_foldericon_wheelevent"
+    ],
+    "11": [
+      "ui_folder_icon_foldericon",
+      "ui_folder_icon_foldericon_contextmenuevent",
+      "ui_folder_icon_foldericon_dragenterevent",
+      "ui_folder_icon_foldericon_dropevent",
+      "ui_folder_icon_foldericon_enterevent",
+      "ui_folder_icon_foldericon_get_app_at_pos",
+      "ui_folder_icon_foldericon_get_setting",
+      "ui_folder_icon_foldericon_init",
+      "ui_folder_icon_foldericon_leaveevent",
+      "ui_folder_icon_foldericon_mousemoveevent",
+      "ui_folder_icon_foldericon_mousepressevent",
+      "ui_folder_icon_foldericon_mousereleaseevent",
+      "ui_folder_icon_foldericon_on_page_anim_finished",
+      "ui_folder_icon_foldericon_open_settings",
+      "ui_folder_icon_foldericon_paintevent",
+      "ui_folder_icon_foldericon_remove_self",
+      "ui_folder_icon_foldericon_set_hover_progress",
+      "ui_folder_icon_foldericon_set_page_progress",
+      "ui_folder_icon_foldericon_set_scale",
+      "ui_folder_icon_foldericon_set_template",
+      "ui_folder_icon_foldericon_show_context_menu",
+      "ui_folder_icon_foldericon_showevent",
+      "ui_folder_icon_foldericon_trigger_pulse",
+      "ui_folder_icon_foldericon_update_hover_speed",
+      "ui_folder_icon_foldericon_update_movie",
+      "ui_folder_icon_foldericon_wheelevent"
+    ],
+    "12": [
+      "backup_ui_refactor_ui_dz_grid_dzcard",
+      "backup_ui_refactor_ui_dz_grid_dzcard_init",
+      "backup_ui_refactor_ui_dz_grid_dzcard_mousemoveevent",
+      "backup_ui_refactor_ui_dz_grid_dzcard_mousepressevent",
+      "backup_ui_refactor_ui_dz_grid_dzcard_mousereleaseevent",
+      "backup_ui_refactor_ui_dz_grid_dzcard_set_active",
+      "backup_ui_refactor_ui_dz_grid_dzcard_update_style",
+      "backup_ui_refactor_ui_dz_grid_dzgrid",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_get_order",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_handle_drop",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_init",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_on_drag_completed",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_render_cards",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_set_active_card",
+      "backup_ui_refactor_ui_dz_grid_dzgrid_set_cards",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_dragenterevent",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_dragmoveevent",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_dropevent",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_init",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_mousepressevent",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_set_card",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_take_card",
+      "backup_ui_refactor_ui_dz_grid_dzgridslot_update_style",
+      "backup_ui_refactor_ui_dz_grid_map_icon_color"
+    ],
+    "13": [
+      "backup_ui_refactor_main",
+      "backup_ui_refactor_main_create_folder",
+      "backup_ui_refactor_main_electrondashboardmanager",
+      "backup_ui_refactor_main_electrondashboardmanager_handle_config_update",
+      "backup_ui_refactor_main_electrondashboardmanager_handle_folder_deleted",
+      "backup_ui_refactor_main_electrondashboardmanager_init",
+      "backup_ui_refactor_main_electrondashboardmanager_prewarm",
+      "backup_ui_refactor_main_electrondashboardmanager_show",
+      "backup_ui_refactor_main_electrondashboardmanager_show_folder",
+      "backup_ui_refactor_main_globalhook",
+      "backup_ui_refactor_main_globalhook_check_mods",
+      "backup_ui_refactor_main_globalhook_init",
+      "backup_ui_refactor_main_globalhook_parse_key",
+      "backup_ui_refactor_main_globalhook_reload_config",
+      "backup_ui_refactor_main_globalhook_set_constraint",
+      "backup_ui_refactor_main_globalhook_start",
+      "backup_ui_refactor_main_handle_halo_cmd",
+      "backup_ui_refactor_main_qt_message_handler",
+      "backup_ui_refactor_main_rationale_368",
+      "backup_ui_refactor_main_rationale_377",
+      "backup_ui_refactor_main_toggle_grid",
+      "backup_ui_refactor_main_warm_up",
+      "core_services_media_daemon",
+      "utils_restore_display_effects"
+    ],
+    "14": [
+      "backup_ui_refactor_halo_halo",
+      "backup_ui_refactor_halo_halo_anim_loop",
+      "backup_ui_refactor_halo_halo_clear_override_tools",
+      "backup_ui_refactor_halo_halo_current_tools",
+      "backup_ui_refactor_halo_halo_cycle_layer",
+      "backup_ui_refactor_halo_halo_execute_current",
+      "backup_ui_refactor_halo_halo_handle_wheel",
+      "backup_ui_refactor_halo_halo_hide_vol_hud",
+      "backup_ui_refactor_halo_halo_hideevent",
+      "backup_ui_refactor_halo_halo_init",
+      "backup_ui_refactor_halo_halo_keypressevent",
+      "backup_ui_refactor_halo_halo_keyreleaseevent",
+      "backup_ui_refactor_halo_halo_mousepressevent",
+      "backup_ui_refactor_halo_halo_mousereleaseevent",
+      "backup_ui_refactor_halo_halo_on_media_update",
+      "backup_ui_refactor_halo_halo_paintevent",
+      "backup_ui_refactor_halo_halo_refresh_geometry",
+      "backup_ui_refactor_halo_halo_reload_tools",
+      "backup_ui_refactor_halo_halo_set_override_tools",
+      "backup_ui_refactor_halo_halo_setup_resources",
+      "backup_ui_refactor_halo_halo_show_center",
+      "backup_ui_refactor_halo_halo_update_mouse",
+      "backup_ui_refactor_halo_halo_wheelevent"
+    ],
+    "15": [
+      "srs",
+      "srs_1_1_purpose",
+      "srs_1_2_scope",
+      "srs_1_3_definitions_acronyms_and_abbreviations",
+      "srs_1_introduction",
+      "srs_2_1_product_perspective",
+      "srs_2_2_product_functions",
+      "srs_2_3_user_classes_and_characteristics",
+      "srs_2_4_operating_environment",
+      "srs_2_overall_description",
+      "srs_3_1_desktop_folder_widgets",
+      "srs_3_2_expanded_folder_view",
+      "srs_3_3_dashboard_and_settings_management",
+      "srs_3_4_radial_hud_and_system_tools",
+      "srs_3_5_info_pill_guidance_system",
+      "srs_3_system_features",
+      "srs_4_1_performance_requirements",
+      "srs_4_2_usability_requirements",
+      "srs_4_3_reliability",
+      "srs_4_4_portability",
+      "srs_4_5_visual_standards",
+      "srs_4_non_functional_requirements",
+      "srs_software_requirements_specification_srs_for_pandora"
+    ],
+    "16": [
+      "hub",
+      "hub_hubmanager",
+      "hub_hubmanager_draw_active",
+      "hub_hubmanager_get_active_module",
+      "hub_hubmanager_handle_key_press",
+      "hub_hubmanager_handle_key_release",
+      "hub_hubmanager_handle_mouse_leave",
+      "hub_hubmanager_handle_mouse_move",
+      "hub_hubmanager_handle_press",
+      "hub_hubmanager_handle_release",
+      "hub_hubmanager_handle_scroll",
+      "hub_hubmanager_init",
+      "hub_hubmanager_reload_config",
+      "hub_modules_default_defaultlogohub",
+      "hub_modules_default_defaultlogohub_draw",
+      "hub_modules_default_defaultlogohub_init",
+      "hub_modules_default_rationale_7",
+      "hub_rationale_1",
+      "hub_rationale_42"
+    ],
+    "17": [
+      "main",
+      "main_create_folder",
+      "main_electrondashboardmanager",
+      "main_electrondashboardmanager_handle_folder_deleted",
+      "main_electrondashboardmanager_prewarm",
+      "main_electrondashboardmanager_show",
+      "main_electrondashboardmanager_show_folder",
+      "main_handle_halo_cmd",
+      "main_hooksignals",
+      "main_on_key_event_routed",
+      "main_qt_message_handler",
+      "main_rationale_368",
+      "main_rationale_377",
+      "main_toggle_grid",
+      "main_warm_up",
+      "qobject",
+      "utils_desktopmonitor",
+      "utils_desktopmonitor_unregister"
+    ],
+    "18": [
+      "backup_ui_refactor_app_icon",
+      "backup_ui_refactor_halo",
+      "backup_ui_refactor_ui_dz_grid",
+      "backup_ui_refactor_ui_utils",
+      "backup_ui_refactor_ui_utils_draw_folder_thumbnail",
+      "backup_ui_refactor_ui_utils_rationale_8",
+      "ui_halo",
+      "utils",
+      "utils_change_system_volume",
+      "utils_get_battery_info",
+      "utils_get_desktop_accent_colors",
+      "utils_get_system_volume_level",
+      "utils_prewarm_heavy_modules",
+      "utils_vectoricon",
+      "utils_vectoricon_icon",
+      "utils_vectoricon_pixmap"
+    ],
+    "19": [
+      "electron_dashboard_package",
+      "electron_dashboard_package_author",
+      "electron_dashboard_package_dependencies",
+      "electron_dashboard_package_dependencies_electron_acrylic_window",
+      "electron_dashboard_package_dependencies_sortablejs",
+      "electron_dashboard_package_description",
+      "electron_dashboard_package_devdependencies",
+      "electron_dashboard_package_devdependencies_electron",
+      "electron_dashboard_package_devdependencies_ws",
+      "electron_dashboard_package_keywords",
+      "electron_dashboard_package_license",
+      "electron_dashboard_package_main",
+      "electron_dashboard_package_name",
+      "electron_dashboard_package_scripts",
+      "electron_dashboard_package_scripts_test",
+      "electron_dashboard_package_version"
+    ],
+    "20": [
+      "electron_dashboard_sandbox_server",
+      "electron_dashboard_sandbox_server_main",
+      "electron_dashboard_sandbox_server_sandboxwindow",
+      "electron_dashboard_sandbox_server_sandboxwindow_changeevent",
+      "electron_dashboard_sandbox_server_sandboxwindow_do_fade_in",
+      "electron_dashboard_sandbox_server_sandboxwindow_do_fade_out",
+      "electron_dashboard_sandbox_server_sandboxwindow_handle_command",
+      "electron_dashboard_sandbox_server_sandboxwindow_init",
+      "electron_dashboard_sandbox_server_sandboxwindow_init_ui",
+      "electron_dashboard_sandbox_server_sandboxwindow_on_fade_out_done",
+      "electron_dashboard_sandbox_server_sandboxwindow_paintevent",
+      "electron_dashboard_sandbox_server_sandboxwindow_set_mode",
+      "electron_dashboard_sandbox_server_sandboxwindow_ui_set_bg",
+      "electron_dashboard_sandbox_server_sandboxwindow_update_angle",
+      "electron_dashboard_sandbox_server_stdinreader",
+      "electron_dashboard_sandbox_server_stdinreader_run"
+    ],
+    "21": [
+      "utils_displayeffectsengine_instance",
+      "utils_mediasessionmanager",
+      "utils_mediasessionmanager_change_app_volume",
+      "utils_mediasessionmanager_get_app_volume",
+      "utils_mediasessionmanager_init",
+      "utils_mediasessionmanager_instance",
+      "utils_mediasessionmanager_next_track",
+      "utils_mediasessionmanager_on_state_changed",
+      "utils_mediasessionmanager_on_thumbnail_ready",
+      "utils_mediasessionmanager_play_pause",
+      "utils_mediasessionmanager_prev_track",
+      "utils_mediasessionmanager_scrub_timeline",
+      "utils_mediasessionmanager_set_session_by_id",
+      "utils_mediasessionmanager_setup_volume_callback",
+      "utils_mediasessionmanager_switch_session",
+      "utils_rationale_356"
+    ],
+    "22": [
+      "backup_ui_refactor_app_icon_appicon",
+      "backup_ui_refactor_app_icon_appicon_enterevent",
+      "backup_ui_refactor_app_icon_appicon_init",
+      "backup_ui_refactor_app_icon_appicon_launch_multi",
+      "backup_ui_refactor_app_icon_appicon_leaveevent",
+      "backup_ui_refactor_app_icon_appicon_mousedoubleclickevent",
+      "backup_ui_refactor_app_icon_appicon_mousemoveevent",
+      "backup_ui_refactor_app_icon_appicon_mousepressevent",
+      "backup_ui_refactor_app_icon_appicon_mousereleaseevent",
+      "backup_ui_refactor_app_icon_appicon_paintevent",
+      "backup_ui_refactor_app_icon_appicon_remove_multi",
+      "backup_ui_refactor_app_icon_appicon_rename",
+      "backup_ui_refactor_app_icon_appicon_show_menu",
+      "backup_ui_refactor_app_icon_appicon_toggle_pin",
+      "backup_ui_refactor_app_icon_appicon_toggle_pin_multi"
+    ],
+    "23": [
+      "ui_app_icon_appicon",
+      "ui_app_icon_appicon_enterevent",
+      "ui_app_icon_appicon_init",
+      "ui_app_icon_appicon_launch_multi",
+      "ui_app_icon_appicon_leaveevent",
+      "ui_app_icon_appicon_mousedoubleclickevent",
+      "ui_app_icon_appicon_mousemoveevent",
+      "ui_app_icon_appicon_mousepressevent",
+      "ui_app_icon_appicon_mousereleaseevent",
+      "ui_app_icon_appicon_paintevent",
+      "ui_app_icon_appicon_remove_multi",
+      "ui_app_icon_appicon_rename",
+      "ui_app_icon_appicon_show_menu",
+      "ui_app_icon_appicon_toggle_pin",
+      "ui_app_icon_appicon_toggle_pin_multi"
+    ],
+    "24": [
+      "backup_ui_refactor_layout_logic",
+      "backup_ui_refactor_layout_logic_flowerlayoutengine",
+      "backup_ui_refactor_layout_logic_flowerlayoutengine_get_collapsed_positions",
+      "backup_ui_refactor_layout_logic_flowerlayoutengine_get_expanded_params",
+      "backup_ui_refactor_layout_logic_flowerlayoutengine_get_paging_positions",
+      "backup_ui_refactor_layout_logic_get_engine",
+      "backup_ui_refactor_layout_logic_gridlayoutengine",
+      "backup_ui_refactor_layout_logic_gridlayoutengine_get_collapsed_positions",
+      "backup_ui_refactor_layout_logic_gridlayoutengine_get_expanded_params",
+      "backup_ui_refactor_layout_logic_gridlayoutengine_get_paging_positions",
+      "backup_ui_refactor_layout_logic_layoutengine",
+      "backup_ui_refactor_layout_logic_layoutengine_get_collapsed_positions",
+      "backup_ui_refactor_layout_logic_layoutengine_get_expanded_params",
+      "backup_ui_refactor_layout_logic_layoutengine_get_paging_positions"
+    ],
+    "25": [
+      "ui_app_icon",
+      "ui_folder_icon",
+      "ui_folder_view",
+      "ui_layout_logic",
+      "ui_layout_logic_get_engine",
+      "ui_logic",
+      "ui_logic_handle_app_drop",
+      "ui_logic_rationale_9",
+      "ui_ui_common",
+      "ui_ui_common_animatedmenu",
+      "ui_ui_utils",
+      "ui_ui_utils_draw_folder_thumbnail",
+      "ui_ui_utils_rationale_8"
+    ],
+    "26": [
+      "ui_layout_logic_flowerlayoutengine",
+      "ui_layout_logic_flowerlayoutengine_get_collapsed_positions",
+      "ui_layout_logic_flowerlayoutengine_get_expanded_params",
+      "ui_layout_logic_flowerlayoutengine_get_paging_positions",
+      "ui_layout_logic_gridlayoutengine",
+      "ui_layout_logic_gridlayoutengine_get_collapsed_positions",
+      "ui_layout_logic_gridlayoutengine_get_expanded_params",
+      "ui_layout_logic_gridlayoutengine_get_paging_positions",
+      "ui_layout_logic_layoutengine",
+      "ui_layout_logic_layoutengine_get_collapsed_positions",
+      "ui_layout_logic_layoutengine_get_expanded_params",
+      "ui_layout_logic_layoutengine_get_paging_positions"
+    ],
+    "27": [
+      "backup_ui_refactor_folder_icon",
+      "backup_ui_refactor_folder_view",
+      "backup_ui_refactor_logic",
+      "backup_ui_refactor_logic_handle_app_drop",
+      "backup_ui_refactor_logic_rationale_9",
+      "config",
+      "config_configmanager",
+      "config_configmanager_load",
+      "config_configmanager_save",
+      "core_services_ipc_server",
+      "scratch_test_add_item"
+    ],
+    "28": [
+      "readme",
+      "readme_advanced_grid_snapping",
+      "readme_architecture_details",
+      "readme_beautiful_fluid_animations",
+      "readme_how_to_use",
+      "readme_info_pill_guidance",
+      "readme_key_features",
+      "readme_native_desktop_integration_win_d_bypass",
+      "readme_pandora",
+      "readme_radial_hud_system_tools",
+      "readme_ultimate_customizability_dashboard"
+    ],
+    "29": [
+      "ui_grid_overlay_gridoverlay",
+      "ui_grid_overlay_gridoverlay_get_snap_pos",
+      "ui_grid_overlay_gridoverlay_init",
+      "ui_grid_overlay_gridoverlay_on_anim_finished",
+      "ui_grid_overlay_gridoverlay_paintevent",
+      "ui_grid_overlay_gridoverlay_set_drag_state",
+      "ui_grid_overlay_gridoverlay_setvisible",
+      "ui_grid_overlay_gridoverlay_showevent",
+      "ui_grid_overlay_gridoverlay_step_anim",
+      "ui_grid_overlay_gridoverlay_toggle",
+      "ui_grid_overlay_gridoverlay_upd_entrance"
+    ],
+    "30": [
+      "utils_displayeffectsengine",
+      "utils_displayeffectsengine_apply_frame",
+      "utils_displayeffectsengine_get_current_ramp",
+      "utils_displayeffectsengine_init",
+      "utils_displayeffectsengine_restore_original",
+      "utils_displayeffectsengine_set_enabled",
+      "utils_displayeffectsengine_set_intensity",
+      "utils_displayeffectsengine_set_preset",
+      "utils_rationale_582",
+      "utils_rationale_638"
+    ],
+    "31": [
+      "backup_ui_refactor_grid_overlay",
+      "ui_grid_overlay",
+      "utils_winapi",
+      "utils_winapi_allow_drag_drop",
+      "utils_winapi_pin_to_workerw",
+      "utils_winapi_register_appbar",
+      "utils_winapi_set_modern_visuals",
+      "utils_winapi_unregister_appbar"
+    ],
+    "32": [
+      "core_services_ipc_server_ipcserver",
+      "core_services_ipc_server_ipcserver_broadcast",
+      "core_services_ipc_server_ipcserver_broadcast_config",
+      "core_services_ipc_server_ipcserver_handler",
+      "core_services_ipc_server_ipcserver_init",
+      "core_services_ipc_server_ipcserver_main",
+      "core_services_ipc_server_ipcserver_run_server",
+      "core_services_ipc_server_ipcserver_start"
+    ],
+    "33": [
+      "htmlparser",
+      "scratch_parse_html",
+      "scratch_parse_html_myhtmlparser",
+      "scratch_parse_html_myhtmlparser_handle_endtag",
+      "scratch_parse_html_myhtmlparser_handle_starttag",
+      "scratch_parse_html_myhtmlparser_init"
+    ],
+    "34": [
+      "scratch_test_icon",
+      "utils_iconextractor",
+      "utils_iconextractor_autocrop",
+      "utils_iconextractor_get_app_icon_pixmap",
+      "utils_iconextractor_get_icon_pixmap",
+      "utils_iconextractor_get_uwp_icon"
+    ],
+    "35": [
+      "scratch_analyze_ast",
+      "scratch_analyze_ast_acorn",
+      "scratch_analyze_ast_ast",
+      "scratch_analyze_ast_code",
+      "scratch_analyze_ast_fs"
+    ],
+    "36": [
+      "scratch_test_halo_anim",
+      "scratch_test_halo_anim_capture",
+      "scratch_test_halo_anim_press_tilde",
+      "scratch_test_halo_anim_release_tilde",
+      "scratch_test_halo_anim_run_test"
+    ],
+    "37": [
+      "electron_dashboard_main",
+      "electron_dashboard_main_app_browserwindow_ipcmain_nativetheme",
+      "electron_dashboard_main_createwindow",
+      "electron_dashboard_main_path"
+    ],
+    "38": [
+      "scratch_minimize_all",
+      "scratch_minimize_all_get_window_title",
+      "scratch_minimize_all_is_window_visible",
+      "scratch_minimize_all_main"
+    ],
+    "39": [
+      "utils_rationale_347",
+      "utils_volumechangehandler",
+      "utils_volumechangehandler_init",
+      "utils_volumechangehandler_onnotify"
+    ],
+    "40": [
+      "scratch_screenshot",
+      "scratch_screenshot_click",
+      "scratch_screenshot_enum_cb"
+    ],
+    "41": [
+      "scratch_analyze_braces",
+      "scratch_analyze_braces_analyze_braces"
+    ],
+    "42": [
+      "scratch_bring_to_front",
+      "scratch_bring_to_front_main"
+    ],
+    "43": [
+      "scratch_click_halo",
+      "scratch_click_halo_enum_cb"
+    ],
+    "44": [
+      "scratch_click_slice",
+      "scratch_click_slice_enum_cb"
+    ],
+    "45": [
+      "scratch_debug_mute",
+      "scratch_debug_mute_debug_mute"
+    ],
+    "46": [
+      "scratch_focus_electron",
+      "scratch_focus_electron_enum_cb"
+    ],
+    "47": [
+      "scratch_map_ids",
+      "scratch_map_ids_print_pane"
+    ],
+    "48": [
+      "scratch_print_sections",
+      "scratch_print_sections_print_lines"
+    ],
+    "49": [
+      "scratch_take_ss",
+      "scratch_take_ss_take_screenshot"
+    ],
+    "50": [
+      "scratch_take_ss_focused",
+      "scratch_take_ss_focused_main"
+    ],
+    "51": [
+      "scratch_test_all_devices",
+      "scratch_test_all_devices_test_all"
+    ],
+    "52": [
+      "scratch_test_pyqt",
+      "scratch_test_pyqt_save_ss"
+    ],
+    "53": [
+      "scratch_test_pyqt_solid",
+      "scratch_test_pyqt_solid_save_ss"
+    ],
+    "54": [
+      "scratch_test_raw_peak",
+      "scratch_test_raw_peak_test_peak"
+    ],
+    "55": [
+      "scratch_test_session_eq",
+      "scratch_test_session_eq_test"
+    ],
+    "56": [
+      "scratch_test_session_id",
+      "scratch_test_session_id_test"
+    ],
+    "57": [
+      "scratch_test_session_order",
+      "scratch_test_session_order_test"
+    ],
+    "58": [
+      "scratch_test_vol_match",
+      "scratch_test_vol_match_test_matching"
+    ],
+    "59": [
+      "scratch_test_ws",
+      "scratch_test_ws_main"
+    ],
+    "60": [
+      "fix"
+    ],
+    "61": [
+      "fix_main"
+    ],
+    "62": [
+      "scratch_ast_extract"
+    ],
+    "63": [
+      "scratch_build"
+    ],
+    "64": [
+      "scratch_check_parity"
+    ],
+    "65": [
+      "scratch_check_pycaw_api"
+    ],
+    "66": [
+      "scratch_check_pycaw_api_v2"
+    ],
+    "67": [
+      "scratch_clean_workspace"
+    ],
+    "68": [
+      "scratch_cleanup"
+    ],
+    "69": [
+      "scratch_detect_incremental"
+    ],
+    "70": [
+      "scratch_extract"
+    ],
+    "71": [
+      "scratch_find_app_ids"
+    ],
+    "72": [
+      "scratch_find_in_script"
+    ],
+    "73": [
+      "scratch_find_panes"
+    ],
+    "74": [
+      "scratch_find_scope"
+    ],
+    "75": [
+      "scratch_find_sliders"
+    ],
+    "76": [
+      "scratch_find_tabs"
+    ],
+    "77": [
+      "scratch_find_tabs2"
+    ],
+    "78": [
+      "scratch_fix_css"
+    ],
+    "79": [
+      "scratch_fix_index"
+    ],
+    "80": [
+      "scratch_fix_renderer"
+    ],
+    "81": [
+      "scratch_label"
+    ],
+    "82": [
+      "scratch_merge"
+    ],
+    "83": [
+      "scratch_move_css"
+    ],
+    "84": [
+      "scratch_rewrite_halo"
+    ],
+    "85": [
+      "scratch_rewrite_hook_signals"
+    ],
+    "86": [
+      "scratch_rewrite_js"
+    ],
+    "87": [
+      "scratch_rewrite_ui"
+    ],
+    "88": [
+      "scratch_search_clock_settings"
+    ],
+    "89": [
+      "scratch_search_code"
+    ],
+    "90": [
+      "scratch_search_elements"
+    ],
+    "91": [
+      "scratch_search_js"
+    ],
+    "92": [
+      "scratch_search_js_bindings"
+    ],
+    "93": [
+      "scratch_search_js_config"
+    ],
+    "94": [
+      "scratch_search_js_slider"
+    ],
+    "95": [
+      "scratch_search_js_specific"
+    ],
+    "96": [
+      "scratch_search_tpl_elements"
+    ],
+    "97": [
+      "scratch_step2_rewrite"
+    ],
+    "98": [
+      "scratch_step3_rewrite"
+    ],
+    "99": [
+      "scratch_test_transient"
+    ],
+    "100": [
+      "ui_init"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07080200501253132,
+    "1": 0.06274509803921569,
+    "2": 0.07585568917668825,
+    "3": 0.08097165991902834,
+    "4": 0.1111111111111111,
+    "5": 0.12310606060606061,
+    "6": 0.07661290322580645,
+    "7": 0.08387096774193549,
+    "8": 0.09462365591397849,
+    "9": 0.11330049261083744,
+    "10": 0.11692307692307692,
+    "11": 0.11692307692307692,
+    "12": 0.12333333333333334,
+    "13": 0.10507246376811594,
+    "14": 0.13043478260869565,
+    "15": 0.08695652173913043,
+    "16": 0.16374269005847952,
+    "17": 0.1503267973856209,
+    "18": 0.23333333333333334,
+    "19": 0.125,
+    "20": 0.175,
+    "21": 0.14166666666666666,
+    "22": 0.1523809523809524,
+    "23": 0.1523809523809524,
+    "24": 0.16483516483516483,
+    "25": 0.34615384615384615,
+    "26": 0.16666666666666666,
+    "27": 0.2545454545454545,
+    "28": 0.18181818181818182,
+    "29": 0.23636363636363636,
+    "30": 0.3111111111111111,
+    "31": 0.25,
+    "32": 0.32142857142857145,
+    "33": 0.3333333333333333,
+    "34": 0.5333333333333333,
+    "35": 0.4,
+    "36": 0.7,
+    "37": 0.5,
+    "38": 0.8333333333333334,
+    "39": 0.5,
+    "40": 0.6666666666666666,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0,
+    "89": 1.0,
+    "90": 1.0,
+    "91": 1.0,
+    "92": 1.0,
+    "93": 1.0,
+    "94": 1.0,
+    "95": 1.0,
+    "96": 1.0,
+    "97": 1.0,
+    "98": 1.0,
+    "99": 1.0,
+    "100": 1.0
+  },
+  "gods": [
+    {
+      "id": "backup_ui_refactor_folder_view_folderview",
+      "label": "FolderView",
+      "degree": 45
+    },
+    {
+      "id": "ui_folder_view_folderview",
+      "label": "FolderView",
+      "degree": 45
+    },
+    {
+      "id": "backup_ui_refactor_folder_icon_foldericon",
+      "label": "FolderIcon",
+      "degree": 39
+    },
+    {
+      "id": "core_services_media_daemon_mediadaemon",
+      "label": "MediaDaemon",
+      "degree": 39
+    },
+    {
+      "id": "ui_folder_icon_foldericon",
+      "label": "FolderIcon",
+      "degree": 36
+    },
+    {
+      "id": "utils_vectoricon",
+      "label": "VectorIcon",
+      "degree": 35
+    },
+    {
+      "id": "backup_ui_refactor_halo_halo",
+      "label": "Halo",
+      "degree": 33
+    },
+    {
+      "id": "ui_halo_halo",
+      "label": "Halo",
+      "degree": 33
+    },
+    {
+      "id": "utils_iconextractor",
+      "label": "IconExtractor",
+      "degree": 30
+    },
+    {
+      "id": "config_configmanager",
+      "label": "ConfigManager",
+      "degree": 27
+    }
+  ],
+  "surprises": [
+    {
+      "source": "AppIcon",
+      "target": "IconExtractor",
+      "source_files": [
+        "backup_ui_refactor/app_icon.py",
+        "utils.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "AppIcon",
+      "target": "VectorIcon",
+      "source_files": [
+        "backup_ui_refactor/app_icon.py",
+        "utils.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "FolderIcon",
+      "target": "AppIcon",
+      "source_files": [
+        "ui/folder_icon.py",
+        "backup_ui_refactor/app_icon.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "FolderView",
+      "target": "AppIcon",
+      "source_files": [
+        "ui/folder_view.py",
+        "backup_ui_refactor/app_icon.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "FolderIcon",
+      "target": "ConfigManager",
+      "source_files": [
+        "backup_ui_refactor/folder_icon.py",
+        "config.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `VectorIcon` connect `Community 18` to `Community 1`, `Community 2`, `Community 4`, `Community 6`, `Community 9`, `Community 10`, `Community 11`, `Community 12`, `Community 13`, `Community 14`, `Community 17`, `Community 22`, `Community 23`, `Community 25`, `Community 27`?",
+      "why": "High betweenness centrality (0.121) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `ConfigManager` connect `Community 27` to `Community 32`, `Community 1`, `Community 2`, `Community 4`, `Community 6`, `Community 10`, `Community 11`, `Community 13`, `Community 17`, `Community 20`, `Community 25`?",
+      "why": "High betweenness centrality (0.076) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `FolderView` connect `Community 2` to `Community 34`, `Community 3`, `Community 11`, `Community 18`, `Community 22`, `Community 25`, `Community 27`, `Community 31`?",
+      "why": "High betweenness centrality (0.062) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `FolderView` (e.g. with `FolderIcon` and `AppIcon`) actually correct?",
+      "why": "`FolderView` has 8 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 6 inferred relationships involving `FolderView` (e.g. with `AppIcon` and `AnimatedMenu`) actually correct?",
+      "why": "`FolderView` has 6 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 12 inferred relationships involving `FolderIcon` (e.g. with `AppIcon` and `FolderView`) actually correct?",
+      "why": "`FolderIcon` has 12 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 5 inferred relationships involving `MediaDaemon` (e.g. with `ElectronDashboardManager` and `GlobalHook`) actually correct?",
+      "why": "`MediaDaemon` has 5 INFERRED edges - model-reasoned connections that need verification."
+    }
+  ]
+}
