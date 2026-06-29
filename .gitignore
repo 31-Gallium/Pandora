@@ -24,3 +24,15 @@ config.json
 backup_stable_v8/
 gem/
 test_*.png
+
+# Excluded demo/test/fix and temp files
+acrylic_demo.py
+test_blur.py
+fix.py
+fix_main.py
+crash_wrapper.py
+scratch/
+backup_ui_refactor/
+graphify-out/
+*.txt
+*.png
