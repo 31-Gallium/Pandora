@@ -29,10 +29,10 @@ The center of the Halo menu is a dynamic "Hub" that intelligently switches conte
 * **Time Hub:** When no media is playing, it reverts to a beautiful Digital or Analog clock, supporting quick-swapping between international timezones.
 
 ### 📁 Interactive Desktop Folders
-* **Fluid Layout Engines:** Icons inside folders can be arranged using standard **Grid** layouts or concentric **Flower** layouts.
+* **Dynamic Grid Layout:** Icons inside folders are arranged in a sleek, customizable grid with smooth transitions when expanding or collapsing.
 * **Smart Extraction:** Automatically extracts icons from dropped `.exe`, `.lnk`, or UWP apps using COM interop (`win32com`, `shell32`), with fallbacks for missing assets.
 * **Drag-and-Drop:** Seamlessly drag apps between folders, to the desktop, or reorder them, complete with "Ghost" tooltip trackers and liquid drag-scroll animations.
-* **Paging:** Supports pagination when folders contain too many apps, complete with smooth transitional animations.
+* **Paging:** Supports pagination when folders contain too many apps, complete with smooth transitional animations and scroll indicators.
 
 ### ⚙️ Hybrid Settings Dashboard
 Pandora's settings are managed by an incredibly sleek, standalone **Electron** application.
