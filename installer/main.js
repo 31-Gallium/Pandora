@@ -3,6 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 
+process.on('uncaughtException', (err) => {
+  fs.writeFileSync(path.join(process.env.USERPROFILE, 'Desktop', 'installer_crash.txt'), err.stack || err.message);
+  app.quit();
+});
+
 let mainWindow;
 
 function createWindow() {
