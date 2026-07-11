@@ -38,29 +38,38 @@ ipcMain.on('close-installer', (event, options) => {
 });
 
 ipcMain.on('start-install', (event, options) => {
+  const logFile = path.join(process.env.USERPROFILE, 'Desktop', 'installer_trace.txt');
+  fs.writeFileSync(logFile, "Started install flow\n");
+
   const destDir = path.join(process.env.LOCALAPPDATA, 'Programs', 'Pandora');
   
   let payloadPath = path.join(process.resourcesPath, '..', 'payload.zip');
   if (!fs.existsSync(payloadPath)) {
       payloadPath = path.join(__dirname, 'payload.zip'); // Fallback for dev mode
   }
+  fs.appendFileSync(logFile, "Payload path: " + payloadPath + "\n");
 
   // 1. Create destination if it doesn't exist
   if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
   }
+  fs.appendFileSync(logFile, "Dest dir created\n");
 
   // 2. Kill any running instance then extract payload
+  fs.appendFileSync(logFile, "Executing taskkill\n");
   exec(`taskkill /F /IM Pandora.exe /T`, () => {
+    fs.appendFileSync(logFile, "Taskkill finished, executing Expand-Archive\n");
     const extractCmd = `powershell.exe -Command "Expand-Archive -Path '${payloadPath}' -DestinationPath '${destDir}' -Force"`;
     
     exec(extractCmd, (error, stdout, stderr) => {
+    fs.appendFileSync(logFile, "Expand-Archive finished. Error: " + (error ? error.message : "none") + "\n");
     if (error) {
       console.error(`Extraction Error: ${error.message}`);
       // Send error back or continue anyway for now
     }
 
     // 3. Handle shortcuts and registry
+    fs.appendFileSync(logFile, "Handling shortcuts\n");
     let scripts = [];
     const exePath = path.join(destDir, 'Pandora.exe');
     const iconPath = path.join(destDir, 'icon.ico');
