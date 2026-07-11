@@ -1,0 +1,57 @@
+# Python environment and cache
+venv/
+__pycache__/
+*.pyc
+
+# Build and Dist folders
+build/
+dist/
+*.spec
+build_and_deploy.ps1
+Pandora.exe.manifest
+
+# App specific data and logs
+internal_storage/
+logs/
+*.log
+drag_debug.txt
+rollback.txt
+
+# User generated config
+config.json
+
+# Backups and temporary files
+backup_stable_v8/
+gem/
+test_*.png
+
+# Excluded demo/test/fix and temp files
+acrylic_demo.py
+test_blur.py
+fix.py
+fix_main.py
+crash_wrapper.py
+convert*.py
+scratch/
+backup_ui_refactor/
+graphify-out/
+snippet_*.txt
+traceback_dump.txt
+scratch_pan_log.txt
+crash_log.txt
+out.txt
+panel_debug.png
+test_*.png
+# Build outputs
+Output/
+dist_electron/
+installer/
+
+# System files
+desktop.ini
+
+# Test scripts
+electron_dashboard/test_icons.js
+
+# Node.js
+node_modules/
