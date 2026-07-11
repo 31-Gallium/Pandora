@@ -64,11 +64,20 @@ ipcMain.on('start-install', (event, options) => {
     // Create uninstall.bat
     const uninstallScript = `
 @echo off
+:: If we are not running from TEMP, copy ourselves there and relaunch
+if not "%~dp0"=="%TEMP%\\" (
+    copy /y "%~f0" "%TEMP%\\Pandora_uninstall.bat" >nul
+    start "" /b "%TEMP%\\Pandora_uninstall.bat"
+    exit /b
+)
+
 echo Uninstalling Pandora...
 taskkill /F /IM Pandora.exe /T >nul 2>&1
 timeout /t 2 /nobreak >nul
+
 reg delete "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" /v Pandora /f >nul 2>&1
 reg delete "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Pandora" /f >nul 2>&1
+
 if exist "%APPDATA%\\Pandora\\internal_storage" (
     echo Backing up Pandora storage to Desktop...
     mkdir "%USERPROFILE%\\Desktop\\Pandora_Backup" >nul 2>&1
@@ -78,10 +87,13 @@ if exist "%APPDATA%\\Pandora\\internal_storage" (
 del "%USERPROFILE%\\Desktop\\Pandora.lnk" >nul 2>&1
 del "%USERPROFILE%\\OneDrive\\Desktop\\Pandora.lnk" >nul 2>&1
 del "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Pandora.lnk" >nul 2>&1
-cd /d "%LOCALAPPDATA%\\Programs"
-rmdir /s /q Pandora
-cd /d "%APPDATA%"
-rmdir /s /q Pandora
+
+:: We are running from TEMP now, so we can safely delete the installation folder
+rmdir /s /q "%LOCALAPPDATA%\\Programs\\Pandora" >nul 2>&1
+rmdir /s /q "%APPDATA%\\Pandora" >nul 2>&1
+
+:: Self delete this script from TEMP
+del "%~f0"
     `;
     fs.writeFileSync(uninstallBatPath, uninstallScript.trim());
 
