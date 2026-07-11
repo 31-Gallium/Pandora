@@ -14,7 +14,7 @@
   },
   "build": {
     "appId": "com.seb.pandora",
-    "productName": "Pandora",
+    "productName": "PandoraSetup",
     "directories": {
       "output": "dist_installer"
     },
