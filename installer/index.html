@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pandora Setup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="pill drag-pill">
+      <img src="Pandora.svg" style="width: 16px; height: 16px; margin-right: 8px;" />
+      <span>Pandora Setup</span>
+      <div class="drag-region"></div>
+    </div>
+    <div class="pill close-btn" id="close-btn">&times;</div>
+  </div>
+
+  <div class="container">
+    <!-- Screen 1: Welcome -->
+    <div id="screen-welcome" class="screen active">
+      <div class="pill hero-pill">
+        <img src="Pandora.svg" class="logo" />
+        <div class="hero-text">
+          <h1>Install Pandora</h1>
+          <p>The ultimate desktop environment.</p>
+        </div>
+      </div>
+
+      <div class="pill options-pill">
+        <label class="toggle-row">
+          <span>Launch Pandora at startup</span>
+          <div class="toggle">
+            <input type="checkbox" id="opt-startup" checked>
+            <span class="track"></span>
+          </div>
+        </label>
+        
+        <label class="toggle-row">
+          <span>Add Desktop Shortcut</span>
+          <div class="toggle">
+            <input type="checkbox" id="opt-desktop" checked>
+            <span class="track"></span>
+          </div>
+        </label>
+      </div>
+
+      <div class="footer">
+        <button id="btn-next" class="pill btn primary">Next</button>
+      </div>
+    </div>
+
+    <!-- Screen 1.5: EULA -->
+    <div id="screen-eula" class="screen">
+      <div class="pill hero-pill" style="padding: 16px 24px;">
+        <h2 style="font-size: 20px;">License Agreement</h2>
+      </div>
+
+      <div class="pill options-pill" style="display: flex; flex-direction: column;">
+        <div class="eula-box">
+          <p><strong>Pandora End User License Agreement</strong></p><br/>
+          <p><strong>1. License Grant:</strong> Pandora is provided Free for Personal, Non-Commercial use only. Any deployment in a corporate or commercial environment requires a paid commercial license.</p><br/>
+          <p><strong>2. Beta Status:</strong> Pandora is currently in active production/beta. The software is provided "AS IS".</p><br/>
+          <p><strong>3. Limitation of Liability:</strong> Under no circumstances shall the author be liable for any data loss, system instability, or other damages arising from the use of this software. You cannot sue the creator for lost files or bugs.</p>
+        </div>
+        
+        <label class="toggle-row" style="border-top: 1px solid var(--border); border-bottom: none; margin-top: 10px; padding-bottom: 4px;">
+          <span>I accept the agreement</span>
+          <div class="toggle">
+            <input type="checkbox" id="opt-accept">
+            <span class="track"></span>
+          </div>
+        </label>
+      </div>
+
+      <div class="footer" style="gap: 12px;">
+        <button id="btn-back" class="pill btn" style="background: rgba(255,255,255,0.1);">Back</button>
+        <button id="btn-install" class="pill btn primary" disabled style="opacity: 0.5; cursor: not-allowed;">Install</button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Installing -->
+    <div id="screen-installing" class="screen">
+      <div class="pill hero-pill center-content">
+        <img src="Pandora.svg" class="logo animating" />
+        <h2>Installing...</h2>
+        <p id="status-text">Extracting files to AppData...</p>
+      </div>
+
+      <div class="pill options-pill no-pad">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Complete -->
+    <div id="screen-complete" class="screen">
+      <div class="pill hero-pill center-content">
+        <img src="Pandora.svg" class="logo glow" />
+        <h2>Installation Complete</h2>
+        <p>Pandora is ready to use.</p>
+      </div>
+
+      <div class="pill options-pill">
+        <label class="toggle-row">
+          <span>Launch Pandora now</span>
+          <div class="toggle">
+            <input type="checkbox" id="opt-launchnow" checked>
+            <span class="track"></span>
+          </div>
+        </label>
+      </div>
+
+      <div class="footer">
+        <button id="btn-finish" class="pill btn primary">Finish</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

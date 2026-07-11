@@ -1,0 +1,35 @@
+{
+  "name": "pandora-installer",
+  "version": "1.0.0",
+  "description": "Installer for Pandora",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.seb.pandora",
+    "productName": "Pandora",
+    "directories": {
+      "output": "dist_installer"
+    },
+    "compression": "store",
+    "win": {
+      "target": "portable",
+      "icon": "../icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "PandoraSetup.exe"
+    },
+    "extraFiles": [
+      "payload.zip",
+      "../icon.ico"
+    ]
+  }
+}

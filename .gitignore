@@ -45,7 +45,9 @@ test_*.png
 # Build outputs
 Output/
 dist_electron/
-installer/
+installer/dist_installer/
+installer/node_modules/
+installer/payload.zip
 
 # System files
 desktop.ini
