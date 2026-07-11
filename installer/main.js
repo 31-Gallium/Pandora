@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
@@ -32,9 +32,12 @@ app.whenReady().then(createWindow);
 ipcMain.on('close-installer', (event, options) => {
   if (options && options.launchNow) {
     const exePath = path.join(process.env.LOCALAPPDATA, 'Programs', 'Pandora', 'Pandora.exe');
-    exec(`start "" "${exePath}"`);
+    shell.openPath(exePath).then(() => {
+      app.quit();
+    });
+  } else {
+    app.quit();
   }
-  app.quit();
 });
 
 ipcMain.on('start-install', (event, options) => {
