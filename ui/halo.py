@@ -107,6 +107,7 @@ class Halo(QWidget):
         self.bg_path = None
         self.inner_hud_path = None
         self._setup_resources()
+        self._noise_pixmap = self._create_noise_texture()
         
         # Connect Media Manager
         from utils import MediaSessionManager
@@ -158,10 +159,16 @@ class Halo(QWidget):
                     ("SizeOfData", c_uint)
                 ]
 
-            blur_level = getattr(self, 'blur_level', 'High')
+            from config import ConfigManager
+            cfg = ConfigManager.load()
+            blur_mode = cfg.get('halo', {}).get('blur_mode', 'live')
+            blur_level = cfg.get('halo', {}).get('blur_level', 'High')
 
             policy = ACCENTPOLICY()
-            policy.AccentState = 4  # ACCENT_ENABLE_ACRYLICBLURBEHIND (modern Windows 11 Acrylic)
+            if blur_mode == 'static':
+                policy.AccentState = 0  # ACCENT_DISABLED - bypass DWM composition blur
+            else:
+                policy.AccentState = 4  # ACCENT_ENABLE_ACRYLICBLURBEHIND (modern Windows 11 Acrylic)
             
             if blur_level == 'Low':
                 # Window 3: tinted gray, AccentFlags = 0x1E0, GradientColor = 0x30555555
@@ -223,6 +230,17 @@ class Halo(QWidget):
         self.pen_cyan_glow = QPen(QColor(0, 240, 255, 100), 4)
         self.brush_cursor = QBrush(QColor(255, 255, 255, 200))
         self.brush_hud_bg = QBrush(QColor(255,255,255,5))
+
+    def _create_noise_texture(self):
+        import random
+        img = QImage(128, 128, QImage.Format.Format_ARGB32)
+        for y in range(128):
+            for x in range(128):
+                # Subtle monochrome high-frequency frosted noise
+                val = random.randint(220, 255)
+                alpha = random.randint(3, 7)
+                img.setPixelColor(x, y, QColor(val, val, val, alpha))
+        return QPixmap.fromImage(img)
 
     def _create_custom_cursor(self):
         from PyQt6.QtGui import QPixmap, QCursor
@@ -416,7 +434,9 @@ class Halo(QWidget):
                     self.update(); return
                 except Exception as e:
                     import traceback
-                    with open('scroll_debug.txt', 'a') as df:
+                    from config import APPDATA_DIR
+                    import os
+                    with open(os.path.join(APPDATA_DIR, 'scroll_debug.txt'), 'a') as df:
                         df.write('Error in night light: ' + str(e) + '\n')
                     return
             elif tid == 'brightness':
@@ -536,7 +556,9 @@ class Halo(QWidget):
     def _anim_loop(self):
         # Process queued mouse movement once per frame to decouple Win32 hook from Qt rendering
         if getattr(self, 'last_global_mouse_pos', None) is not None:
-            self._process_mouse_pos(self.last_global_mouse_pos)
+            if not hasattr(self, '_last_processed_mouse_pos') or self._last_processed_mouse_pos != self.last_global_mouse_pos:
+                self._process_mouse_pos(self.last_global_mouse_pos)
+                self._last_processed_mouse_pos = self.last_global_mouse_pos
         elif hasattr(self, '_nav_keys') and self._nav_keys:
             from PyQt6.QtGui import QCursor
             self._process_mouse_pos(QCursor.pos())
@@ -628,19 +650,100 @@ class Halo(QWidget):
                 changed = True
             
         # Keep UI awake for Audio Visualizers to allow smooth decay
+        vis_changed = False
         if hasattr(self, 'hub_manager') and not changed:
             mod = self.hub_manager.get_active_module()
             if getattr(mod, '__class__', None).__name__ == 'MediaHub':
                 if mod.settings.get('visualizer', 'None') != 'None':
                     track = mod.media_mgr.current_track
-                    if track.get('status') == 'Playing' or getattr(mod, '_smoothed_peak', 0.0) > 0.01:
-                        changed = True
+                    if track.get('status') == 'Playing' or getattr(mod, '_idle_frame_counter', 999) < 120:
+                        vis_changed = True
 
         if changed:
             self.update()
+        elif vis_changed:
+            from PyQt6.QtCore import QRect
+            cx = self.center_pt.x()
+            cy = self.center_pt.y()
+            # Safe bounding box for all visualizers including Edge Ring EQ which bleeds outward
+            update_radius = int(self.inner_radius) + 120 
+            self.update(QRect(cx - update_radius, cy - update_radius, update_radius * 2, update_radius * 2))
     def show_center(self):
+        # Refresh composition blur state (in case the user changed it in dashboard)
+        self._enable_windows_blur()
+        
+        from config import ConfigManager
+        cfg = ConfigManager.load()
+        blur_mode = cfg.get('halo', {}).get('blur_mode', 'live')
+        blur_level = cfg.get('halo', {}).get('blur_level', 'High')
+        theme = cfg.get('halo', {}).get('theme', 'Dark')
+        
         from PyQt6.QtGui import QCursor, QGuiApplication
         screen = QGuiApplication.primaryScreen().availableGeometry()
+        
+        if blur_mode == 'static':
+            primary_screen = QGuiApplication.primaryScreen()
+            if primary_screen:
+                original_pixmap = primary_screen.grabWindow(0)
+                w = original_pixmap.width()
+                h = original_pixmap.height()
+                
+                # Target width based on blur level setting (smaller width = stronger blur)
+                if blur_level == 'Low':
+                    target_w = w // 12
+                elif blur_level == 'Medium':
+                    target_w = w // 24
+                else:  # High
+                    target_w = w // 48
+                
+                # Step 1: Iterative downscale in steps of 50% to prevent aliasing and create a low-pass filter
+                temp_img = original_pixmap.toImage()
+                current_w = w
+                current_h = h
+                while current_w > target_w * 2:
+                    current_w = max(1, current_w // 2)
+                    current_h = max(1, current_h // 2)
+                    temp_img = temp_img.scaled(current_w, current_h, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                
+                # Final downscale step to target size
+                temp_img = temp_img.scaled(max(1, target_w), max(1, h * target_w // w), Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                
+                # Step 2: Offset Box Blur on the downscaled image to smear the pixels and eliminate blockiness
+                blurred_small = QImage(temp_img.size(), QImage.Format.Format_ARGB32)
+                blurred_small.fill(Qt.GlobalColor.transparent)
+                bp = QPainter(blurred_small)
+                bp.setOpacity(0.4)
+                bp.drawImage(0, 0, temp_img)
+                bp.setOpacity(0.15)
+                bp.drawImage(-1, 0, temp_img)
+                bp.drawImage(1, 0, temp_img)
+                bp.drawImage(0, -1, temp_img)
+                bp.drawImage(0, 1, temp_img)
+                bp.end()
+                
+                # Step 3: Upscale back to full size
+                upscaled_pixmap = QPixmap.fromImage(blurred_small.scaled(w, h, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                
+                # Step 4: Pre-bake the frosted glass color tint and noise texture onto the pixmap once
+                baked_pixmap = QPixmap(w, h)
+                baked_pixmap.fill(Qt.GlobalColor.transparent)
+                bp_bake = QPainter(baked_pixmap)
+                bp_bake.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+                bp_bake.drawPixmap(0, 0, upscaled_pixmap)
+                
+                if theme == 'Dark':
+                    bp_bake.fillRect(baked_pixmap.rect(), QColor(10, 10, 15, int(255 * 0.22)))
+                else:
+                    bp_bake.fillRect(baked_pixmap.rect(), QColor(255, 255, 255, int(255 * 0.18)))
+                    
+                if hasattr(self, '_noise_pixmap') and self._noise_pixmap:
+                    bp_bake.drawTiledPixmap(baked_pixmap.rect(), self._noise_pixmap)
+                bp_bake.end()
+                
+                self._bg_blur_pixmap = baked_pixmap
+        else:
+            self._bg_blur_pixmap = None
+            
         pos = screen.center()
         self.original_cursor_pos = QCursor.pos()
         self.setGeometry(screen)
@@ -854,7 +957,9 @@ class Halo(QWidget):
             self._do_paint(p)
         except Exception as ex:
             import traceback
-            with open("traceback_dump.txt", "a") as f:
+            from config import APPDATA_DIR
+            import os
+            with open(os.path.join(APPDATA_DIR, "traceback_dump.txt"), "a") as f:
                 traceback.print_exc(file=f)
         finally:
             if p.isActive():
@@ -869,12 +974,10 @@ class Halo(QWidget):
         fade = getattr(self, "fade_progress", 0.0)
         theme = getattr(self, 'theme', 'Dark')
         
-        # 1. Full-screen background (Blurred Wallpaper)
+        # 1. Full-screen background (Blurred Wallpaper + Frosted Overlay + Noise pre-baked)
         if self._bg_blur_pixmap and not self._bg_blur_pixmap.isNull():
             p.save()
-            # Reduce opacity to 85% so background apps bleed through
-            p.setOpacity(fade * 0.90)
-            
+            p.setOpacity(fade)
             # 1:1 perfectly aligned hardware blit
             p.drawPixmap(0, 0, self._bg_blur_pixmap)
             p.restore()

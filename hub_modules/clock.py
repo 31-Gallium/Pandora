@@ -23,10 +23,15 @@ class TimeHub(BaseHubModule):
         self._smooth_timer.start(16)
 
     def _on_smooth_tick(self):
-        # Force a repaint at 60fps if halo is visible
+        # Force a repaint at 60fps if halo is visible and TimeHub is active
         try:
             if hasattr(self.manager, 'halo') and self.manager.halo.isVisible():
-                self.manager.halo.update()
+                if hasattr(self.manager, 'get_active_module') and self.manager.get_active_module() == self:
+                    cx = self.manager.halo.center_pt.x()
+                    cy = self.manager.halo.center_pt.y()
+                    update_radius = int(self.manager.halo.inner_radius) + 120
+                    from PyQt6.QtCore import QRect
+                    self.manager.halo.update(QRect(cx - update_radius, cy - update_radius, update_radius * 2, update_radius * 2))
         except RuntimeError:
             self._smooth_timer.stop()
 

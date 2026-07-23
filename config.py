@@ -104,10 +104,12 @@ class ConfigManager:
                 "grid_wave_fade": True,
                 "grid_opacity": 100,
                 "launch_at_startup": False,
-                "theme_intensity": 100,
+                "open_dashboard_startup": False,
+                "theme_intensity": "Balanced",
                 "dashboard_theme": "Dark",
                 "folder_theme": "Default",
                 "folder_custom_color": "#161B22FF",
+                "gpu_preference": 0,
                 "keybinds": {}
             },
             "display_effects": {
@@ -122,6 +124,7 @@ class ConfigManager:
                 "hub_ratio": 50,
                 "brightness": 50,
                 "blur_level": "High",
+                "blur_mode": "live",
                 "layer_anim_style": "Z-Depth + Spring",
                 "pill_mode": "Name",
                 "pill_icon_path": "",
@@ -171,7 +174,7 @@ class ConfigManager:
                 "mouse_sens": 100,
                 "scroll_sens": 50,
                 "hold_mode": "Hold",
-                "mosaic_shape": "Square",
+                "mosaic_shape": "Square"
             },
             "folders": []
         }
@@ -199,12 +202,22 @@ class ConfigManager:
                     # 2. Ensure general_settings exists and prune orphaned settings
                     valid_keys = set(defaults['general_settings'].keys())
                     current_keys = list(data.get('general_settings', {}).keys())
+                    
+                    # Migrate gpu_preference from hub_config to general_settings
+                    if "hub_config" in data and "gpu_preference" in data["hub_config"]:
+                        data.setdefault("general_settings", {})["gpu_preference"] = data["hub_config"].pop("gpu_preference")
+                        
                     for k in current_keys:
                         if k not in valid_keys:
                             del data['general_settings'][k]
                             
                     for k, v in defaults['general_settings'].items():
                         data.setdefault('general_settings', {}).setdefault(k, v)
+                        
+                    # 2.05 Sanitize theme_intensity
+                    ti = data.get('general_settings', {}).get('theme_intensity')
+                    if ti not in ["Subtle", "Balanced", "Intense", "Solid"]:
+                        data.setdefault('general_settings', {})['theme_intensity'] = "Balanced"
                         
                     # 2.1 Ensure display_effects exists
                     for k, v in defaults.get('display_effects', {}).items():
@@ -400,18 +413,37 @@ class ConfigManager:
 def set_startup_registry(enable=True):
     try:
         import winreg
-        key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS)
-        if enable:
-            exe_path = sys.executable
-            # Only set if running as a compiled exe, don't set startup for python.exe!
-            if getattr(sys, 'frozen', False):
-                winreg.SetValueEx(key, "Pandora", 0, winreg.REG_SZ, f'"{exe_path}"')
-        else:
+        
+        # 1. Always ensure it is present in the standard Run key so Task Manager sees it
+        if getattr(sys, 'frozen', False):
+            run_key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
             try:
-                winreg.DeleteValue(key, "Pandora")
-            except FileNotFoundError:
-                pass
-        winreg.CloseKey(key)
+                run_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, run_key_path, 0, winreg.KEY_SET_VALUE)
+                exe_path = sys.executable
+                winreg.SetValueEx(run_key, "Pandora", 0, winreg.REG_SZ, f'"{exe_path}" --startup')
+                winreg.CloseKey(run_key)
+            except Exception as e:
+                logger.error(f"Failed to set Run key: {e}")
+
+        # 2. Toggle the enabled/disabled state in StartupApproved
+        approved_key_path = r"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
+        try:
+            approved_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, approved_key_path, 0, winreg.KEY_SET_VALUE)
+            if enable:
+                try:
+                    winreg.DeleteValue(approved_key, "Pandora")
+                except FileNotFoundError:
+                    pass
+            else:
+                import time, struct
+                # Calculate FILETIME (100-nanosecond intervals since Jan 1, 1601)
+                filetime = int((time.time() + 11644473600) * 10000000)
+                ft_bytes = struct.pack('<Q', filetime)
+                val = b'\x03\x00\x00\x00' + ft_bytes
+                winreg.SetValueEx(approved_key, "Pandora", 0, winreg.REG_BINARY, val)
+            winreg.CloseKey(approved_key)
+        except Exception as e:
+            logger.error(f"Failed to set StartupApproved key: {e}")
+            
     except Exception as e:
         logger.error(f"Startup registry error: {e}")

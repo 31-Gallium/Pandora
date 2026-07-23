@@ -25,6 +25,7 @@ class FolderPanel(QWidget):
         # UI State
         self.is_dragging = False
         self.is_resizing = False
+        self._is_closing = False
         self.resize_edges = '' # e.g. 'tl', 'r', 'b'
         self.dsp = QPoint()
         self.wsp = QPoint()
@@ -58,12 +59,20 @@ class FolderPanel(QWidget):
         
         # Start at 1x1 to prevent Windows from shifting the window if it spawns near the edge of the screen (due to default 640x480 size)
         self.resize(1, 1)
-        self.update_geometry()
+        self.update_geometry(animate=False)
         
         # Ensure position
         pos_list = self.data.get('pos', [200, 200])
         if len(pos_list) == 2:
             self.move(int(pos_list[0]), int(pos_list[1]))
+            # Handle early-boot startup clamping: Windows DWM might clamp owned windows
+            # to an incorrect screen resolution before display drivers fully initialize. 
+            # We enforce the position repeatedly for 10 seconds to guarantee it overrides the OS.
+            self._startup_enforce_ticks = 0
+            self._startup_enforce_timer = QTimer(self)
+            self._startup_enforce_timer.setInterval(500)
+            self._startup_enforce_timer.timeout.connect(self._enforce_startup_pos)
+            self._startup_enforce_timer.start()
             
         # File System Watcher for internal storage
         self.watcher = QFileSystemWatcher(self)
@@ -86,7 +95,27 @@ class FolderPanel(QWidget):
         
     def _on_internal_storage_changed(self, path):
         # Debounce the directory change signal
-        self._sync_debounce_timer.start(200)
+        self._sync_debounce_timer.start(250)
+
+    def _enforce_startup_pos(self):
+        self._startup_enforce_ticks += 1
+        if self._startup_enforce_ticks > 20: # 10 seconds
+            self._startup_enforce_timer.stop()
+            return
+            
+        if self.is_dragging or self.is_resizing:
+            self._startup_enforce_timer.stop()
+            return
+            
+        pos_list = self.data.get('pos', [200, 200])
+        if len(pos_list) == 2:
+            x, y = int(pos_list[0]), int(pos_list[1])
+            try:
+                import ctypes
+                # 0x0015 = SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE
+                ctypes.windll.user32.SetWindowPos(int(self.winId()), 0, x, y, 0, 0, 0x0015)
+            except:
+                self.move(x, y)
         
     def _sync_with_disk(self):
         target_storage = os.path.join(STORAGE_PATH, self.data.get('id', ''))
@@ -106,6 +135,8 @@ class FolderPanel(QWidget):
         changed = False
         new_apps = []
         
+        logger.info(f"Syncing folder {self.data.get('id')}. Physical files: {physical_files}")
+        
         # 1. Retain existing apps whose files still exist
         # Also, non-internal apps (like standard desktop shortcuts) remain untouched
         for app in current_apps:
@@ -122,16 +153,14 @@ class FolderPanel(QWidget):
             norm_path = os.path.normcase(os.path.normpath(path))
             norm_target = os.path.normcase(os.path.normpath(target_storage))
             
-            if norm_path.startswith(norm_target) or (os.path.normcase(os.path.normpath(STORAGE_PATH)) in norm_path and getattr(self, 'id', '') in norm_path):
+            if norm_path.startswith(norm_target) or (os.path.normcase(os.path.normpath(STORAGE_PATH)) in norm_path and self.data.get('id', '') in norm_path):
                 if path in physical_files or norm_path in [os.path.normcase(os.path.normpath(p)) for p in physical_files]:
                     new_apps.append(app)
-                    # We can't easily remove from physical_files if cases don't match, 
-                    # but physical_files is only used to add NEW files later. 
-                    # Let's just remove by finding the match.
                     match = next((p for p in physical_files if os.path.normcase(os.path.normpath(p)) == norm_path), None)
                     if match:
                         physical_files.remove(match)
                 else:
+                    logger.info(f"App deleted (not found on disk): {path}")
                     changed = True # App was deleted
             else:
                 new_apps.append(app) # External app, keep it
@@ -483,26 +512,15 @@ class FolderPanel(QWidget):
         self._enable_windows_blur()
         WinAPI.allow_drag_drop(self.winId())
         
-        # Stage 1: Pin and initial blur setup (150ms)
-        def _stage_1_setup():
+        # Pin to the desktop layer via Z-order (no owner relationship needed).
+        # The DesktopPinner handles Win+D recovery automatically.
+        def _deferred_pin():
             WinAPI.pin_to_workerw(self.winId())
             self._enable_windows_blur()
             self.repaint()
-            # Stage 2: First resize poke (150ms later -> 300ms)
-            QTimer.singleShot(150, _stage_2_poke)
-            
-        def _stage_2_poke():
-            self._dwm_resize_poke()
-            # Stage 3: Safety re-affirmation (200ms later -> 500ms)
-            QTimer.singleShot(200, _stage_3_safety)
-            
-        def _stage_3_safety():
-            # Final re-apply to catch any DWM resets from asynchronous window closures/activations
-            self._enable_windows_blur()
-            self.repaint()
             self._dwm_resize_poke()
             
-        QTimer.singleShot(150, _stage_1_setup)
+        QTimer.singleShot(150, _deferred_pin)
     
     def _dwm_resize_poke(self):
         try:
@@ -898,7 +916,9 @@ class FolderPanel(QWidget):
                     
             except Exception as e:
                 import traceback
-                with open("liquid_crash.txt", "w") as f:
+                from config import APPDATA_DIR
+                import os
+                with open(os.path.join(APPDATA_DIR, "liquid_crash.txt"), "w") as f:
                     traceback.print_exc(file=f)
                 self._drag_scroll_dir = 0 # stop drawing to avoid infinite crash loop
 
@@ -1218,6 +1238,10 @@ class FolderPanel(QWidget):
             self._page_badge = None
 
     def changeEvent(self, e):
+        # Fallback: prevent minimize from any other source (e.g. taskbar grouping)
+        if e.type() == QEvent.Type.WindowStateChange:
+            if self.windowState() & Qt.WindowState.WindowMinimized:
+                self.setWindowState(self.windowState() & ~Qt.WindowState.WindowMinimized)
         super().changeEvent(e)
 
     def _get_resize_edges(self, pos):
@@ -1281,6 +1305,7 @@ class FolderPanel(QWidget):
                         
                         self.dashboard.save_and_broadcast()
                         target_folder.refresh()
+                        self._is_closing = True
                         self.deleteLater()
                         
                         if hasattr(self, 'dashboard') and self.dashboard:
@@ -2142,6 +2167,7 @@ class FolderPanel(QWidget):
         else:
             if hasattr(self, 'dashboard') and self in getattr(self.dashboard, 'app_instances', []):
                 self.dashboard.app_instances.remove(self)
+            self._is_closing = True
             self.dashboard.save_and_broadcast()
             self.deleteLater()
     def move_to_desktop(self, ad_or_list):

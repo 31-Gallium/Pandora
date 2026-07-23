@@ -61,6 +61,9 @@
         </div>
         <div class="window-controls">
             <button class="win-btn min" id="min-btn">─</button>
+            <button class="win-btn pill" id="btn-pill-mode" title="Collapse to Pill">
+                <div style="-webkit-mask-image: url('assets/pill.svg'); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor; width: 10px; height: 10px; display: inline-block; vertical-align: middle;"></div>
+            </button>
             <button class="win-btn close" id="close-btn">✕</button>
         </div>
     </div>
@@ -484,6 +487,13 @@
                         <input type="range" min="0" max="100" value="50" data-val="v-hb">
                     </div>
                     <div class="control-row" id="set-halo-blur-level"><span class="control-label">Blur Level</span><select><option value="Low">Low</option><option value="Medium">Medium</option><option value="High" selected>High</option></select></div>
+                    <div class="control-row" id="set-halo-blur-mode">
+                        <span class="control-label">Blur Mode</span>
+                        <select>
+                            <option value="live" selected>Live Blur</option>
+                            <option value="static">Static Blur</option>
+                        </select>
+                    </div>
                     <div class="control-row" id="set-halo-arc"><span class="control-label">HUD Arc Gap</span><select><option>0</option><option>15</option><option>30</option><option>45</option><option>60</option><option selected>75</option><option>90</option></select></div>
                     <div class="toggle-row" style="margin-top: 12px;"><span class="control-label has-tip" data-tip="Show numeric value and icon in the arc gap">Show HUD Text</span><label class="toggle"><input type="checkbox" id="set-halo-show-hud" checked><span class="track"></span></label></div>
                     <div class="toggle-row"><span class="control-label has-tip" data-tip="Blend custom application icons with the selected theme">Blend Custom App Icons</span><label class="toggle"><input type="checkbox" id="set-halo-blend-icons"><span class="track"></span></label></div>
@@ -617,6 +627,23 @@
                         <span class="control-label has-tip" data-tip="Automatically launch Pandora when you sign into Windows">Launch at Startup</span>
                         <label class="toggle"><input type="checkbox"><span class="track"></span></label>
                     </div>
+                    <div class="toggle-row" id="set-open-dash-startup" style="margin-top: 16px;">
+                        <span class="control-label has-tip" data-tip="Automatically open the settings dashboard when Pandora starts up">Open Dashboard at Startup</span>
+                        <label class="toggle"><input type="checkbox"><span class="track"></span></label>
+                    </div>
+                    <div class="control-row" id="set-system-gpu-pref" style="margin-top: 16px;">
+                        <span class="control-label">Hardware Acceleration</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span id="system-gpu-name" style="font-size: 11px; color: rgba(255,255,255,0.4); text-align: right; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Loading GPU info...</span>
+                            <div class="custom-select" style="width: 180px;">
+                                <select>
+                                    <option value="0" selected>Auto</option>
+                                    <option value="1">Integrated GPU</option>
+                                    <option value="2">Dedicated GPU</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="section-header" style="margin-top: 32px;">
@@ -664,8 +691,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script src="renderer.js"></script>
 </body>

@@ -121,3 +121,11 @@ function connectWebSocket() {
 }
 
 connectWebSocket();
+
+
+const btnPillMode = document.getElementById('btn-pill-mode');
+if (btnPillMode) {
+    btnPillMode.addEventListener('click', () => {
+        window.sendCustomCommand({ type: 'enter_pill_mode' });
+    });
+}

@@ -1442,107 +1442,97 @@ class MediaHub(BaseHubModule):
                 radii[i] = ring_r + val_r * 60.0 + global_expansion
                 fluids[i] = self.surface_thick[idx_pts]
 
-            # Helper function to generate a polygon path
-            def create_ring_path(thickness_func):
-                path = QPainterPath()
-                out_pts = []
-                in_pts = []
-                for i in range(pts + 1):
-                    r = radii[i]
-                    t = thickness_func(i)
-                    r_out = r + t / 2.0
-                    r_in = r - t / 2.0
-                    out_pts.append(QPointF(cx + math.cos(angles[i]) * r_out, cy + math.sin(angles[i]) * r_out))
-                    in_pts.append(QPointF(cx + math.cos(angles[i]) * r_in, cy + math.sin(angles[i]) * r_in))
-                path.moveTo(out_pts[0])
-                for pt in out_pts[1:]:
-                    path.lineTo(pt)
-                for pt in reversed(in_pts):
-                    path.lineTo(pt)
-                path.closeSubpath()
-                return path, in_pts
-
-            p.setPen(Qt.PenStyle.NoPen)
-
-            # LAYER 1: Rear Cushion (Flat, wide, very low opacity, ignores fluid thickness)
-            cushion_c = QColor(glow_c)
-            cushion_c.setAlpha(int(op * 40 * global_op)) # ~15% opacity
-            p.setBrush(QBrush(cushion_c))
-            cushion_path, _ = create_ring_path(lambda i: base_thick + 6.0)
-            p.drawPath(cushion_path)
+            # --- HARDWARE ACCELERATED RING ---
+            import hub_modules.vis_engine_bridge as vis
+            vis.init_ui_engine()
+            vis.begin_ui_frame(0.0, 0.0, 0.0, 0.0)
             
-            # LAYER 2: Core Fluid (Variable opacity and softness via Conical Gradients)
-            core_grad = QConicalGradient(cx, cy, 90) # 90 degrees in Qt is 12 o'clock
-            feather_grad = QConicalGradient(cx, cy, 90)
-            center_grad = QConicalGradient(cx, cy, 90)
+            # Extract AARRGGBB
+            rgba = glow_c.rgba() 
             
-            for i in range(pts):
-                stop = i / pts
-                # Qt ConicalGradient goes CCW. Our geometry goes CW. Map it perfectly:
-                ccw_stop = 1.0 - stop if stop > 0 else 0.0
-                
-                t = fluids[i]
-                
-                # Variable Opacity logic: thin regions 70%, thick regions up to 120%
-                alpha_mod = 0.7 + min(0.5, t * 0.15)
-                
-                base_alpha = op * 180 * global_op
-                
-                # Feather Brush
-                c_feather = QColor(glow_c)
-                c_feather.setAlpha(int(min(255, base_alpha * alpha_mod * 0.3)))
-                feather_grad.setColorAt(ccw_stop, c_feather)
-                
-                # Core Brush
-                c_core = QColor(glow_c)
-                c_core.setAlpha(int(min(255, base_alpha * alpha_mod * 0.7)))
-                core_grad.setColorAt(ccw_stop, c_core)
-                
-                # Pressure Center Brush (Brighter and denser)
-                c_center = QColor(glow_c)
-                c_center.setAlpha(int(min(255, base_alpha * alpha_mod * 1.2)))
-                h, s, l, a = c_center.getHsl()
-                c_center.setHsl(h, max(0, int(s * 0.8)), min(255, int(l * 1.2)), a)
-                center_grad.setColorAt(ccw_stop, c_center)
-
-            # Draw Feather (Edge Softness expands in thick regions)
-            p.setBrush(QBrush(feather_grad))
-            feather_path, _ = create_ring_path(lambda i: base_thick + (fluids[i] * 18.0) + 5.0)
-            p.drawPath(feather_path)
-
-            # Draw Core
-            p.setBrush(QBrush(core_grad))
-            core_path, in_pts = create_ring_path(lambda i: base_thick + (fluids[i] * 18.0))
-            p.drawPath(core_path)
-
-            # Draw Pressure Center
-            p.setBrush(QBrush(center_grad))
-            center_path, _ = create_ring_path(lambda i: base_thick + (fluids[i] * 18.0) * 0.3)
-            p.drawPath(center_path)
-
-            # LAYER 3: Inner Highlight (Derived color: higher luminance, lower saturation)
-            highlight_c = QColor(self._dominant_color)
-            h, s, l, a = highlight_c.getHsl()
-            highlight_c.setHsl(h, max(0, int(s * 0.5)), min(255, int(l * 1.4)))
-            highlight_c.setAlpha(int(op * 90 * global_op)) # Low uniform opacity
+            # The DLL handles the heavy 256-point geometry calculation & rendering natively on the Dedicated GPU
+            vis.draw_d2d_ring(radii, fluids, 512, base_thick, rgba, op * global_op)
+            ring_img = vis.end_ui_frame()
             
-            p.setPen(QPen(highlight_c, 1.5))
-            p.setBrush(Qt.BrushStyle.NoBrush)
-            
-            hi_path = QPainterPath()
-            hi_path.moveTo(in_pts[0])
-            for pt in in_pts[1:]:
-                hi_path.lineTo(pt)
-            hi_path.closeSubpath()
-            p.drawPath(hi_path)
+            if ring_img and not ring_img.isNull():
+                p.drawImage(QRectF(cx - 256, cy - 256, 512, 512), ring_img)
+            # ---------------------------------
 
         # Draw the Thumbnail/Art
-        if art_style == "8-Bit Mosaic" and effect_strength > 0:
-            thumb, thumb_id = self._get_fallback_thumbnail(track)
+        thumb, thumb_id = self._get_fallback_thumbnail(track)
+        
+        if art_style == "Liquid Ferrofluid" and effect_strength > 0:
+            import hub_modules.vis_engine_bridge as vis
+            pref_gpu = int(self.manager.cfg.get('general_settings', {}).get('gpu_preference', 0))
+            if not getattr(self, '_vis_engine_inited', False) or getattr(self, '_current_gpu_pref', -1) != pref_gpu:
+                gpu_pref = pref_gpu
+                if vis.init_vis_engine(512, 512, gpu_pref):
+                    self._vis_engine_inited = True
+                    self._current_gpu_pref = gpu_pref
+            if getattr(self, '_vis_engine_inited', False):
+                # Init Texture
+                if getattr(self, '_cached_ferro_thumb_id', None) != thumb_id:
+                    self._cached_ferro_thumb_id = thumb_id
+                    vis.init_ferrofluid(thumb)
+                    
+                    # Extract Dominant Color from thumbnail
+                    # Very basic center-ish sampling for dominant color
+                    img_ptr = thumb.convertToFormat(QImage.Format.Format_RGB32)
+                    r_sum, g_sum, b_sum, count = 0, 0, 0, 0
+                    for y in range(0, img_ptr.height(), 10):
+                        for x in range(0, img_ptr.width(), 10):
+                            px = img_ptr.pixel(x, y)
+                            r_sum += (px >> 16) & 0xFF
+                            g_sum += (px >> 8) & 0xFF
+                            b_sum += px & 0xFF
+                            count += 1
+                    if count > 0:
+                        dom = ((r_sum//count) << 16) | ((g_sum//count) << 8) | (b_sum//count)
+                        self._cached_ferro_dominant_color = dom
+                    else:
+                        self._cached_ferro_dominant_color = 0x888888
+                
+                vbe = locals().get('voxel_band_energies', {})
+                bass_e = vbe.get('bass', 0.0)
+                mids_e = vbe.get('mids', 0.0)
+                treble_e = vbe.get('treble', 0.0)
+                time_t = time.time()
+                
+                use_texture_setting = self.settings.get('ferrofluid_mode', 'Dominant Color')
+                use_texture = 1 if use_texture_setting == 'Album Art' else 0
+                dom_color = getattr(self, '_cached_ferro_dominant_color', 0x888888)
+                
+                ferro_img = vis.render_ferrofluid(
+                    bass_e, mids_e, treble_e, time_t, 
+                    use_texture, dom_color, global_op
+                )
+                
+                if ferro_img and not ferro_img.isNull():
+                    p.setOpacity(1.0)
+                    
+                    p.save()
+                    path = QPainterPath(); path.addEllipse(int(cx - size//2), int(cy - size//2), size, size); p.setClipPath(path)
+                    p.drawImage(QRectF(cx - size/2, cy - size/2, size, size), ferro_img)
+                    p.restore()
+
+        elif art_style == "8-Bit Mosaic" and effect_strength > 0:
+            import hub_modules.vis_engine_bridge as vis
+            pref_gpu = int(self.manager.cfg.get('general_settings', {}).get('gpu_preference', 0))
+            if not getattr(self, '_vis_engine_inited', False) or getattr(self, '_current_gpu_pref', -1) != pref_gpu:
+                gpu_pref = pref_gpu
+                if vis.init_vis_engine(512, 512, gpu_pref):
+                    self._vis_engine_inited = True
+                    self._current_gpu_pref = gpu_pref
             mosaic_shape = self.settings.get('mosaic_shape', 'Square')
             if thumb:
                 block_size = int(12 + (effect_strength / 100.0) * 32)
-                grid_dim = size // block_size
+                
+                # Check setting for block_size override
+                setting_block_size = self.settings.get('mosaic_size', 12)
+                if setting_block_size != 12:
+                    block_size = setting_block_size
+
+                grid_dim = 512 // block_size
                 
                 if getattr(self, '_cached_mosaic_thumb_id', '') == thumb_id and getattr(self, '_cached_block_size', -1) == block_size and self._cached_mosaic_color_map is not None:
                     color_map = self._cached_mosaic_color_map
@@ -1552,230 +1542,42 @@ class MediaHub(BaseHubModule):
                     color_map = thumb.scaled(grid_dim, grid_dim, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
                     self._cached_mosaic_color_map = color_map
                 
-                anim_prog = getattr(self, '_thumb_anim_progress', 1.0)
-                prev_color_map = None
-                if anim_prog < 1.0 and hasattr(self, '_prev_raw_thumb') and self._prev_raw_thumb:
-                    prev_track_id = getattr(self, '_prev_track_id', '')
-                    if getattr(self, '_cached_mosaic_prev_thumb_id', '') == prev_track_id and getattr(self, '_cached_mosaic_prev_block_size', -1) == block_size and self._cached_mosaic_prev_color_map is not None:
-                        prev_color_map = self._cached_mosaic_prev_color_map
-                    else:
-                        self._cached_mosaic_prev_thumb_id = prev_track_id
-                        self._cached_mosaic_prev_block_size = block_size
-                        prev_color_map = self._prev_raw_thumb.scaled(grid_dim, grid_dim, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
-                        self._cached_mosaic_prev_color_map = prev_color_map
-                    self._thumb_anim_progress = min(1.0, anim_prog + 0.1)
-                    self.manager.halo.update()
-
-                p.save()
-                p.translate(cx - size//2, cy - size//2)
-                path = QPainterPath(); path.addEllipse(0, 0, size, size); p.setClipPath(path)
-                
-                grid_offset = (size - (grid_dim * block_size)) / 2.0
-                p.translate(grid_offset, grid_offset)
-                
-                # Tremble effect using Edge Ring EQ threshold and physics logic
-                if visualizer == "Reactive Voxels":
-                    if hasattr(self, 'filament_shape') and self.filament_shape:
-                        instability_threshold = max(0.85, min(0.99, 1.0 - (0.05 * ring_prof.sensitivity)))
-                        max_shape = max(self.filament_shape)
-                        instability_scale = 1.0 / (1.0 - instability_threshold)
-                        global_instability = max(0.0, (max_shape - instability_threshold) * instability_scale)
-                        
-                        if global_instability > 0:
-                            maxed_bins = sum(1 for val in self.filament_shape if val > instability_threshold)
-                            bin_ratio = maxed_bins / len(self.filament_shape)
-                            
-                            if bin_ratio > 0.85:
-                                intensity_curve = (bin_ratio - 0.85) * 6.66
-                                t = time.time()
-                                speed_x = 10.0 + (intensity_curve * 75.0)
-                                speed_y = 12.0 + (intensity_curve * 90.0)
-                                shake_dist = 2.5 * intensity_curve
-                                
-                                tremble_x = math.sin(t * speed_x) * global_instability * shake_dist
-                                tremble_y = math.cos(t * speed_y) * global_instability * shake_dist
-                                p.translate(tremble_x, tremble_y)
-                
-                p.setPen(Qt.PenStyle.NoPen)
-                
-                cache_key = (grid_dim, block_size)
-                if getattr(self, '_cached_grid_dim_key', None) == cache_key and hasattr(self, '_cached_blocks'):
-                    blocks = self._cached_blocks
-                else:
-                    blocks = []
-                    max_dist = grid_dim / 2.0
-                    margin = 3.0
+                if getattr(self, '_vis_engine_inited', False):
+                    vis.init_mosaic(color_map, block_size, mosaic_shape)
                     
-                    for gy in range(grid_dim):
-                        for gx in range(grid_dim):
-                            dcx = gx - grid_dim / 2.0 + 0.5
-                            dcy = gy - grid_dim / 2.0 + 0.5
-                            dist = math.hypot(dcx, dcy)
-                            if dist > max_dist + margin:
-                                continue
-                                
-                            pdx = dcx / dist if dist > 0 else 0.0
-                            pdy = dcy / dist if dist > 0 else 0.0
-                            pa = (dist / max_dist) * (block_size * 0.8) if max_dist > 0 else 0.0
-                            
-                            blocks.append((gx, gy, dist, pdx, pdy, pa))
+                    vbe = locals().get('voxel_band_energies', {})
+                    cs = locals().get('current_signals', {})
                     
-                    blocks.sort(key=lambda item: item[2], reverse=True)
-                    self._cached_grid_dim_key = cache_key
-                    self._cached_blocks = blocks
-
-                # ═══════════════════════════════════════════════════
-
-
-                for idx, (gx, gy, dist, pdx, pdy, pa) in enumerate(blocks):
-                    base_bx = gx * block_size
-                    base_by = gy * block_size
-                    bx, by = base_bx, base_by
-                    ext_factor = current_signals.get("voxel_extrusion", 0.0) if visualizer == "Reactive Voxels" else 0.0
-                    bx += pdx * pa * ext_factor
-                    by += pdy * pa * ext_factor
-
-                    col = QColor(color_map.pixel(gx, gy))
-                    if global_op < 1.0:
-                        col.setAlpha(int(col.alpha() * global_op))
-                        
-                    if prev_color_map and anim_prog < 1.0:
-                        p_col = QColor(prev_color_map.pixel(gx, gy))
-                        # Radial color wave sweep from center outwards
-                        max_d = grid_dim / 2.0
-                        d_norm = dist / max_d if max_d > 0 else 0.0
-                        local_prog = anim_prog * 1.4 - d_norm * 0.4
-                        local_prog = max(0.0, min(1.0, local_prog))
-                        e_prog = 1.0 - (1.0 - local_prog) ** 2
-                        col = QColor(int(p_col.red() + (col.red() - p_col.red()) * e_prog), int(p_col.green() + (col.green() - p_col.green()) * e_prog), int(p_col.blue() + (col.blue() - p_col.blue()) * e_prog))
+                    bass_e = vbe.get('bass', 0.0)
+                    mids_e = vbe.get('mids', 0.0)
+                    treble_e = vbe.get('treble', 0.0)
+                    ext_factor = cs.get("voxel_extrusion", 0.0)
+                    w_x = cs.get("voxel_treble_wave_x", 0.0)
+                    w_y = cs.get("voxel_treble_wave_y", 1.0)
+                    d_x = cs.get("voxel_treble_disp_x", 1.0)
+                    d_y = cs.get("voxel_treble_disp_y", 0.0)
+                    b_phase = locals().get('voxel_bass_phase', 0.0)
+                    m_phase = locals().get('voxel_mids_phase', 0.0)
+                    t_phase = locals().get('voxel_treble_phase', 0.0)
                     
-                    draw_w = block_size - 2
-                    draw_h = block_size - 2
+                    ring_t = [0.0] * 8
+                    if hasattr(self, 'ring_thick') and len(self.ring_thick) >= 8:
+                        ring_t = self.ring_thick[:8]
+                        
+                    mosaic_img = vis.render_mosaic(
+                        bass_e, mids_e, treble_e, ext_factor, w_x, w_y, d_x, d_y, 
+                        b_phase, m_phase, t_phase, ring_t, global_op
+                    )
                     
-                    t_now = time.time()
-                    
-                    # Compute drifting origin
-                    dcx = gx - grid_dim / 2.0 + 0.5
-                    dcy = gy - grid_dim / 2.0 + 0.5
-                    
-                    ox = 0.0
-                    oy = 0.0
-                    if hasattr(self, 'drift_x_spring'):
-                        ox = self.drift_x_spring.value * (grid_dim * 0.08)
-                        oy = self.drift_y_spring.value * (grid_dim * 0.08)
-                    
-                    odx = dcx - ox
-                    ody = dcy - oy
-                    odist = math.hypot(odx, ody)
-                    if visualizer == "Reactive Voxels":
-                        # Per-band smoothed energies (spring-filtered, [0,1])
-                        bass_e = voxel_band_energies.get('bass', 0.0)
-                        mids_e = voxel_band_energies.get('mids', 0.0)
-                        treble_e = voxel_band_energies.get('treble', 0.0)
+                    if mosaic_img and not mosaic_img.isNull():
+                        p.setOpacity(1.0)
                         
-                        # ═══════════════════════════════════════════════════
-                        # BASS → SIZE (Beat-Reactive Punch)
-                        # Blocks pulse on bass beats with radial ripple.
-                        # Idle: blocks at 60%. Beat hit: blocks snap to 100%.
-                        # Bloom: bass/treble >75%, mids >90% scales to 275%.
-                        # ═══════════════════════════════════════════════════
-                        bass_ripple = 0.5 + 0.5 * math.sin(voxel_bass_phase - odist * 0.8)
-                        
-                        # Apply low initial curve (squaring) after normalizing over threshold
-                        bass_over = max(0.0, (bass_e - 0.75) / 0.25) ** 2.0
-                        mids_over = max(0.0, (mids_e - 0.90) / 0.10) ** 2.0
-                        treble_over = max(0.0, (treble_e - 0.75) / 0.25) ** 2.0
-                        
-                        total_over = bass_over + mids_over + treble_over
-                        bloom = 1.0 + (total_over / 3.0) * 4.5
-                        
-                        bass_grow = (bass_e * bloom * bass_ripple) * (block_size * 0.4)
-                        idle_shrink = block_size * 0.4
-                        # Cap at -1.75 to allow 275% max size (100% base + 175% extra)
-                        effective_shrink = max(-block_size * 1.75, idle_shrink - bass_grow)
-                        
-                        bx += effective_shrink / 2.0
-                        by += effective_shrink / 2.0
-                        draw_w -= effective_shrink
-                        draw_h -= effective_shrink
-                        
-                        # ═══════════════════════════════════════════════════
-                        # MIDS → BRIGHTNESS (Radial Glow Pulse)
-                        # Broad radial brightness wave (2-3 blocks wide)
-                        # radiates from center, driven by mids energy.
-                        # Subtle when mids are low, bright on choruses.
-                        # ═══════════════════════════════════════════════════
-                        mids_wave = 0.5 + 0.5 * math.sin(voxel_mids_phase - odist * 0.5)
-                        
-                        if mids_e > 0.05:
-                            col = col.lighter(100 + int(30 * mids_e * mids_wave))
-                        
-                        # ═══════════════════════════════════════════════════
-                        # TREBLE → SWAY (Alternating Directional Wipe)
-                        # Restored: fast alternating wipe that pivots
-                        # smoothly via physics springs on treble transients.
-                        # ═══════════════════════════════════════════════════
-                        w_x = current_signals.get("voxel_treble_wave_x", 0.0)
-                        w_y = current_signals.get("voxel_treble_wave_y", 1.0)
-                        d_x = current_signals.get("voxel_treble_disp_x", 1.0)
-                        d_y = current_signals.get("voxel_treble_disp_y", 0.0)
-                        
-                        t_coord_scaled = (gx * w_x + gy * w_y) * 1.5
-                        treble_ripple = 0.5 + 0.5 * math.sin(voxel_treble_phase - t_coord_scaled)
-                        # Use an exponential curve (treble_e ** 2) so the shake is minimal at low levels,
-                        # and reduce maximum amplitude from 0.4 to 0.25.
-                        displacement = (treble_ripple - 0.5) * 2.0 * (treble_e ** 2.0) * (block_size * 0.25)
-                        
-                        bx += displacement * d_x
-                        by += displacement * d_y
-                        
-                        # --- 8-Band Spatial Extrusion ---
-                        if ext_factor > 0.01:
-                            dist_norm = max(0.0, min(1.0, odist / (grid_dim / 2.0)))
-                            band_idx_float = dist_norm * 7.0
-                            b_low = int(math.floor(band_idx_float))
-                            b_high = min(7, int(math.ceil(band_idx_float)))
-                            b_blend = band_idx_float - b_low
-                            
-                            extrusion = self.ring_thick[b_low] * (1.0 - b_blend) + self.ring_thick[b_high] * b_blend
-                            
-                            depth_jump = (bass_e * 7.5) + (extrusion * 2.5)
-                            bx += pdx * depth_jump * ext_factor
-                            by += pdy * depth_jump * ext_factor
+                        # Apply circular clipping since the C++ engine doesn't clip the outer edge
+                        p.save()
+                        path = QPainterPath(); path.addEllipse(int(cx - size//2), int(cy - size//2), size, size); p.setClipPath(path)
+                        p.drawImage(QRectF(cx - size/2, cy - size/2, size, size), mosaic_img)
+                        p.restore()
 
-
-                    if draw_w > 0 and draw_h > 0:
-                        base_cx = base_bx + draw_w / 2.0
-                        base_cy = base_by + draw_h / 2.0
-                        front_cx = bx + draw_w / 2.0
-                        front_cy = by + draw_h / 2.0
-                        
-                        if ext_factor > 0.01:
-                            p.setBrush(col.darker(150))
-                            dist_ext = math.hypot(front_cx - base_cx, front_cy - base_cy)
-                            steps = max(1, int(dist_ext))
-                            dx = (front_cx - base_cx) / steps
-                            dy = (front_cy - base_cy) / steps
-                            
-                            for step in range(steps):
-                                e_cx = base_cx + dx * step
-                                e_cy = base_cy + dy * step
-                                e_bx = e_cx - draw_w / 2.0
-                                e_by = e_cy - draw_h / 2.0
-                                if mosaic_shape == "Rounded":
-                                    p.drawRoundedRect(int(e_bx), int(e_by), int(draw_w), int(draw_h), 4.0, 4.0)
-                                else: # Square
-                                    p.drawRect(int(e_bx), int(e_by), int(draw_w), int(draw_h))
-                                
-                        p.setBrush(col)
-                        if mosaic_shape == "Rounded":
-                            p.drawRoundedRect(int(bx), int(by), int(draw_w), int(draw_h), 4.0, 4.0)
-                        else: # Square
-                            p.drawRect(int(bx), int(by), int(draw_w), int(draw_h))
-                p.restore()
-            else:
-                pix = VectorIcon.pixmap("music", self._dominant_color.name(), 40)
-                p.drawPixmap(int(cx - 20), int(cy - 40), pix)
         else:
             thumb = self._get_round_thumbnail(size, track, override_strength=effect_strength)
             if thumb:
@@ -1791,6 +1593,7 @@ class MediaHub(BaseHubModule):
                 global_op = p.opacity()
                 if visualizer == "Reactive Voxels":
                     # Combine pulse_spring and pulse_drive for combined Voxel Wiggle / Size Pulsing fallback
+                    pulse_drive = locals().get('pulse_drive', 0.0)
                     scale_val = self.pulse_spring.value + pulse_drive * 0.5
                     scale = 1.0 + (scale_val * 0.10)
                         
@@ -1813,8 +1616,6 @@ class MediaHub(BaseHubModule):
                 
                 p.setOpacity(global_op)
                 p.restore()
-                
-
             else:
                 pix = VectorIcon.pixmap("music", self._dominant_color.name(), 40)
                 p.drawPixmap(int(cx - 20), int(cy - 40), pix)
@@ -1914,7 +1715,9 @@ class MediaHub(BaseHubModule):
         try:
             if hasattr(event, 'isAutoRepeat') and event.isAutoRepeat(): return False
         except Exception as e:
-            with open('c:\\\\Users\\\\Base\\\\Desktop\\\\Seb\\\\Pandora\\\\crash_log.txt', 'a') as f:
+            from config import APPDATA_DIR
+            import os
+            with open(os.path.join(APPDATA_DIR, 'crash_log.txt'), 'a') as f:
                 f.write(str(e) + '\\n')
         if event.key() == Qt.Key.Key_Space:
             if not getattr(self, '_space_pressed', False):

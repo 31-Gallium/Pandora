@@ -191,6 +191,8 @@ const searchIndex = [
     { id: "set-wave-ent", name: "Wave Entrance", tab: "general", group: "Grid Behavior" },
     { id: "set-wave-color", name: "Wave Color Fade", tab: "general", group: "Grid Behavior" },
     { id: "set-launch-startup", name: "Launch at Startup", tab: "system", group: "System" },
+    { id: "set-open-dash-startup", name: "Open Dashboard at Startup", tab: "system", group: "System" },
+    { id: "set-system-gpu-pref", name: "Hardware Acceleration", tab: "system", group: "System" },
     { id: "set-filter-preset", name: "Filter Preset", tab: "hub", group: "Display Effects" },
     { id: "v-wi", name: "Warmth Intensity", tab: "hub", group: "Display Effects" },
     { id: "set-halo-act-key", name: "Halo Activation Key", tab: "halo", group: "Activation & Behavior" },
@@ -198,6 +200,7 @@ const searchIndex = [
     { id: "set-halo-theme", name: "Visual Theme", tab: "halo", group: "Activation & Behavior" },
     { id: "v-hb", name: "Brightness", tab: "halo", group: "Activation & Behavior" },
     { id: "set-halo-blur-level", name: "Blur Level", tab: "halo", group: "Activation & Behavior" },
+    { id: "set-halo-blur-mode", name: "Blur Mode", tab: "halo", group: "Activation & Behavior" },
     { id: "set-halo-arc", name: "HUD Arc Gap", tab: "halo", group: "Activation & Behavior" },
     { id: "set-halo-show-hud", name: "Show HUD Text", tab: "halo", group: "Activation & Behavior" },
     { id: "set-halo-blend-icons", name: "Blend Custom App Icons", tab: "halo", group: "Activation & Behavior" },
@@ -1409,12 +1412,14 @@ function openWidgetSettings(index) {
             `;
         } else if (slot.type === 'media') {
             const isMosaic = slot.settings.art_style === '8-Bit Mosaic';
+            const isFerro = slot.settings.art_style === 'Liquid Ferrofluid';
             html += `
                 <div class="control-row">
                     <span class="control-label">Art Style</span>
                     <select id="setting-media-artstyle">
                         <option value="Gaussian Blur" ${slot.settings.art_style === 'Gaussian Blur' ? 'selected' : ''}>Gaussian Blur</option>
                         <option value="8-Bit Mosaic" ${slot.settings.art_style === '8-Bit Mosaic' ? 'selected' : ''}>8-Bit Mosaic</option>
+                        <option value="Liquid Ferrofluid" ${slot.settings.art_style === 'Liquid Ferrofluid' ? 'selected' : ''}>Liquid Ferrofluid (3D)</option>
                         <option value="None" ${slot.settings.art_style === 'None' ? 'selected' : ''}>None</option>
                     </select>
                 </div>
@@ -2053,74 +2058,115 @@ function syncCustomSelect(sel) {
     if (!sel) return;
     
     let wrapper = sel.parentNode;
+    let isNew = false;
     if (!wrapper || !wrapper.classList.contains('custom-select')) {
         wrapper = document.createElement('div');
         wrapper.className = 'custom-select';
         sel.parentNode.insertBefore(wrapper, sel);
         wrapper.appendChild(sel);
+        isNew = true;
     }
     
-    const oldSel = wrapper.querySelector('.select-selected');
-    if (oldSel) oldSel.remove();
-    const oldItems = wrapper.querySelector('.select-items');
-    if (oldItems) oldItems.remove();
+    const selectedDiv = wrapper.querySelector('.select-selected');
+    const optionsDiv = wrapper.querySelector('.select-items');
     
-    if (sel.options.length === 0) return;
-    
-    const selectedDiv = document.createElement('div');
-    selectedDiv.className = 'select-selected';
-    if (sel.options[sel.selectedIndex]) {
-        selectedDiv.innerHTML = sel.options[sel.selectedIndex].innerHTML;
-    }
-    wrapper.appendChild(selectedDiv);
-
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'select-items select-hide';
-    
-    for (let i = 0; i < sel.options.length; i++) {
-        const opt = document.createElement('div');
-        opt.innerHTML = sel.options[i].innerHTML;
-        if (i === sel.selectedIndex) opt.classList.add('same-as-selected');
-        if (sel.options[i].hidden || sel.options[i].disabled) opt.style.display = 'none';
-        
-        opt.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (sel.options[i].disabled || sel.options[i].hidden) return;
-            sel.selectedIndex = i;
-            sel.dispatchEvent(new Event('change'));
-            
-            selectedDiv.innerHTML = this.innerHTML;
-            
-            const s = this.parentNode.querySelectorAll('.same-as-selected');
-            for (let k = 0; k < s.length; k++) {
-                s[k].classList.remove('same-as-selected');
+    let rebuild = isNew || !selectedDiv || !optionsDiv;
+    if (!rebuild) {
+        const optionDivs = optionsDiv.querySelectorAll('div');
+        if (optionDivs.length !== sel.options.length) {
+            rebuild = true;
+        } else {
+            for (let i = 0; i < sel.options.length; i++) {
+                if (optionDivs[i].innerHTML !== sel.options[i].innerHTML) {
+                    rebuild = true;
+                    break;
+                }
             }
-            this.classList.add('same-as-selected');
-            
-            closeAllSelect();
-        });
-        optionsDiv.appendChild(opt);
+        }
     }
-    wrapper.appendChild(optionsDiv);
     
-    selectedDiv.onclick = function(e) {
-        e.stopPropagation();
-        closeAllSelect(this);
-        optionsDiv.classList.toggle('select-hide');
-        selectedDiv.classList.toggle('select-arrow-active');
-        wrapper.classList.toggle('active');
-    };
+    if (rebuild) {
+        if (selectedDiv) selectedDiv.remove();
+        if (optionsDiv) optionsDiv.remove();
+        
+        if (sel.options.length === 0) return;
+        
+        const newSelectedDiv = document.createElement('div');
+        newSelectedDiv.className = 'select-selected';
+        if (sel.options[sel.selectedIndex]) {
+            newSelectedDiv.innerHTML = sel.options[sel.selectedIndex].innerHTML;
+        }
+        wrapper.appendChild(newSelectedDiv);
+
+        const newOptionsDiv = document.createElement('div');
+        newOptionsDiv.className = 'select-items select-hide';
+        
+        for (let i = 0; i < sel.options.length; i++) {
+            const opt = document.createElement('div');
+            opt.innerHTML = sel.options[i].innerHTML;
+            if (i === sel.selectedIndex) opt.classList.add('same-as-selected');
+            if (sel.options[i].hidden || sel.options[i].disabled) opt.style.display = 'none';
+            
+            opt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (sel.options[i].disabled || sel.options[i].hidden) return;
+                sel.selectedIndex = i;
+                sel.dispatchEvent(new Event('change'));
+                
+                newSelectedDiv.innerHTML = this.innerHTML;
+                
+                const s = this.parentNode.querySelectorAll('.same-as-selected');
+                for (let k = 0; k < s.length; k++) {
+                    s[k].classList.remove('same-as-selected');
+                }
+                this.classList.add('same-as-selected');
+                
+                closeAllSelect();
+            });
+            newOptionsDiv.appendChild(opt);
+        }
+        wrapper.appendChild(newOptionsDiv);
+        
+        newSelectedDiv.onclick = function(e) {
+            e.stopPropagation();
+            closeAllSelect(this);
+            newOptionsDiv.classList.toggle('select-hide');
+            newSelectedDiv.classList.toggle('select-arrow-active');
+            wrapper.classList.toggle('active');
+        };
+    } else {
+        if (sel.options[sel.selectedIndex]) {
+            selectedDiv.innerHTML = sel.options[sel.selectedIndex].innerHTML;
+        }
+        const optionDivs = optionsDiv.querySelectorAll('div');
+        for (let i = 0; i < optionDivs.length; i++) {
+            if (i === sel.selectedIndex) {
+                optionDivs[i].classList.add('same-as-selected');
+            } else {
+                optionDivs[i].classList.remove('same-as-selected');
+            }
+            if (sel.options[i].hidden || sel.options[i].disabled) {
+                optionDivs[i].style.display = 'none';
+            } else {
+                optionDivs[i].style.display = '';
+            }
+        }
+    }
 }
 
 function closeAllSelect(elmnt) {
     const items = document.getElementsByClassName('select-items');
     const selected = document.getElementsByClassName('select-selected');
-    const wrappers = document.getElementsByClassName('custom-select');
     for (let i = 0; i < selected.length; i++) {
         if (elmnt !== selected[i]) {
             selected[i].classList.remove('select-arrow-active');
-            wrappers[i].classList.remove('active');
-            items[i].classList.add('select-hide');
+            const wrap = selected[i].parentNode;
+            if (wrap && wrap.classList.contains('custom-select')) {
+                wrap.classList.remove('active');
+            }
+            if (items[i]) {
+                items[i].classList.add('select-hide');
+            }
         }
     }
 }

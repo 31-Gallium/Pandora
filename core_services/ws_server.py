@@ -11,6 +11,10 @@ class WebSocketServerThread(QThread):
     delete_folder_action_received = pyqtSignal(str, str)
     create_folder_action_received = pyqtSignal(str)
     reset_config_requested = pyqtSignal(str)
+    restart_app_requested = pyqtSignal()
+    quit_app_requested = pyqtSignal()
+    toggle_grid_requested = pyqtSignal()
+    enter_pill_mode_requested = pyqtSignal()
     
     def __init__(self, cfg, host="localhost", port=0):
         super().__init__()
@@ -50,6 +54,14 @@ class WebSocketServerThread(QThread):
                         self.delete_folder_action_received.emit(payload.get('id'), payload.get('action'))
                     elif payload.get('type') == 'reset_config':
                         self.reset_config_requested.emit(payload.get('section', 'all'))
+                    elif payload.get('type') == 'restart_app':
+                        self.restart_app_requested.emit()
+                    elif payload.get('type') == 'quit_app':
+                        self.quit_app_requested.emit()
+                    elif payload.get('type') == 'toggle_grid':
+                        self.toggle_grid_requested.emit()
+                    elif payload.get('type') == 'enter_pill_mode':
+                        self.enter_pill_mode_requested.emit()
                 except Exception as e:
                     print(f"WS Parse Error: {e}")
         finally:

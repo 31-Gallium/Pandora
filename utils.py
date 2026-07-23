@@ -98,41 +98,142 @@ class WinAPI:
 
     @staticmethod
     def pin_to_workerw(hwnd):
+        """Pin a window to the desktop layer using pure Z-order management.
+        
+        Instead of setting an owner relationship with WorkerW (which breaks when
+        Explorer rebuilds WorkerW during boot), we simply push the window to
+        HWND_BOTTOM and install a subclass that prevents Windows from changing
+        our Z-order. This is the approach Rainmeter uses.
+        """
+        try:
+            hwnd_int = int(hwnd)
+            user32 = ctypes.windll.user32
+            
+            # Push to the absolute bottom of the Z-order
+            # HWND_BOTTOM = 1
+            # SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW = 0x0053
+            user32.SetWindowPos(hwnd_int, 1, 0, 0, 0, 0, 0x0053)
+            
+            # Track this window for automatic pinning
+            DesktopPinner.track(hwnd_int)
+            
+        except Exception as e:
+            logger.error(f"WinAPI pin_to_workerw error: {e}")
+
+    @staticmethod
+    def unpin_from_workerw(hwnd):
+        """Remove a window from desktop pinning tracking."""
+        try:
+            hwnd_int = int(hwnd)
+            DesktopPinner.untrack(hwnd_int)
+        except Exception:
+            pass
+
+
+class DesktopPinner:
+    """Uses GWLP_HWNDPARENT to natively pin windows to the Desktop, surviving Win+D flawlessly.
+    Includes an auto-recovery timer to re-pin if the Desktop window changes (e.g., during Windows startup).
+    """
+    
+    _tracked_windows = set()
+    _timer = None
+    _current_desktop_hwnd = 0
+    
+    @classmethod
+    def _start_monitoring(cls):
+        try:
+            from PyQt6.QtCore import QTimer
+            cls._timer = QTimer()
+            cls._timer.setInterval(1000)
+            cls._timer.timeout.connect(cls._check_desktop_state)
+            cls._timer.start()
+        except Exception as e:
+            logger.error(f"_start_monitoring error: {e}")
+            
+    @classmethod
+    def _stop_monitoring(cls):
+        if cls._timer:
+            cls._timer.stop()
+            cls._timer = None
+            
+    @classmethod
+    def _check_desktop_state(cls):
+        if not cls._tracked_windows:
+            return
         try:
             import ctypes
             import platform
+            from ctypes import wintypes
             user32 = ctypes.windll.user32
-            progman = user32.FindWindowW("Progman", None)
             
-            # Send message to spawn WorkerW
-            user32.SendMessageTimeoutW(progman, 0x052C, 0, 0, 0, 1000, None)
-            
-            workerw = [0]
-            def enum_windows_callback(tophandle, topparamhandle):
-                # Find the WorkerW containing SHELLDLL_DefView
-                p = user32.FindWindowExW(tophandle, 0, "SHELLDLL_DefView", None)
-                if p != 0:
-                    workerw[0] = tophandle
-                return True
+            # Setup correct argtypes
+            if not hasattr(user32.FindWindowW, 'argtypes'):
+                user32.FindWindowW.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p]
+                user32.FindWindowW.restype = wintypes.HWND
+                user32.FindWindowExW.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_wchar_p, ctypes.c_wchar_p]
+                user32.FindWindowExW.restype = wintypes.HWND
                 
-            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_int, ctypes.c_int)
-            user32.EnumWindows(WNDENUMPROC(enum_windows_callback), 0)
-            
-            target = workerw[0] if workerw[0] else progman
-            if target:
-                hwnd_int = int(hwnd)
-                # Instead of SetParent (which breaks DWM translucency), set the OWNER.
-                # An owned window is forced to stay above its owner in the Z-order.
-                if platform.architecture()[0] == '64bit':
-                    user32.SetWindowLongPtrW(hwnd_int, -8, target)
-                else:
-                    user32.SetWindowLongW(hwnd_int, -8, target)
+            hwnd_desktop = user32.FindWindowW("Progman", "Program Manager")
+            workerw = user32.FindWindowExW(0, 0, "WorkerW", None)
+            while workerw:
+                if user32.FindWindowExW(workerw, 0, "SHELLDLL_DefView", None):
+                    hwnd_desktop = workerw
+                    break
+                workerw = user32.FindWindowExW(0, workerw, "WorkerW", None)
+                
+            if not hwnd_desktop:
+                user32.GetShellWindow.restype = wintypes.HWND
+                hwnd_desktop = user32.GetShellWindow()
+                if not hwnd_desktop:
+                    return
                     
-                # Force DWM to recomposite the window by triggering a frame change
-                # SWP_NOMOVE (0x0002) | SWP_NOSIZE (0x0001) | SWP_NOZORDER (0x0004) | SWP_FRAMECHANGED (0x0020) = 0x0027
-                user32.SetWindowPos(hwnd_int, 0, 0, 0, 0, 0, 0x0027)
+            if hwnd_desktop != cls._current_desktop_hwnd:
+                cls._current_desktop_hwnd = hwnd_desktop
+                
+                # Setup SetWindowLongPtr based on architecture
+                if platform.architecture()[0] == '64bit':
+                    set_window_long = user32.SetWindowLongPtrW
+                    set_window_long.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_uint64]
+                    set_window_long.restype = ctypes.c_uint64
+                else:
+                    set_window_long = user32.SetWindowLongW
+                    set_window_long.argtypes = [wintypes.HWND, ctypes.c_int, wintypes.HWND]
+                    set_window_long.restype = wintypes.HWND
+                    
+                dead = []
+                for hwnd_int in list(cls._tracked_windows):
+                    if user32.IsWindow(hwnd_int):
+                        set_window_long(hwnd_int, -8, hwnd_desktop) # GWLP_HWNDPARENT
+                        user32.SetWindowPos(hwnd_int, 1, 0, 0, 0, 0, 0x0413) # HWND_BOTTOM
+                    else:
+                        dead.append(hwnd_int)
+                        
+                for h in dead:
+                    cls.untrack(h)
+                    
         except Exception as e:
-            logger.error(f"WinAPI pin_to_workerw error: {e}")
+            pass
+            
+    @classmethod
+    def track(cls, hwnd_int):
+        cls._tracked_windows.add(hwnd_int)
+        if cls._timer is None:
+            cls._start_monitoring()
+        cls._current_desktop_hwnd = 0 # Force a re-pin immediately
+        cls._check_desktop_state()
+        
+    @classmethod
+    def untrack(cls, hwnd_int):
+        cls._tracked_windows.discard(hwnd_int)
+        if not cls._tracked_windows and cls._timer is not None:
+            cls._stop_monitoring()
+            
+    @classmethod
+    def repin_all(cls):
+        """Force a manual re-pin to current Desktop."""
+        cls._current_desktop_hwnd = 0
+        cls._check_desktop_state()
+
 
 class DesktopMonitor:
     @staticmethod
@@ -479,7 +580,13 @@ class MediaSessionManager(QObject):
         self._cached_vol_interface = None
         self._cached_vol_app_id = None
         
-        if hasattr(self.app, 'media_daemon'):
+        if getattr(self.app, 'media_daemon', None) is not None:
+            self._connect_to_daemon()
+        else:
+            print("[MediaSessionManager] MediaDaemon not initialized yet, waiting for lazy load.")
+
+    def _connect_to_daemon(self):
+        if getattr(self.app, 'media_daemon', None) is not None:
             self.app.media_daemon.state_changed.connect(self._on_state_changed)
             self.app.media_daemon.thumbnail_ready.connect(self._on_thumbnail_ready)
             if hasattr(self.app.media_daemon, 'audio_features_updated'):
@@ -490,8 +597,6 @@ class MediaSessionManager(QObject):
             # Seed initial cached thumbnail if present
             if getattr(self.app.media_daemon, 'thumbnail', None) is not None:
                 self.thumbnail = self.app.media_daemon.thumbnail
-        else:
-            print("[MediaSessionManager] WARNING: MediaDaemon not found in app instance.")
 
     def _on_audio_features(self, features):
         self.audio_features = features
@@ -870,6 +975,11 @@ class VectorIcon:
             actual_name = "unmute" if get_system_mute() else "mute"
             
         svg_path = actual_name
+        
+        # If it explicitly includes the assets directory, resolve it properly
+        if svg_path.startswith("assets/") or svg_path.startswith("assets\\"):
+            svg_path = get_resource_path(svg_path)
+            
         if not (svg_path.endswith(".svg") and os.path.exists(svg_path)):
             svg_path = get_resource_path(os.path.join("assets", f"{actual_name}.svg"))
             

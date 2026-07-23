@@ -64,6 +64,22 @@ class HaloTab {
         bindInput('#set-halo-theme select', 'halo.theme', false, this.getConfig, this.sendUpdate);
         bindSlider('[data-val="v-hb"]', 'halo.brightness', this.getConfig, this.sendUpdate);
         bindInput('#set-halo-blur-level select', 'halo.blur_level', false, this.getConfig, this.sendUpdate);
+        const blurModeSelect = document.querySelector('#set-halo-blur-mode select');
+        if (blurModeSelect) {
+            blurModeSelect.addEventListener('change', (e) => {
+                const val = e.target.value;
+                const cfg = this.getConfig();
+                if (!cfg.halo) cfg.halo = {};
+                cfg.halo.blur_mode = val;
+                
+                if (val === 'static') {
+                    cfg.halo.brightness = 10;
+                    setSliderValue('[data-val="v-hb"]', 10);
+                }
+                
+                this.sendUpdate();
+            });
+        }
         bindInput('#set-halo-arc select', 'halo.gap_size', true, this.getConfig, this.sendUpdate);
         bindInput('#set-halo-show-hud', 'halo.show_arc_hud', false, this.getConfig, this.sendUpdate);
         bindInput('#set-halo-blend-icons', 'halo.blend_app_icons', false, this.getConfig, this.sendUpdate);
@@ -108,6 +124,7 @@ class HaloTab {
         setInputValue('#set-halo-theme select', halo.theme || 'Dark');
         setSliderValue('[data-val="v-hb"]', halo.brightness !== undefined ? halo.brightness : 50);
         setInputValue('#set-halo-blur-level select', halo.blur_level || 'High');
+        setInputValue('#set-halo-blur-mode select', halo.blur_mode || 'live');
         setInputValue('#set-halo-arc select', halo.gap_size || 75);
         setInputValue('#set-halo-show-hud', halo.show_arc_hud !== false);
         setInputValue('#set-halo-blend-icons', halo.blend_app_icons === true);

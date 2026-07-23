@@ -57,3 +57,35 @@ electron_dashboard/test_icons.js
 
 # Node.js
 node_modules/
+
+# Ignore compiled binaries
+*.exe
+*.dll
+*.obj
+*.o
+
+# Ignore build artifacts
+installer_final/
+installer_out/
+
+# IDE and tooling
+.serena/
+.antigravitycli/
+
+# Inno Setup (replaced by Python installer)
+*.iss
+gen_bmp.py
+gen_splash.py
+generate_installer_images.py
+assets/Pandora_logo.bmp
+assets/Pandora_splash.png
+launcher_res.o
+
+# Old installer assets
+installer/
+
+# Empty/stub engine files
+engine_src/mosaic_update.cpp
+engine_src/ui_core.cpp
+engine_src/test_dxgi.cpp
+

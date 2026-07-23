@@ -6,11 +6,189 @@ if sys.stdout is None:
 if sys.stderr is None:
     sys.stderr = open(os.devnull, 'w')
 
+if "--uninstall" in sys.argv:
+    from PyQt6.QtWidgets import QApplication
+    from uninstaller import UninstallerUI
+    app = QApplication(sys.argv)
+    font = app.font()
+    font.setFamily("Segoe UI")
+    app.setFont(font)
+    ui = UninstallerUI()
+    ui.show()
+    sys.exit(app.exec())
+
+import winreg
+
+def force_high_performance_gpu():
+    import json
+    appdata = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), "Pandora")
+    config_path = os.path.join(appdata, 'config.json')
+    pref = 0
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                pref = data.get('general_settings', {}).get('gpu_preference', 0)
+        except Exception:
+            pass
+
+    paths_to_register = {sys.executable}
+    base_exe_name = os.path.basename(sys.executable)
+    if hasattr(sys, 'base_exec_prefix') and sys.base_exec_prefix:
+        base_exe = os.path.join(sys.base_exec_prefix, base_exe_name)
+        if os.path.exists(base_exe):
+            paths_to_register.add(os.path.abspath(base_exe))
+            paths_to_register.add(os.path.realpath(base_exe))
+    paths_to_register.add(os.path.realpath(sys.executable))
+    paths_to_register.add(os.path.abspath(sys.executable))
+
+    key_path = r"Software\Microsoft\DirectX\UserGpuPreferences"
+    try:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS)
+    except FileNotFoundError:
+        if pref == 0: return
+        key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
+    
+    try:
+        for exe_path in paths_to_register:
+            if not exe_path:
+                continue
+            norm_exe_path = os.path.normpath(exe_path)
+            if pref == 0:
+                try:
+                    winreg.DeleteValue(key, norm_exe_path)
+                except FileNotFoundError:
+                    pass
+            else:
+                target_val = f"GpuPreference={pref};"
+                try:
+                    value, _ = winreg.QueryValueEx(key, norm_exe_path)
+                    if target_val in str(value):
+                        continue
+                except FileNotFoundError:
+                    pass
+                winreg.SetValueEx(key, norm_exe_path, 0, winreg.REG_SZ, target_val)
+    finally:
+        winreg.CloseKey(key)
+
+force_high_performance_gpu()
+
 import faulthandler
 try:
     faulthandler.enable(all_threads=True, file=sys.stderr)
 except Exception:
     pass
+
+if getattr(sys, 'frozen', False):
+    os.chdir(os.path.dirname(sys.executable))
+
+if "--startup" in sys.argv:
+    import time
+    import ctypes
+    user32 = ctypes.windll.user32
+    
+    def wait_for_desktop():
+        import ctypes
+        import time
+        from ctypes import wintypes
+        
+        user32 = ctypes.windll.user32
+        wtsapi32 = ctypes.windll.wtsapi32
+        WTS_CURRENT_SERVER_HANDLE = 0
+        WTS_CURRENT_SESSION = -1
+        WTSSessionInfoEx = 25
+
+        # Define ctypes signatures to prevent handle truncation on 64-bit Python
+        user32.FindWindowW.argtypes = [wintypes.LPCWSTR, wintypes.LPCWSTR]
+        user32.FindWindowW.restype = wintypes.HWND
+        
+        user32.IsWindowVisible.argtypes = [wintypes.HWND]
+        user32.IsWindowVisible.restype = wintypes.BOOL
+        
+        user32.OpenInputDesktop.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+        user32.OpenInputDesktop.restype = wintypes.HWND
+        
+        user32.CloseDesktop.argtypes = [wintypes.HWND]
+        user32.CloseDesktop.restype = wintypes.BOOL
+        
+        user32.GetUserObjectInformationW.argtypes = [
+            wintypes.HWND, ctypes.c_int, ctypes.c_void_p, wintypes.DWORD, ctypes.POINTER(wintypes.DWORD)
+        ]
+        user32.GetUserObjectInformationW.restype = wintypes.BOOL
+        
+        user32.SendMessageTimeoutW.argtypes = [
+            wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM,
+            wintypes.UINT, wintypes.UINT, ctypes.c_void_p
+        ]
+        user32.SendMessageTimeoutW.restype = wintypes.LPARAM
+        
+        user32.GetClassNameW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+        user32.GetClassNameW.restype = ctypes.c_int
+        
+        user32.FindWindowExW.argtypes = [wintypes.HWND, wintypes.HWND, wintypes.LPCWSTR, wintypes.LPCWSTR]
+        user32.FindWindowExW.restype = wintypes.HWND
+        
+        wtsapi32.WTSQuerySessionInformationW.argtypes = [
+            wintypes.HANDLE, wintypes.DWORD, wintypes.DWORD,
+            ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(wintypes.DWORD)
+        ]
+        wtsapi32.WTSQuerySessionInformationW.restype = wintypes.BOOL
+        
+        wtsapi32.WTSFreeMemory.argtypes = [ctypes.c_void_p]
+        wtsapi32.WTSFreeMemory.restype = None
+
+        start_time = time.time()
+        timeout = 60.0 # Wait up to 60 seconds for the desktop
+        
+        # Check if we are running in a user session and desktop is available
+        while time.time() - start_time < timeout:
+            hwnd = user32.FindWindowW("Progman", None)
+            if hwnd:
+                tray = user32.FindWindowW("Shell_TrayWnd", None)
+                if tray and user32.IsWindowVisible(tray):
+                    buffer = ctypes.c_void_p()
+                    bytes_returned = ctypes.c_uint32()
+                    
+                    is_locked = False
+                    try:
+                        success = wtsapi32.WTSQuerySessionInformationW(
+                            WTS_CURRENT_SERVER_HANDLE,
+                            WTS_CURRENT_SESSION,
+                            WTSSessionInfoEx,
+                            ctypes.byref(buffer),
+                            ctypes.byref(bytes_returned)
+                        )
+                        if success and buffer.value:
+                            is_locked_array = ctypes.cast(buffer, ctypes.POINTER(ctypes.c_uint32))
+                            is_locked = is_locked_array[3] == 1 
+                            wtsapi32.WTSFreeMemory(buffer)
+                    except Exception:
+                        pass
+                    
+                    if not is_locked:
+                        desk = user32.OpenInputDesktop(0, False, 0x0100)
+                        if desk:
+                            length = ctypes.c_ulong(0)
+                            user32.GetUserObjectInformationW(desk, 2, None, 0, ctypes.byref(length))
+                            name = ctypes.create_unicode_buffer(length.value)
+                            user32.GetUserObjectInformationW(desk, 2, name, length.value, ctypes.byref(length))
+                            user32.CloseDesktop(desk)
+                            if name.value == "Default":
+                                # 1. Wait until Windows officially registers the Shell Desktop Window
+                                if not user32.GetShellWindow():
+                                    continue
+                                
+                                # 2. Wait until the Taskbar is fully created and visible (past lock screen)
+                                tray_hwnd = user32.FindWindowW("Shell_TrayWnd", None)
+                                if not tray_hwnd or not user32.IsWindowVisible(tray_hwnd):
+                                    continue
+                                    
+                                # Give Windows shell a moment to stabilize
+                                time.sleep(1.5)
+                                return
+            time.sleep(0.5)
+            
+    wait_for_desktop()
 
 SCROLLBAR_CSS = '''
 QScrollArea, QScrollArea > QWidget > QWidget, QListWidget, QListView, QTextEdit, QPlainTextEdit {
@@ -68,7 +246,7 @@ from ui.folder_panel import FolderPanel
 from utils import VectorIcon, IconExtractor, DesktopMonitor
 from ui.grid_overlay import GridOverlay
 from ui.halo import Halo
-from core_services.media_daemon import MediaDaemon
+
 import sys
 import os
 
@@ -425,7 +603,7 @@ def handle_halo_cmd(cmd, grid, dash):
         except Exception as e:
             print(f"Failed to set brightness: {e}")
     elif cmd in ["taskmgr", "tasks"]: subprocess.Popen("taskmgr")
-    elif cmd == "pandora": dash.show()
+    elif cmd in ["pandora", "settings"]: dash.show()
     elif cmd in ["trash", "empty trash"]: subprocess.Popen(["powershell.exe", "-Command", "Clear-RecycleBin -Force -ErrorAction SilentlyContinue"])
     elif cmd == "search": send_win_key(0x53) # Win + S
     elif cmd == "power": subprocess.Popen(["shutdown", "/s", "/t", "60", "/c", "Pandora: Shutting down in 60s. Use 'shutdown /a' to cancel."])
@@ -457,7 +635,7 @@ def handle_halo_cmd(cmd, grid, dash):
     elif cmd == "bluetooth":
         from utils import toggle_bluetooth
         toggle_bluetooth()
-    elif cmd in ["settings", "windows settings"]: subprocess.Popen(["cmd", "/c", "start", "ms-settings:"])
+    elif cmd in ["winsettings", "windows settings", "ms-settings"]: subprocess.Popen(["cmd", "/c", "start", "ms-settings:"])
     elif cmd in ["defender", "windows defender"]: subprocess.Popen(["cmd", "/c", "start", "windowsdefender:"])
     else:
         if cmd:
@@ -496,6 +674,15 @@ class ElectronDashboardManager(QObject):
         self.electron_process = None
         self.ws_port = None
         
+        # Initialize visualizer engine at startup to bind and discover the active GPU
+        try:
+            import hub_modules.vis_engine_bridge as vis
+            pref_gpu = int(self.cfg.get('general_settings', {}).get('gpu_preference', 0))
+            vis.init_vis_engine(512, 512, pref_gpu)
+            self.cfg['system_gpu_name'] = vis.get_bound_gpu_name()
+        except Exception as e:
+            self.cfg['system_gpu_name'] = "Default Hardware GPU"
+
         # Start WebSocket Server
         from core_services.ws_server import WebSocketServerThread
         self.ws_thread = WebSocketServerThread(self.cfg, port=0)
@@ -521,6 +708,7 @@ class ElectronDashboardManager(QObject):
         self._storage_sync_timer = QTimer(self)
         self._storage_sync_timer.setSingleShot(True)
         self._storage_sync_timer.timeout.connect(self._sync_storage_root)
+        self.pill_window = None
 
     def _on_storage_root_changed(self, path):
         """Debounce root storage directory changes (500ms)."""
@@ -795,6 +983,15 @@ class ElectronDashboardManager(QObject):
                         child.update()
             except Exception:
                 pass
+                
+        # Also update the pill window
+        if hasattr(self, 'pill_window') and self.pill_window:
+            try:
+                self.pill_window.cfg = self.cfg
+                self.pill_window.update_theme()
+                self.pill_window.update()
+            except Exception as e:
+                print(f"Error updating pill window on wallpaper change: {e}")
 
     def _on_reset_config(self, section):
         from config import ConfigManager
@@ -817,7 +1014,7 @@ class ElectronDashboardManager(QObject):
                 "general_settings.grid_opacity"
             ],
             "System": [
-                "general_settings.launch_at_startup"
+                "general_settings.launch_at_startup", "general_settings.open_dashboard_startup", "general_settings.gpu_preference"
             ],
             "Display Effects": [
                 "general_settings.warmth_intensity", "display_effects.active_preset"
@@ -864,69 +1061,124 @@ class ElectronDashboardManager(QObject):
         self.handle_config_update(self.cfg)
 
     def handle_config_update(self, new_cfg):
-        # Update our running config dictionary
-        self.cfg.clear()
-        self.cfg.update(new_cfg)
-        
-        # Inject desktop wallpaper accent colors if Dashboard or Folder theme is Desktop
-        gen = self.cfg.setdefault('general_settings', {})
-        if gen.get('dashboard_theme') == 'Desktop' or gen.get('folder_theme') == 'Desktop':
-            from utils import get_desktop_accent_colors
-            accents = get_desktop_accent_colors()
-            gen['desktop_accents'] = [list(c) for c in accents]
+        try:
+            # Update our running config dictionary
+            self.cfg.clear()
+            self.cfg.update(new_cfg)
             
-        # Push updated config back to the Electron dashboard clients to keep them in sync
-        self.ws_thread.send_config_to_clients(self.cfg)
-        
-        # Save to disk
-        ConfigManager.save(self.cfg)
-        
-        app = QApplication.instance()
-        # 1. Update Display Engine
-        disp_cfg = self.cfg.get('display_effects', {})
-        from utils import DisplayEffectsEngine
-        engine = DisplayEffectsEngine.instance()
-        engine._active_preset = disp_cfg.get('active_preset', 'Sunset')
-        engine._target_intensity = disp_cfg.get('warmth_intensity', 60) / 100.0
-        if engine._is_enabled:
-            engine.set_intensity(engine._target_intensity)
-            
-        # 2. Update Halo Menu Settings
-        if hasattr(app, 'halo'):
-            app.halo.reload_tools(self.cfg)
-            
-        # 3. Update Global Hook Settings
-        if hasattr(app, 'global_hook'):
-            app.global_hook.reload_config(self.cfg)
-            
-        # Emit signal in case any other modular UI components need to react
-        self.configUpdated.emit(self.cfg)
-        # 4. Refresh all folder icon visuals on the desktop
-        from utils import animate_theme_change
-        for w in self.app_instances[:]:
+            # Re-initialize visualizer engine if GPU preference changed
             try:
-                animate_theme_change(w)
-                # Use root_data to match the panel's top-level folder, even when
-                # the user has navigated into a nested folder (self.data != root)
-                root = getattr(w, 'root_data', w.data) if hasattr(w, 'root_data') else w.data
-                if 'id' in root:
-                    for f in self.cfg.get('folders', []):
-                        if f.get('id') == root.get('id'):
-                            root.clear()
-                            root.update(f)
-                            break
-                if hasattr(w, 'update_geometry'):
-                    w.update_geometry()
-                if hasattr(w, 'refresh'):
-                    w.refresh()
-                if hasattr(w, 'update'):
-                    w.update()
-            except RuntimeError as e:
-                if "has been deleted" in str(e):
-                    if w in self.app_instances:
-                        self.app_instances.remove(w)
-                else:
-                    raise
+                import hub_modules.vis_engine_bridge as vis
+                pref_gpu = int(self.cfg.get('general_settings', {}).get('gpu_preference', 0))
+                vis.init_vis_engine(512, 512, pref_gpu)
+                self.cfg['system_gpu_name'] = vis.get_bound_gpu_name()
+            except Exception as e:
+                self.cfg['system_gpu_name'] = "Default Hardware GPU"
+            
+            # Update Windows Startup Registry
+            launch_at_startup = self.cfg.get('general_settings', {}).get('launch_at_startup', False)
+            try:
+                from config import set_startup_registry
+                set_startup_registry(launch_at_startup)
+            except Exception as e:
+                print(f"Error updating registry for startup: {e}")
+            
+            # Inject desktop wallpaper accent colors if Dashboard or Folder theme is Desktop
+            gen = self.cfg.setdefault('general_settings', {})
+            if gen.get('dashboard_theme') == 'Desktop' or gen.get('folder_theme') == 'Desktop':
+                try:
+                    from utils import get_desktop_accent_colors
+                    accents = get_desktop_accent_colors()
+                    gen['desktop_accents'] = [list(c) for c in accents]
+                except Exception as e:
+                    print(f"Error getting desktop accents: {e}")
+                
+            # Push updated config back to the Electron dashboard clients to keep them in sync
+            self.ws_thread.send_config_to_clients(self.cfg)
+            
+            # Save to disk
+            ConfigManager.save(self.cfg)
+            
+            # Apply GPU Preference registry settings immediately
+            try:
+                force_high_performance_gpu()
+            except Exception as e:
+                print(f"Error applying GPU preference: {e}")
+            
+            app = QApplication.instance()
+            # 1. Update Display Engine
+            try:
+                disp_cfg = self.cfg.get('display_effects', {})
+                from utils import DisplayEffectsEngine
+                engine = DisplayEffectsEngine.instance()
+                engine._active_preset = disp_cfg.get('active_preset', 'Sunset')
+                engine._target_intensity = disp_cfg.get('warmth_intensity', 60) / 100.0
+                if engine._is_enabled:
+                    engine.set_intensity(engine._target_intensity)
+            except Exception as e:
+                print(f"Error updating Display Engine: {e}")
+                
+            # 2. Update Halo Menu Settings
+            try:
+                if hasattr(app, 'halo'):
+                    app.halo.reload_tools(self.cfg)
+            except Exception as e:
+                print(f"Error updating Halo Menu Settings: {e}")
+                
+            # 3. Update Global Hook Settings
+            try:
+                if hasattr(app, 'global_hook'):
+                    app.global_hook.reload_config(self.cfg)
+            except Exception as e:
+                print(f"Error updating Global Hook Settings: {e}")
+                
+            # Emit signal in case any other modular UI components need to react
+            self.configUpdated.emit(self.cfg)
+            
+            from utils import animate_theme_change
+            
+            # 4. Refresh Pill Window Theme
+            if hasattr(self, 'pill_window') and self.pill_window:
+                try:
+                    self.pill_window.cfg = self.cfg
+                    self.pill_window.update_theme()
+                    self.pill_window.update()
+                except Exception as e:
+                    print(f"Error updating pill window theme: {e}")
+                    
+            # 5. Refresh all folder icon visuals on the desktop
+            for w in self.app_instances[:]:
+                try:
+                    animate_theme_change(w)
+                    # Use root_data to match the panel's top-level folder, even when
+                    # the user has navigated into a nested folder (self.data != root)
+                    root = getattr(w, 'root_data', w.data) if hasattr(w, 'root_data') else w.data
+                    if 'id' in root:
+                        for f in self.cfg.get('folders', []):
+                            if f.get('id') == root.get('id'):
+                                root.clear()
+                                root.update(f)
+                                break
+                    if hasattr(w, 'update_geometry'):
+                        w.update_geometry()
+                    if hasattr(w, 'refresh'):
+                        w.refresh()
+                    if hasattr(w, 'update'):
+                        w.update()
+                except RuntimeError as e:
+                    if "has been deleted" in str(e):
+                        if w in self.app_instances:
+                            self.app_instances.remove(w)
+                    else:
+                        print(f"RuntimeError updating folder: {e}")
+                except Exception as e:
+                    print(f"Error updating folder {getattr(w, 'data', {}).get('id', 'unknown')}: {e}")
+                    import traceback
+                    traceback.print_exc()
+        except Exception as e:
+            print(f"FATAL ERROR in handle_config_update: {e}")
+            import traceback
+            traceback.print_exc()
                     
     def save_and_broadcast(self, new_cfg=None):
         if new_cfg is not None:
@@ -939,47 +1191,60 @@ class ElectronDashboardManager(QObject):
         pass
         
     def show(self):
-        # Spawn Electron
-        if self.electron_process is None or self.electron_process.poll() is not None:
-            env = os.environ.copy()
-            if self.ws_port is not None:
-                env['PANDORA_WS_PORT'] = str(self.ws_port)
-                
-            if getattr(sys, 'frozen', False):
-                # PyInstaller bundled mode
-                base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
-                electron_path = os.path.join(base_dir, 'electron_dashboard', 'PandoraUI-win32-x64', 'PandoraUI.exe')
-                if not os.path.exists(electron_path):
-                    print(f"Packaged Electron not found at {electron_path}!")
-                    return
-                # Do not pass "." when running pre-packaged app
-                self.electron_process = subprocess.Popen([electron_path], cwd=os.path.dirname(electron_path), env=env)
-            else:
-                electron_path = os.path.abspath(r"electron_dashboard\node_modules\.bin\electron.cmd")
-                if not os.path.exists(electron_path):
-                    print("Electron not found! Run npm install in electron_dashboard")
-                    return
-                
-                # Copy assets to electron_dashboard/assets for dev mode
-                src_assets = os.path.abspath("assets")
-                dest_assets = os.path.abspath(r"electron_dashboard\assets")
-                if os.path.exists(src_assets):
-                    import shutil
-                    if os.path.exists(dest_assets):
+        try:
+            # Spawn Electron
+            if self.electron_process is None or self.electron_process.poll() is not None:
+                env = os.environ.copy()
+                if self.ws_port is not None:
+                    env['PANDORA_WS_PORT'] = str(self.ws_port)
+                    
+                if getattr(sys, 'frozen', False):
+                    # PyInstaller bundled mode
+                    base_dir = os.path.dirname(sys.executable)
+                    electron_path = os.path.join(base_dir, 'electron_dashboard', 'PandoraUI-win32-x64', 'PandoraUI.exe')
+                    if not os.path.exists(electron_path):
+                        print(f"Packaged Electron not found at {electron_path}!")
+                        return
+                    # Do not pass "." when running pre-packaged app
+                    self.electron_process = subprocess.Popen([electron_path], cwd=os.path.dirname(electron_path), env=env)
+                else:
+                    electron_path = os.path.abspath(r"electron_dashboard\node_modules\.bin\electron.cmd")
+                    if not os.path.exists(electron_path):
+                        print("Electron not found! Run npm install in electron_dashboard")
+                        return
+                    
+                    # Copy assets to electron_dashboard/assets for dev mode
+                    src_assets = os.path.abspath("assets")
+                    dest_assets = os.path.abspath(r"electron_dashboard\assets")
+                    if os.path.exists(src_assets):
+                        import shutil
+                        if os.path.exists(dest_assets):
+                            try:
+                                shutil.rmtree(dest_assets)
+                            except Exception:
+                                pass
                         try:
-                            shutil.rmtree(dest_assets)
-                        except Exception:
-                            pass
-                    try:
-                        shutil.copytree(src_assets, dest_assets, dirs_exist_ok=True)
-                    except Exception as e:
-                        print(f"Failed to copy assets in dev mode: {e}")
-                        
-                self.electron_process = subprocess.Popen([electron_path, "."], cwd="electron_dashboard", env=env)
+                            shutil.copytree(src_assets, dest_assets, dirs_exist_ok=True)
+                        except Exception as e:
+                            print(f"Failed to copy assets in dev mode: {e}")
+                            
+                    self.electron_process = subprocess.Popen([electron_path, "."], cwd="electron_dashboard", env=env)
+        except Exception as e:
+            print(f"FATAL ERROR in dashboard.show(): {e}")
+            import traceback
+            traceback.print_exc()
             
-
-
-
+    def hide(self):
+        if self.electron_process and self.electron_process.poll() is None:
+            try:
+                import subprocess
+                subprocess.run(['taskkill', '/F', '/T', '/PID', str(self.electron_process.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, creationflags=0x08000000)
+            except Exception:
+                try:
+                    self.electron_process.terminate()
+                except Exception:
+                    pass
+            self.electron_process = None
 
     def show_folder(self, fid):
         """Open the Electron dashboard and navigate to a specific folder's settings."""
@@ -996,6 +1261,9 @@ class ElectronDashboardManager(QObject):
 
 if __name__ == "__main__":
     import sys
+    import os
+    
+
     _app_mutex_handle = None
     if sys.platform == 'win32':
         import ctypes
@@ -1024,13 +1292,37 @@ if __name__ == "__main__":
     
     cfg = ConfigManager.load()
     
-    # Initialize Core Services
-    app.media_daemon = MediaDaemon()
+    # Initialize / Refresh desktop accents on startup
+    gen = cfg.setdefault('general_settings', {})
+    if gen.get('dashboard_theme') == 'Desktop' or gen.get('folder_theme') == 'Desktop':
+        def _load_accents():
+            try:
+                from utils import get_desktop_accent_colors
+                accents = get_desktop_accent_colors()
+                gen['desktop_accents'] = [list(c) for c in accents]
+            except Exception as e:
+                print(f"Error getting desktop accents on startup: {e}")
+        
+        import threading
+        threading.Thread(target=_load_accents, daemon=True).start()
+    
+    # Initialize Core Services lazily
+    def _init_media_daemon():
+        from core_services.media_daemon import MediaDaemon
+        app.media_daemon = MediaDaemon()
+        import utils
+        if utils.MediaSessionManager._instance is not None:
+            utils.MediaSessionManager._instance._connect_to_daemon()
+        
+    app.media_daemon = None
+    QTimer.singleShot(100, _init_media_daemon)
     
     QTimer.singleShot(500, warm_up)
     
     dashboard = ElectronDashboardManager(cfg, [])
     dashboard.prewarm()
+    if cfg.get('general_settings', {}).get('open_dashboard_startup', False):
+        QTimer.singleShot(2000, lambda: dashboard.show())
     
     grid_overlay = GridOverlay(cfg)
     grid_overlay.show(); grid_overlay.hide() # Force initialization
@@ -1071,16 +1363,67 @@ if __name__ == "__main__":
         cfg=cfg
     )
     app.global_hook = hook
-    hook.start()
+    QTimer.singleShot(1000, hook.start)
     
     wins = []
-    for f in cfg['folders']:
-        if not f.get('is_nested', False):
-            w = FolderPanel(f, cfg, dashboard)
-            wins.append(w)
-            w.show()
-        
     dashboard.app_instances = wins
+    
+    def build_folders(folder_list, idx=0):
+        if idx >= len(folder_list):
+            return
+        try:
+            f = folder_list[idx]
+            if not f.get('is_nested', False):
+                w = FolderPanel(f, cfg, dashboard)
+                wins.append(w)
+                w.show()
+        except Exception as e:
+            print(f"Error creating folder {idx}: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            QTimer.singleShot(20, lambda: build_folders(folder_list, idx + 1))
+        
+    from PyQt6.QtCore import QTimer, QThread
+        
+    build_folders(cfg['folders'])
+    
+    # Robust zero-CPU registry watcher instead of polling
+    class RegistryWatcherThread(QThread):
+        def run(self):
+            import win32api
+            import win32con
+            import win32event
+            import winreg
+            try:
+                key_path = r"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
+                key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_READ | win32con.KEY_NOTIFY)
+                evt = win32event.CreateEvent(None, 0, 0, None)
+                
+                while not self.isInterruptionRequested():
+                    # 1 = REG_NOTIFY_CHANGE_NAME, 4 = REG_NOTIFY_CHANGE_LAST_SET
+                    win32api.RegNotifyChangeKeyValue(key, True, 1 | 4, evt, True)
+                    res = win32event.WaitForSingleObject(evt, 1000)
+                    if res == win32con.WAIT_OBJECT_0:
+                        enabled = True
+                        try:
+                            val, _ = winreg.QueryValueEx(key, "Pandora")
+                            if val and len(val) > 0 and val[0] == 0x03:
+                                enabled = False
+                        except Exception:
+                            pass
+                        
+                        current = cfg.get('general_settings', {}).get('launch_at_startup', False)
+                        if current != enabled:
+                            cfg.setdefault('general_settings', {})['launch_at_startup'] = enabled
+                            from config import ConfigManager
+                            ConfigManager.save(cfg)
+                            dashboard.ws_thread.send_config_to_clients(cfg)
+            except Exception:
+                pass
+
+    reg_watcher = RegistryWatcherThread(app)
+    reg_watcher.start()
     
     tray = QSystemTrayIcon(app_icon)
     tray.show()
@@ -1335,9 +1678,9 @@ if __name__ == "__main__":
             
         # Handle restart correctly whether running from python script or compiled binary
         if getattr(sys, 'frozen', False):
-            subprocess.Popen(sys.argv)
+            subprocess.Popen(sys.argv, creationflags=0x08000000)
         else:
-            subprocess.Popen([sys.executable] + sys.argv)
+            subprocess.Popen([sys.executable] + sys.argv, creationflags=0x08000000)
         
         # Small delay to allow new process to start before we exit
         import time
@@ -1346,6 +1689,56 @@ if __name__ == "__main__":
 
     app.create_folder_callback = create_folder
     custom_tray_menu = CustomTrayMenu(app, create_folder, restart_app, quit_app, dashboard)
+    
+    def enter_pill_mode():
+        dashboard.hide()
+        from config import ConfigManager
+        active_cfg = ConfigManager.load()
+        if not hasattr(dashboard, 'pill_window') or dashboard.pill_window is None:
+            from ui.pill_window import DashboardPillWindow
+            dashboard.pill_window = DashboardPillWindow(active_cfg, dashboard, grid_overlay, restart_app, quit_app)
+        else:
+            dashboard.pill_window.cfg = active_cfg
+        
+        screen = QApplication.primaryScreen()
+        if screen:
+            geom = screen.availableGeometry()
+            # Read saved position from config
+            gen_settings = active_cfg.get('general_settings', {})
+            edge = gen_settings.get('pill_edge', 'right')
+            rx = gen_settings.get('pill_center_x_ratio')
+            ry = gen_settings.get('pill_center_y_ratio')
+            
+            # Restore saved orientation and rotation
+            dashboard.pill_window.edge = edge
+            dashboard.pill_window.orientation = 'horizontal' if edge in ['top', 'bottom'] else 'vertical'
+            dashboard.pill_window._rotation = -90.0 if edge in ['top', 'bottom'] else 0.0
+            
+            cx, cy = 320, 320
+            if rx is not None and ry is not None:
+                ccx = geom.x() + int(rx * geom.width())
+                ccy = geom.y() + int(ry * geom.height())
+                tx = ccx - cx
+                ty = ccy - cy
+            else:
+                # Default position: right edge, centered vertically
+                tx = geom.x() + geom.width() - 29 - cx
+                ty = geom.y() + (geom.height() - 640) // 2
+                
+            dashboard.pill_window.setGeometry(tx, ty, 640, 640)
+            dashboard.pill_window.move_to_edge(edge, geom)
+            dashboard.pill_window.update_mask_and_geom()
+            dashboard.pill_window.update_theme()
+            dashboard.pill_window.expansion = 0.0
+            
+        dashboard.pill_window.show()
+        dashboard.pill_window.raise_()
+        dashboard.pill_window.activateWindow()
+
+    dashboard.ws_thread.restart_app_requested.connect(restart_app)
+    dashboard.ws_thread.quit_app_requested.connect(quit_app)
+    dashboard.ws_thread.toggle_grid_requested.connect(grid_overlay.toggle)
+    dashboard.ws_thread.enter_pill_mode_requested.connect(enter_pill_mode)
     
     def on_tray_activated(reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
@@ -1407,6 +1800,9 @@ if __name__ == "__main__":
         if hasattr(dashboard, 'app_instances') and dashboard.app_instances:
             for panel in list(dashboard.app_instances):
                 try:
+                    panel._is_closing = True
+                    from utils import WinAPI as _WinAPI
+                    _WinAPI.unpin_from_workerw(panel.winId())
                     panel.close()
                     panel.deleteLater()
                 except Exception:
@@ -1470,7 +1866,7 @@ if __name__ == "__main__":
                 # If we use .terminate() on the parent, it dies and orphans the children.
                 import subprocess
                 subprocess.run(['taskkill', '/F', '/T', '/PID', str(dashboard.electron_process.pid)], 
-                               capture_output=True, timeout=5)
+                               capture_output=True, timeout=5, creationflags=0x08000000)
                 dashboard.electron_process.terminate()
                 dashboard.electron_process.wait(timeout=3)
             except Exception:

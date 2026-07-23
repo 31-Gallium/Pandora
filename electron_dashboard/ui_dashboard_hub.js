@@ -1,4 +1,4 @@
-const { bindInput, bindSlider, setInputValue, setCheckboxValue, setSliderValue } = require('./ui_dashboard_common.js');
+const { bindInput, bindSlider, setInputValue, setCheckboxValue, setSliderValue, syncCustomSelect } = require('./ui_dashboard_common.js');
 
 class HubTab {
     constructor(getConfig, sendUpdate) {
@@ -6,15 +6,23 @@ class HubTab {
         this.sendUpdate = sendUpdate;
     }
     
-    _getWidgetSettings(cfg, widgetName) {
-        const hubCfg = cfg.hub_config || {};
-        const layers = hubCfg.layers || [];
-        for (const layer of layers) {
+    _getWidgetSettings(cfg, widgetName, createIfMissing=false) {
+        if (!cfg.hub_config) cfg.hub_config = {};
+        if (!cfg.hub_config.layers) cfg.hub_config.layers = [];
+        
+        for (const layer of cfg.hub_config.layers) {
             if (layer && layer.type === widgetName) {
                 if (!layer.settings) layer.settings = {};
                 return layer.settings;
             }
         }
+        
+        if (createIfMissing) {
+            const layer = { id: "layer_" + widgetName, type: widgetName, settings: {} };
+            cfg.hub_config.layers.push(layer);
+            return layer.settings;
+        }
+        
         return {};
     }
 
@@ -64,6 +72,7 @@ class HubTab {
         const settings = this._getWidgetSettings(cfg, 'media');
         
         const isMosaic = settings.art_style === '8-Bit Mosaic';
+        const isFerro = settings.art_style === 'Liquid Ferrofluid';
         const isReactive = settings.visualizer === 'Reactive Voxels';
         
         // Mosaic Shape setting visibility
@@ -105,6 +114,8 @@ class HubTab {
             } else {
                 visSelect.value = options.includes(settings.visualizer) ? settings.visualizer : 'None';
             }
+            
+            syncCustomSelect(visSelect);
         }
     }
 
@@ -118,7 +129,7 @@ class HubTab {
         if (artSelect) {
             artSelect.addEventListener('change', (e) => {
                 const cfg = this.getConfig();
-                const settings = this._getWidgetSettings(cfg, 'media');
+                const settings = this._getWidgetSettings(cfg, 'media', true);
                 
                 const oldStyle = settings.art_style || 'Gaussian Blur';
                 const currentVis = settings.visualizer || 'None';
@@ -151,7 +162,7 @@ class HubTab {
         if (visSelect) {
             visSelect.addEventListener('change', (e) => {
                 const cfg = this.getConfig();
-                const settings = this._getWidgetSettings(cfg, 'media');
+                const settings = this._getWidgetSettings(cfg, 'media', true);
                 const val = e.target.value;
                 settings.visualizer = val;
                 if (settings.art_style === '8-Bit Mosaic') {
@@ -165,7 +176,7 @@ class HubTab {
             });
         }
 
-        this._bindWidget('#set-media-mosaic-shape', 'media', 'mosaic_shape', false);
+        this._bindWidget('#set-media-mosaic-shape', 'media', 'mosaic_shape', true);
         this._bindWidget('#i-media-strength', 'media', 'effect_strength', true, false, true);
         this._bindWidget('#set-media-timeline', 'media', 'show_timeline', false, true);
         this._bindWidget('#set-media-title', 'media', 'show_title', false, true);

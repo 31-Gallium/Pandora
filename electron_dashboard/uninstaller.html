@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pandora Uninstaller</title>
+  <style>
+    :root {
+      --bg: transparent;
+      --panel: rgba(25, 25, 30, 0.95);
+      --panel-blur: blur(25px);
+      --text: #ffffff;
+      --text-dim: #9aa0a6;
+      --accent: #26c0d3;
+      --accent-hover: #1ca5b8;
+      --border: rgba(255, 255, 255, 0.12);
+      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      font-family: var(--font-family);
+      background: transparent;
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      margin-bottom: 20px;
+    }
+
+    .pill {
+      background: var(--panel);
+      backdrop-filter: var(--panel-blur);
+      -webkit-backdrop-filter: var(--panel-blur);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .drag-pill {
+      position: relative;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .drag-region {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      -webkit-app-region: drag;
+    }
+
+    .close-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      -webkit-app-region: no-drag;
+      transition: background 0.2s, color 0.2s;
+      border-radius: 50%;
+    }
+    .close-btn:hover { background: #e81123; color: white; }
+
+    .container { flex: 1; position: relative; }
+
+    .screen {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .hero-pill {
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .hero-pill.center-content {
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .hero-text { margin-left: 20px; }
+    .hero-pill h1, .hero-pill h2 {
+      font-size: 26px; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.5px;
+    }
+    .hero-pill p { color: var(--text-dim); font-size: 14px; }
+    
+    .logo {
+      width: 64px; height: 64px;
+      filter: drop-shadow(0 4px 12px rgba(38, 192, 211, 0.3));
+    }
+    .hero-pill.center-content .logo { width: 90px; height: 90px; }
+
+    .logo.animating {
+      animation: pulseRotateOrganic 4s infinite cubic-bezier(0.45, 0, 0.55, 1);
+    }
+    @keyframes pulseRotateOrganic {
+      0%   { transform: scale(1) rotate(0deg); filter: drop-shadow(0 4px 12px rgba(38, 192, 211, 0.3)); }
+      25%  { transform: scale(1.15) rotate(90deg); filter: drop-shadow(0 4px 20px rgba(38, 192, 211, 0.5)); }
+      50%  { transform: scale(0.9) rotate(190deg); filter: drop-shadow(0 4px 8px rgba(38, 192, 211, 0.2)); }
+      75%  { transform: scale(1.2) rotate(270deg); filter: drop-shadow(0 4px 25px rgba(38, 192, 211, 0.6)); }
+      100% { transform: scale(1) rotate(360deg); filter: drop-shadow(0 4px 12px rgba(38, 192, 211, 0.3)); }
+    }
+
+    .options-pill {
+      padding: 8px 20px;
+      margin-bottom: 20px;
+    }
+    .options-pill.no-pad { padding: 0; overflow: hidden; }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      cursor: pointer;
+    }
+    .toggle-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+    .toggle-row.no-border { border-bottom: none; }
+
+    .radio-group {
+      display: flex;
+      gap: 16px;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 16px; height: 16px; cursor: pointer;
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px; height: 20px;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .track {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px; transition: 0.3s;
+    }
+    .track:before {
+      content: ""; position: absolute;
+      height: 16px; width: 16px; left: 2px; bottom: 2px;
+      background: white; border-radius: 50%;
+      transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .toggle input:checked + .track { background: var(--accent); }
+    .toggle input:checked + .track:before { transform: translateX(20px); }
+
+    .footer { display: flex; justify-content: flex-end; gap: 12px; }
+
+    .btn {
+      padding: 10px 32px; font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; color: white; border-radius: 20px; border: none;
+    }
+    .btn.primary {
+      background: var(--accent); color: #000; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn.primary:hover {
+      background: var(--accent-hover); transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(38, 192, 211, 0.4);
+    }
+    .btn.secondary { background: rgba(255,255,255,0.1); }
+    .btn.secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    .progress-bar { height: 8px; background: rgba(255, 255, 255, 0.05); width: 100%; }
+    .progress-fill {
+      height: 100%; width: 0%; background: var(--accent);
+      transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent);
+    }
+
+    #screen-uninstalling {
+      opacity: 0; pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s;
+    }
+    #screen-uninstalling.active {
+      opacity: 1; pointer-events: auto; transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="pill drag-pill">
+      <!-- We will just point to Pandora icon or generic svg. In dashboard it's in assets -->
+      <img src="Pandora.svg" style="width: 16px; height: 16px; margin-right: 8px;" onerror="this.style.display='none'"/>
+      <span>Pandora Setup</span>
+      <div class="drag-region"></div>
+    </div>
+    <div class="pill close-btn" id="btn-close-window">&times;</div>
+  </div>
+
+  <div class="container">
+    <div id="screen-welcome" class="screen">
+      <div class="pill hero-pill">
+        <img src="Pandora.svg" class="logo" onerror="this.src=''" />
+        <div class="hero-text">
+          <h1>Uninstall Pandora</h1>
+          <p>We're sorry to see you go.</p>
+        </div>
+      </div>
+
+      <div class="pill options-pill">
+        <label class="toggle-row">
+          <span>Delete Preferences & Cache</span>
+          <div class="toggle">
+            <input type="checkbox" id="chk-appdata" checked>
+            <span class="track"></span>
+          </div>
+        </label>
+        
+        <div class="toggle-row no-border" style="align-items: flex-start;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span>Internal Storage</span>
+            <span id="storage-desc" style="font-size: 12px; color: var(--text-dim);">Moves your files to a 'Pandora_Backup' folder on your desktop.</span>
+          </div>
+          <div class="radio-group" style="margin-top: 2px;">
+            <label class="radio-label"><input type="radio" name="storage" value="desktop" checked> Backup</label>
+            <label class="radio-label"><input type="radio" name="storage" value="delete"> Delete</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button id="btn-cancel" class="pill btn secondary">Cancel</button>
+        <button id="btn-uninstall" class="pill btn primary" style="background:#ff4757; color:white; border:none; box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);">Uninstall</button>
+      </div>
+    </div>
+
+    <div id="screen-uninstalling" class="screen">
+      <div class="pill hero-pill center-content">
+        <img src="Pandora.svg" class="logo animating" onerror="this.src=''" />
+        <h2>Uninstalling...</h2>
+        <p id="status-text">Cleaning up files...</p>
+      </div>
+
+      <div class="pill options-pill no-pad">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="uninstaller_renderer.js"></script>
+</body>
+</html>
