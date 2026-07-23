@@ -106,6 +106,12 @@ function connectWebSocket() {
                 const folder = currentConfig.folders.find(f => f.id === parsed.folder_id);
                 if (folder) foldersTab.renderEditor(folder);
             }
+        } else if (parsed.type === 'update_check_result') {
+            systemTab.handleUpdateCheckResult(parsed.data);
+        } else if (parsed.type === 'update_progress') {
+            systemTab.handleUpdateProgress(parsed.data);
+        } else if (parsed.type === 'update_complete') {
+            systemTab.handleUpdateComplete(parsed.data);
         }
     });
 

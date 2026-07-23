@@ -683,6 +683,15 @@ class ElectronDashboardManager(QObject):
         except Exception as e:
             self.cfg['system_gpu_name'] = "Default Hardware GPU"
 
+        # Inject app version into config for dashboard display
+        from config import APP_VERSION
+        self.cfg['app_version'] = APP_VERSION
+
+        # Update state
+        self._update_checker = None
+        self._update_worker = None
+        self._pending_download_url = None
+
         # Start WebSocket Server
         from core_services.ws_server import WebSocketServerThread
         self.ws_thread = WebSocketServerThread(self.cfg, port=0)
@@ -1739,6 +1748,51 @@ if __name__ == "__main__":
     dashboard.ws_thread.quit_app_requested.connect(quit_app)
     dashboard.ws_thread.toggle_grid_requested.connect(grid_overlay.toggle)
     dashboard.ws_thread.enter_pill_mode_requested.connect(enter_pill_mode)
+
+    # ── Auto-Update Handlers ──
+    def on_check_updates():
+        from core_services.update_checker import UpdateChecker
+        from config import APP_VERSION
+        dashboard._update_checker = UpdateChecker(APP_VERSION)
+        dashboard._update_checker.result.connect(on_update_check_result)
+        dashboard._update_checker.start()
+
+    def on_update_check_result(result):
+        if result.get('available') and result.get('download_url'):
+            dashboard._pending_download_url = result['download_url']
+        dashboard.ws_thread.send_command_to_clients({
+            'type': 'update_check_result',
+            'data': result
+        })
+
+    def on_apply_update():
+        url = getattr(dashboard, '_pending_download_url', None)
+        if not url:
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'update_complete',
+                'data': {'success': False, 'message': 'No update URL available. Check for updates first.'}
+            })
+            return
+        from core_services.update_checker import UpdateWorker
+        dashboard._update_worker = UpdateWorker(url)
+        dashboard._update_worker.progress.connect(on_update_progress)
+        dashboard._update_worker.finished.connect(on_update_finished)
+        dashboard._update_worker.start()
+
+    def on_update_progress(percent, status):
+        dashboard.ws_thread.send_command_to_clients({
+            'type': 'update_progress',
+            'data': {'percent': percent, 'status': status}
+        })
+
+    def on_update_finished(success, message):
+        dashboard.ws_thread.send_command_to_clients({
+            'type': 'update_complete',
+            'data': {'success': success, 'message': message}
+        })
+
+    dashboard.ws_thread.check_updates_requested.connect(on_check_updates)
+    dashboard.ws_thread.apply_update_requested.connect(on_apply_update)
     
     def on_tray_activated(reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
