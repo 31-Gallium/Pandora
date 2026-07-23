@@ -1686,7 +1686,10 @@ if __name__ == "__main__":
             pass
             
         # Handle restart correctly whether running from python script or compiled binary
-        if getattr(sys, 'frozen', False):
+        script_path = getattr(dashboard, '_update_script_path', None)
+        if script_path and os.path.exists(script_path):
+            subprocess.Popen([script_path], shell=True, creationflags=0x08000000)
+        elif getattr(sys, 'frozen', False):
             subprocess.Popen(sys.argv, creationflags=0x08000000)
         else:
             subprocess.Popen([sys.executable] + sys.argv, creationflags=0x08000000)
@@ -1786,10 +1789,17 @@ if __name__ == "__main__":
         })
 
     def on_update_finished(success, message):
-        dashboard.ws_thread.send_command_to_clients({
-            'type': 'update_complete',
-            'data': {'success': success, 'message': message}
-        })
+        if success:
+            dashboard._update_script_path = message
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'update_complete',
+                'data': {'success': success, 'message': "Update ready! Restart to apply."}
+            })
+        else:
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'update_complete',
+                'data': {'success': success, 'message': message}
+            })
 
     dashboard.ws_thread.check_updates_requested.connect(on_check_updates)
     dashboard.ws_thread.apply_update_requested.connect(on_apply_update)
