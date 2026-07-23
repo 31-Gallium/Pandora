@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Electron](https://img.shields.io/badge/Electron-Dashboard-47848F?logo=electron&logoColor=white)](https://electronjs.org)
 [![DirectX](https://img.shields.io/badge/DirectX_11-Vis_Engine-0078D4?logo=windows&logoColor=white)](https://docs.microsoft.com/en-us/windows/win32/direct3d11)
-[![License](https://img.shields.io/badge/License-Proprietary-red)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 </div>
 
