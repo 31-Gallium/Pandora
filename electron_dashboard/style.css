@@ -1090,6 +1090,24 @@ input[type=range]::-webkit-slider-thumb:hover {
 .action-btn:hover {
     background: var(--card-hover-border);
 }
+
+.themed-btn {
+    background: color-mix(in srgb, var(--section-accent, var(--accent)) 8%, rgba(255,255,255,0.02));
+    border: 1px solid color-mix(in srgb, var(--section-accent, var(--accent)) 30%, rgba(255,255,255,0.1));
+    padding: 8px 16px;
+    border-radius: var(--radius-xs);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--section-accent, var(--accent));
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.themed-btn:hover {
+    background: color-mix(in srgb, var(--section-accent, var(--accent)) 15%, rgba(255,255,255,0.05));
+    border-color: color-mix(in srgb, var(--section-accent, var(--accent)) 50%, rgba(255,255,255,0.2));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--section-accent, var(--accent)) 20%, transparent);
+}
+
 .delete-fld-btn {
     background: transparent;
     border: none;
