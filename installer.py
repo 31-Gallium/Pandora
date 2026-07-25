@@ -36,7 +36,8 @@ class InstallWorker(QThread):
             import sys
             import zipfile
             if getattr(sys, 'frozen', False):
-                payload_path = sys.executable
+                # PyInstaller extracts bundled data to sys._MEIPASS
+                payload_path = os.path.join(sys._MEIPASS, 'payload.zip')
             else:
                 payload_path = os.path.join(os.path.dirname(__file__), 'installer', 'payload.zip')
                 
