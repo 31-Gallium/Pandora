@@ -88,6 +88,10 @@ function connectWebSocket() {
             tabs.forEach(tab => {
                 if (tab.updateUI) tab.updateUI(currentConfig);
             });
+            if (currentConfig.app_version) {
+                const vp = document.getElementById('version-pill');
+                if (vp) vp.textContent = 'v' + currentConfig.app_version;
+            }
             const loader = document.getElementById('dashboard-loader');
             if (loader && loader.style.display !== 'none') {
                 // Add a minimum 800ms artificial delay to give the UI time to paint

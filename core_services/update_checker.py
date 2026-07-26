@@ -84,10 +84,11 @@ class UpdateWorker(QThread):
     def __init__(self, download_url, parent=None):
         super().__init__(parent)
         self.download_url = download_url
-        self.install_dir = os.path.join(
-            os.environ.get('LOCALAPPDATA', os.path.expanduser('~')),
-            "Programs", "Pandora"
-        )
+        import sys
+        if getattr(sys, 'frozen', False):
+            self.install_dir = os.path.dirname(sys.executable)
+        else:
+            self.install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     def run(self):
         tmp_zip = None
@@ -164,9 +165,20 @@ timeout /t 3 /nobreak > nul
 taskkill /f /im Pandora.exe > nul 2>&1
 taskkill /f /im PandoraUI.exe > nul 2>&1
 taskkill /f /im PandoraCore.exe > nul 2>&1
+taskkill /f /im AudioCaptureService.exe > nul 2>&1
 
 echo Installing update...
+set retry_count=0
+:retry
 xcopy /y /e /h /c /i "{temp_extract_dir}\\*" "{self.install_dir}"
+if errorlevel 1 (
+    set /a retry_count+=1
+    if %retry_count% lss 5 (
+        echo Copy failed, retrying in 2 seconds...
+        timeout /t 2 /nobreak > nul
+        goto retry
+    )
+)
 
 echo Restarting Pandora...
 {launch_cmd}

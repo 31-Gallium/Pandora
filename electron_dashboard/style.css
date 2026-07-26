@@ -617,6 +617,29 @@ body.out-of-focus .page-pill {
     scrollbar-width: none;
 }
 
+.version-pill {
+    -webkit-app-region: no-drag;
+    position: absolute;
+    left: calc(16px + var(--sidebar-w) + 16px);
+    display: flex;
+    align-items: center;
+    background: #121216;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 24px;
+    padding: 0 12px;
+    height: 28px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    cursor: default;
+}
+.version-pill:hover {
+    border-color: var(--panel-border);
+    color: var(--text);
+    background: #1a1a20;
+}
+
 .window-controls {
     -webkit-app-region: no-drag;
     position: absolute;

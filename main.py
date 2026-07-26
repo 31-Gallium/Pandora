@@ -1209,7 +1209,7 @@ class ElectronDashboardManager(QObject):
                     
                 if getattr(sys, 'frozen', False):
                     # PyInstaller bundled mode
-                    base_dir = os.path.dirname(sys.executable)
+                    base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
                     electron_path = os.path.join(base_dir, 'electron_dashboard', 'PandoraUI-win32-x64', 'PandoraUI.exe')
                     if not os.path.exists(electron_path):
                         print(f"Packaged Electron not found at {electron_path}!")
@@ -1688,7 +1688,7 @@ if __name__ == "__main__":
         # Handle restart correctly whether running from python script or compiled binary
         script_path = getattr(dashboard, '_update_script_path', None)
         if script_path and os.path.exists(script_path):
-            subprocess.Popen([script_path], shell=True, creationflags=0x08000000)
+            subprocess.Popen(f'"{script_path}"', shell=True, creationflags=0x08000000)
         elif getattr(sys, 'frozen', False):
             subprocess.Popen(sys.argv, creationflags=0x08000000)
         else:
