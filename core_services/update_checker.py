@@ -179,16 +179,24 @@ class UpdateWorker(QThread):
             # Step 4: Extract to temp directory to avoid locked files
             self.progress.emit(75, "Extracting update...")
             import time
-            temp_extract_dir = os.path.join(tempfile.gettempdir(), f'PandoraUpdate_{int(time.time())}')
-            if os.path.exists(temp_extract_dir):
-                shutil.rmtree(temp_extract_dir)
-            os.makedirs(temp_extract_dir)
+            import sys
+            temp_extract_dir_raw = os.path.abspath(os.path.join(tempfile.gettempdir(), f'PandoraUpdate_{int(time.time())}'))
+            
+            # Windows MAX_PATH bypass for zipfile extraction
+            if sys.platform == 'win32' and not temp_extract_dir_raw.startswith(r'\\?\'):
+                temp_extract_dir_unc = r'\\?\' + temp_extract_dir_raw
+            else:
+                temp_extract_dir_unc = temp_extract_dir_raw
+                
+            if os.path.exists(temp_extract_dir_unc):
+                shutil.rmtree(temp_extract_dir_unc)
+            os.makedirs(temp_extract_dir_unc)
 
             with zipfile.ZipFile(tmp_zip, 'r') as zf:
                 file_list = zf.namelist()
                 total_files = len(file_list)
                 for i, file in enumerate(file_list):
-                    zf.extract(file, temp_extract_dir)
+                    zf.extract(file, temp_extract_dir_unc)
                     if i % 20 == 0:
                         pct = 75 + int((i / max(total_files, 1)) * 20)  # 75-95%
                         self.progress.emit(pct, f"Extracting files... ({i}/{total_files})")
@@ -211,6 +219,8 @@ class UpdateWorker(QThread):
                 launch_cmd = f'start "" "{executable}" {args}'
             
             bat_path = os.path.join(tempfile.gettempdir(), f'pandora_apply_update_{int(time.time())}.bat')
+            
+            # Use robocopy because it handles >260 character paths automatically
             bat_content = f"""@echo off
 echo Waiting for Pandora to close...
 timeout /t 2 /nobreak > nul
@@ -219,30 +229,24 @@ taskkill /f /im PandoraUI.exe > nul 2>&1
 taskkill /f /im PandoraCore.exe > nul 2>&1
 taskkill /f /im AudioCaptureService.exe > nul 2>&1
 
-:: Wait for file locks to release
-timeout /t 2 /nobreak > nul
-
 echo Installing update...
 set retry_count=0
 :retry
-xcopy /y /e /h /c /i "{temp_extract_dir}\\*" "{self.install_dir}"
-if not errorlevel 1 goto success
-set /a retry_count+=1
-if %retry_count% lss 5 (
-    echo Copy failed, retrying in 2 seconds...
-    timeout /t 2 /nobreak > nul
-    goto retry
+robocopy "{temp_extract_dir_raw}" "{self.install_dir}" /E /IS /IT /MT:8
+if %ERRORLEVEL% GEQ 8 (
+    set /a retry_count+=1
+    if %retry_count% lss 5 (
+        echo Copy failed, retrying in 2 seconds...
+        timeout /t 2 /nobreak > nul
+        goto retry
+    )
 )
-:success
 
 echo Restarting Pandora...
 {launch_cmd}
-
-echo Cleaning up...
-rmdir /s /q "{temp_extract_dir}"
 del "%~f0"
 """
-            with open(bat_path, 'w') as f:
+            with open(bat_path, 'w', encoding='utf-8') as f:
                 f.write(bat_content)
 
             self.progress.emit(100, "Update complete!")
