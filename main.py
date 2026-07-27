@@ -888,8 +888,14 @@ class ElectronDashboardManager(QObject):
     def _start_ipc_server(self):
         import threading
         def ipc_server_loop():
-            import win32file
-            import win32pipe
+            try:
+                import win32file
+                import win32pipe
+                import pywintypes
+            except ImportError:
+                print("win32pipe or win32file not found. IPC server disabled.")
+                return
+                
             pipe_name = r'\\.\pipe\PandoraIPC'
             while True:
                 try:
@@ -911,7 +917,8 @@ class ElectronDashboardManager(QObject):
                     win32pipe.DisconnectNamedPipe(pipe)
                     win32file.CloseHandle(pipe)
                 except Exception as e:
-                    pass
+                    import time
+                    time.sleep(1)
         
         self.ipc_thread = threading.Thread(target=ipc_server_loop, daemon=True)
         self.ipc_thread.start()
