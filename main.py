@@ -885,6 +885,37 @@ class ElectronDashboardManager(QObject):
         if STORAGE_PATH not in self.storage_watcher.directories():
             self.storage_watcher.addPath(STORAGE_PATH)
 
+    def _start_ipc_server(self):
+        import threading
+        def ipc_server_loop():
+            import win32file
+            import win32pipe
+            pipe_name = r'\\.\pipe\PandoraIPC'
+            while True:
+                try:
+                    pipe = win32pipe.CreateNamedPipe(
+                        pipe_name,
+                        win32pipe.PIPE_ACCESS_INBOUND,
+                        win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
+                        1, 65536, 65536,
+                        0,
+                        None
+                    )
+                    win32pipe.ConnectNamedPipe(pipe, None)
+                    result, data = win32file.ReadFile(pipe, 4096)
+                    message = data.decode('utf-8')
+                    if message == "--create-folder":
+                        from PyQt6.QtCore import QMetaObject, Qt
+                        QMetaObject.invokeMethod(self, "_on_create_folder_requested", Qt.ConnectionType.QueuedConnection)
+                    
+                    win32pipe.DisconnectNamedPipe(pipe)
+                    win32file.CloseHandle(pipe)
+                except Exception as e:
+                    pass
+        
+        self.ipc_thread = threading.Thread(target=ipc_server_loop, daemon=True)
+        self.ipc_thread.start()
+
     def _on_create_folder_requested(self):
         if hasattr(self, 'create_folder_callback'):
             self.create_folder_callback("grid")
