@@ -631,13 +631,22 @@ body.out-of-focus .page-pill {
     font-size: 11px;
     font-weight: 700;
     color: var(--text-dim);
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: default;
 }
 .version-pill:hover {
     border-color: var(--panel-border);
     color: var(--text);
     background: #1a1a20;
+}
+.version-pill.status-uptodate {
+    border-color: rgba(80, 250, 123, 0.5); /* green */
+}
+.version-pill.status-available {
+    border-color: rgba(255, 184, 108, 0.5); /* orange/yellow */
+}
+.version-pill.status-error {
+    border-color: rgba(255, 85, 85, 0.5); /* red */
 }
 
 .window-controls {

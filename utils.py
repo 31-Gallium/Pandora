@@ -97,6 +97,43 @@ class WinAPI:
             logger.error(f"WinAPI unregister_appbar error: {e}")
 
     @staticmethod
+    def register_context_menu(exe_path=None):
+        import winreg
+        import sys
+        try:
+            if not exe_path:
+                exe_path = sys.executable if not getattr(sys, 'frozen', False) else sys.argv[0]
+            
+            key_path = r"Software\Classes\Directory\Background\shell\PandoraFolder"
+            # Create main key
+            key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
+            winreg.SetValue(key, "", winreg.REG_SZ, "Add Pandora Folder")
+            # Set icon
+            winreg.SetValueEx(key, "Icon", 0, winreg.REG_SZ, f'"{exe_path}"')
+            winreg.CloseKey(key)
+
+            # Create command subkey
+            cmd_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path + r"\command")
+            winreg.SetValue(cmd_key, "", winreg.REG_SZ, f'"{exe_path}" --create-folder')
+            winreg.CloseKey(cmd_key)
+            logger.info("Registered Windows context menu")
+        except Exception as e:
+            logger.error(f"WinAPI register_context_menu error: {e}")
+
+    @staticmethod
+    def unregister_context_menu():
+        import winreg
+        try:
+            key_path = r"Software\Classes\Directory\Background\shell\PandoraFolder"
+            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path + r"\command")
+            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
+            logger.info("Unregistered Windows context menu")
+        except FileNotFoundError:
+            pass # Already unregistered
+        except Exception as e:
+            logger.error(f"WinAPI unregister_context_menu error: {e}")
+
+    @staticmethod
     def pin_to_workerw(hwnd):
         """Pin a window to the desktop layer using pure Z-order management.
         

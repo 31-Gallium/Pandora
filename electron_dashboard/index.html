@@ -651,6 +651,18 @@
                     <span class="sh-text">Updates</span>
                 </div>
                 <div class="control-group">
+                    <div class="control-item">
+                        <div class="control-row">
+                            <span class="control-label has-tip" data-tip="Choose whether to receive stable releases or early pre-releases (betas).">Update Channel</span>
+                            <select id="update-channel-select">
+                                <option value="stable">Stable</option>
+                                <option value="prerelease">Pre-release</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
                     <div class="control-item" style="padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); border-radius: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
                             <div>
@@ -671,6 +683,17 @@
                                 <div id="update-progress-bar" style="height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease;"></div>
                             </div>
                             <div id="update-progress-text" style="font-size: 10px; color: var(--text-dim); margin-top: 4px;"></div>
+                        </div>
+
+                        <!-- Version History & Rollbacks -->
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 11px; color: var(--text-dim);">Need to downgrade?</div>
+                                <button class="link-btn" id="btn-view-rollbacks" style="font-size: 11px;">View Version History</button>
+                            </div>
+                            <div id="rollbacks-list" style="display: none; margin-top: 12px; max-height: 150px; overflow-y: auto; padding-right: 4px;">
+                                <div style="text-align: center; color: var(--text-dim); font-size: 11px; padding: 12px;">Loading past releases...</div>
+                            </div>
                         </div>
                     </div>
                 </div>

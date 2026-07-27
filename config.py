@@ -4,9 +4,9 @@ import logging
 from datetime import datetime
 
 # ==========================================
-# APP VERSION
+# APP INFO
 # ==========================================
-APP_VERSION = "0.9.4"
+APP_VERSION = "0.9.7"
 
 # ==========================================
 # LOGGING SETUP
@@ -94,6 +94,7 @@ class ConfigManager:
     def get_defaults():
         return {
             "general_settings": {
+                "update_channel": "stable",
                 "pagination_style": "Pill & Dots",
                 "grid_size": 120,
                 "edge_padding": 0,

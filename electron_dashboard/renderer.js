@@ -116,6 +116,8 @@ function connectWebSocket() {
             systemTab.handleUpdateProgress(parsed.data);
         } else if (parsed.type === 'update_complete') {
             systemTab.handleUpdateComplete(parsed.data);
+        } else if (parsed.type === 'release_history_result') {
+            systemTab.handleReleaseHistoryResult(parsed.data);
         }
     });
 

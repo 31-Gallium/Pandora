@@ -28,18 +28,30 @@ class UpdateChecker(QThread):
     """Checks GitHub Releases for a newer version."""
     result = pyqtSignal(dict)  # {available, latest_version, download_url, notes, error}
 
-    def __init__(self, current_version, parent=None):
+    def __init__(self, current_version, update_channel="stable", parent=None):
         super().__init__(parent)
         self.current_version = current_version
+        self.update_channel = update_channel
 
     def run(self):
         try:
-            req = Request(GITHUB_API_URL, headers={
+            if self.update_channel == "prerelease":
+                api_url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
+            else:
+                api_url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
+
+            req = Request(api_url, headers={
                 'User-Agent': 'Pandora-Update-Checker',
                 'Accept': 'application/vnd.github.v3+json'
             })
             with urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read().decode('utf-8'))
+                
+            if isinstance(data, list):
+                if not data:
+                    self.result.emit({'available': False, 'error': 'No releases found.'})
+                    return
+                data = data[0]
 
             latest_tag = data.get('tag_name', '')
             release_notes = data.get('body', '')
@@ -74,6 +86,40 @@ class UpdateChecker(QThread):
             self.result.emit({'available': False, 'error': f'Network error: {e.reason}'})
         except Exception as e:
             self.result.emit({'available': False, 'error': str(e)})
+
+
+class ReleaseHistoryFetcher(QThread):
+    """Fetches the last N releases for version rollback."""
+    result = pyqtSignal(list)
+
+    def run(self):
+        try:
+            api_url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
+            req = Request(api_url, headers={
+                'User-Agent': 'Pandora-Update-Checker',
+                'Accept': 'application/vnd.github.v3+json'
+            })
+            with urlopen(req, timeout=15) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+            
+            releases = []
+            for r in data[:15]:
+                dl_url = None
+                for asset in r.get('assets', []):
+                    if asset.get('name', '').lower().endswith('.zip'):
+                        dl_url = asset.get('browser_download_url')
+                        break
+                
+                releases.append({
+                    'version': r.get('tag_name', '').lstrip('v'),
+                    'name': r.get('name', ''),
+                    'prerelease': r.get('prerelease', False),
+                    'date': r.get('published_at', ''),
+                    'download_url': dl_url
+                })
+            self.result.emit(releases)
+        except Exception as e:
+            self.result.emit([])
 
 
 class UpdateWorker(QThread):
@@ -150,6 +196,12 @@ class UpdateWorker(QThread):
             # Step 5: Generate update script
             self.progress.emit(96, "Preparing restart script...")
             
+            try:
+                from utils import WinAPI
+                WinAPI.unregister_context_menu()
+            except Exception as e:
+                pass
+            
             import sys
             executable = sys.executable if not getattr(sys, 'frozen', False) else sys.argv[0]
             if getattr(sys, 'frozen', False):
@@ -161,24 +213,27 @@ class UpdateWorker(QThread):
             bat_path = os.path.join(tempfile.gettempdir(), f'pandora_apply_update_{int(time.time())}.bat')
             bat_content = f"""@echo off
 echo Waiting for Pandora to close...
-timeout /t 3 /nobreak > nul
+timeout /t 2 /nobreak > nul
 taskkill /f /im Pandora.exe > nul 2>&1
 taskkill /f /im PandoraUI.exe > nul 2>&1
 taskkill /f /im PandoraCore.exe > nul 2>&1
 taskkill /f /im AudioCaptureService.exe > nul 2>&1
 
+:: Wait for file locks to release
+timeout /t 2 /nobreak > nul
+
 echo Installing update...
 set retry_count=0
 :retry
 xcopy /y /e /h /c /i "{temp_extract_dir}\\*" "{self.install_dir}"
-if errorlevel 1 (
-    set /a retry_count+=1
-    if %retry_count% lss 5 (
-        echo Copy failed, retrying in 2 seconds...
-        timeout /t 2 /nobreak > nul
-        goto retry
-    )
+if not errorlevel 1 goto success
+set /a retry_count+=1
+if %retry_count% lss 5 (
+    echo Copy failed, retrying in 2 seconds...
+    timeout /t 2 /nobreak > nul
+    goto retry
 )
+:success
 
 echo Restarting Pandora...
 {launch_cmd}

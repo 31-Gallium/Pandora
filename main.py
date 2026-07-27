@@ -698,6 +698,13 @@ class ElectronDashboardManager(QObject):
         self.ws_thread.config_received.connect(self.handle_config_update)
         self.ws_thread.port_bound.connect(self._handle_port_bound)
         self.ws_thread.create_folder_requested.connect(self._on_create_folder_requested)
+
+        # Start IPC Server for context menu commands
+        self._start_ipc_server()
+        
+        # Register context menu if not already registered
+        from utils import WinAPI
+        WinAPI.register_context_menu()
         self.ws_thread.create_folder_action_received.connect(self._on_dashboard_create_folder)
         self.ws_thread.delete_folder_action_received.connect(self._on_dashboard_delete_folder)
         self.ws_thread.reset_config_requested.connect(self._on_reset_config)
@@ -1280,6 +1287,20 @@ if __name__ == "__main__":
         mutex_name = "Global\\PandoraAppSingleInstanceMutex"
         _app_mutex_handle = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
         if ctypes.windll.kernel32.GetLastError() == 183: # ERROR_ALREADY_EXISTS
+            if "--create-folder" in sys.argv:
+                try:
+                    import win32file
+                    handle = win32file.CreateFile(
+                        r'\\.\pipe\PandoraIPC',
+                        win32file.GENERIC_WRITE,
+                        0, None,
+                        win32file.OPEN_EXISTING,
+                        0, None
+                    )
+                    win32file.WriteFile(handle, b"--create-folder")
+                    win32file.CloseHandle(handle)
+                except Exception as e:
+                    pass
             print("Pandora is already running. Exiting.")
             sys.exit(0)
             
@@ -1755,8 +1776,10 @@ if __name__ == "__main__":
     # ── Auto-Update Handlers ──
     def on_check_updates():
         from core_services.update_checker import UpdateChecker
-        from config import APP_VERSION
-        dashboard._update_checker = UpdateChecker(APP_VERSION)
+        from config import APP_VERSION, ConfigManager
+        cfg = ConfigManager.load()
+        update_channel = cfg.get('general_settings', {}).get('update_channel', 'stable')
+        dashboard._update_checker = UpdateChecker(APP_VERSION, update_channel)
         dashboard._update_checker.result.connect(on_update_check_result)
         dashboard._update_checker.start()
 
@@ -1798,11 +1821,30 @@ if __name__ == "__main__":
         else:
             dashboard.ws_thread.send_command_to_clients({
                 'type': 'update_complete',
-                'data': {'success': success, 'message': message}
+                'data': {'success': False, 'message': message}
             })
+
+    def on_fetch_releases():
+        from core_services.update_checker import ReleaseHistoryFetcher
+        dashboard._release_fetcher = ReleaseHistoryFetcher()
+        dashboard._release_fetcher.result.connect(lambda releases: dashboard.ws_thread.send_command_to_clients({
+            'type': 'release_history_result',
+            'data': releases
+        }))
+        dashboard._release_fetcher.start()
+
+    def on_apply_rollback(url):
+        if not url: return
+        from core_services.update_checker import UpdateWorker
+        dashboard._update_worker = UpdateWorker(url)
+        dashboard._update_worker.progress.connect(on_update_progress)
+        dashboard._update_worker.finished.connect(on_update_finished)
+        dashboard._update_worker.start()
 
     dashboard.ws_thread.check_updates_requested.connect(on_check_updates)
     dashboard.ws_thread.apply_update_requested.connect(on_apply_update)
+    dashboard.ws_thread.fetch_releases_requested.connect(on_fetch_releases)
+    dashboard.ws_thread.apply_rollback_requested.connect(on_apply_rollback)
     
     def on_tray_activated(reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
