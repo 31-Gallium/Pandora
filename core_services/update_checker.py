@@ -183,8 +183,8 @@ class UpdateWorker(QThread):
             temp_extract_dir_raw = os.path.abspath(os.path.join(tempfile.gettempdir(), f'PandoraUpdate_{int(time.time())}'))
             
             # Windows MAX_PATH bypass for zipfile extraction
-            if sys.platform == 'win32' and not temp_extract_dir_raw.startswith(r'\\?\'):
-                temp_extract_dir_unc = r'\\?\' + temp_extract_dir_raw
+            if sys.platform == 'win32' and not temp_extract_dir_raw.startswith('\\\\?\\\\'):
+                temp_extract_dir_unc = '\\\\?\\\\' + temp_extract_dir_raw
             else:
                 temp_extract_dir_unc = temp_extract_dir_raw
                 
