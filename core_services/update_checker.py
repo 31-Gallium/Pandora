@@ -151,6 +151,8 @@ class HTTPRangeFile:
 
     def tell(self): return self.pos
 
+    def seekable(self): return True
+
     def read(self, size=-1):
         if size == -1: size = self.size - self.pos
         if size == 0: return b""
