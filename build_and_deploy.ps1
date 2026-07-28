@@ -87,11 +87,29 @@ if (Test-Path "$WorkspaceDir\dist_electron") {
 Push-Location "$WorkspaceDir\electron_dashboard"
 # Copy assets so they are packaged into the Electron app
 Copy-Item -Path "..\assets" -Destination "assets" -Recurse -Force
-npx electron-packager . "PandoraUI" --platform=win32 --arch=x64 --icon="..\icon.ico" --out="..\dist_electron" --asar --overwrite
+npx electron-packager . "PandoraUI" --platform=win32 --arch=x64 --icon="..\icon.ico" --out="..\dist_electron" --overwrite
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: electron-packager failed." -ForegroundColor Red
     Exit
 }
+
+# Manually package into app.asar to bypass electron-packager's Windows EPERM bug
+Write-Host "Packaging resources into app.asar..."
+Push-Location "..\dist_electron\PandoraUI-win32-x64\resources"
+npx @electron/asar pack app app.asar
+if ($LASTEXITCODE -eq 0) {
+    # It might still throw an EPERM when deleting if a lock persists, so we use a robust remove
+    $maxRetries = 3
+    for ($i = 0; $i -lt $maxRetries; $i++) {
+        Remove-Item -Path "app" -Recurse -Force -ErrorAction SilentlyContinue
+        if (-not (Test-Path "app")) { break }
+        Start-Sleep -Seconds 2
+    }
+} else {
+    Write-Host "Warning: Manual asar packaging failed. Falling back to unpacked structure." -ForegroundColor Yellow
+}
+Pop-Location
+
 # Clean up copied assets
 Remove-Item -Path "assets" -Recurse -Force
 Pop-Location
