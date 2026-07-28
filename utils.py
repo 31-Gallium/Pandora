@@ -98,14 +98,15 @@ class WinAPI:
 
     @staticmethod
     def register_context_menu(exe_path=None):
-        r"""Register 'Pandora Folder' in Windows Explorer's context menu.
+        """Register 'Pandora Folder' in Windows Explorer's New submenu.
         
-        Registers in Directory\Background\shell so it acts as a direct command
-        (unlike ShellNew which creates a physical file). On Windows 11, this
-        will appear under 'Show more options'.
+        Uses the undocumented ShellNew Command registry trick to appear in the
+        top-level 'New' submenu without dropping a physical file.
         """
         import winreg
         import sys
+        import ctypes
+        import os
         try:
             if not exe_path:
                 if getattr(sys, 'frozen', False):
@@ -113,38 +114,54 @@ class WinAPI:
                     if not os.path.exists(exe_path):
                         exe_path = sys.executable
                 else:
-                    exe_path = sys.executable
+                    # Use pythonw.exe to prevent terminal window flashing
+                    python_dir = os.path.dirname(sys.executable)
+                    exe_path = os.path.join(python_dir, 'pythonw.exe')
+                    if not os.path.exists(exe_path):
+                        exe_path = sys.executable
 
-            key_path = r"Software\Classes\Directory\Background\shell\PandoraFolder"
-            
-            # Create main key
-            key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
-            winreg.SetValue(key, "", winreg.REG_SZ, "Add Pandora Folder")
-            # Set icon to Pandora.exe
-            winreg.SetValueEx(key, "Icon", 0, winreg.REG_SZ, f'"{exe_path}"')
-            winreg.CloseKey(key)
+            script_arg = f'"{os.path.abspath(sys.argv[0])}" ' if not getattr(sys, 'frozen', False) else ''
+            command_str = f'"{exe_path}" {script_arg}--create-folder cursor'
 
-            # Create command subkey
-            cmd_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path + r"\command")
-            winreg.SetValue(cmd_key, "", winreg.REG_SZ, f'"{exe_path}" --create-folder cursor')
-            winreg.CloseKey(cmd_key)
+            # Step 1: Register the .pandorafolder extension
+            ext_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\.pandorafolder")
+            winreg.SetValue(ext_key, "", winreg.REG_SZ, "PandoraFolder")
+            winreg.CloseKey(ext_key)
             
-            # Clean up the experimental ShellNew keys if they exist
+            # Step 2: Register ShellNew with Command (creates no file, executes silently)
+            shellnew_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\.pandorafolder\ShellNew")
+            winreg.SetValueEx(shellnew_key, "Command", 0, winreg.REG_SZ, command_str)
+            winreg.SetValueEx(shellnew_key, "ItemName", 0, winreg.REG_SZ, "Pandora Folder")
+            # IconPath must point to the actual script/exe for the icon, not pythonw.exe
+            icon_exe = sys.executable if not getattr(sys, 'frozen', False) else exe_path
+            winreg.SetValueEx(shellnew_key, "IconPath", 0, winreg.REG_EXPAND_SZ, icon_exe)
+            winreg.CloseKey(shellnew_key)
+            
+            # Step 3: Register the ProgID with a friendly name and icon
+            prog_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\PandoraFolder")
+            winreg.SetValue(prog_key, "", winreg.REG_SZ, "Pandora Folder")
+            winreg.SetValueEx(prog_key, "FriendlyTypeName", 0, winreg.REG_SZ, "Pandora Folder")
+            winreg.CloseKey(prog_key)
+            
+            # Step 4: Set the default icon
+            icon_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\PandoraFolder\DefaultIcon")
+            winreg.SetValue(icon_key, "", winreg.REG_SZ, f'"{icon_exe}",0')
+            winreg.CloseKey(icon_key)
+            
+            # Clean up legacy shell key if present
             try:
-                winreg.DeleteKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\.pandorafolder\ShellNew")
-                winreg.DeleteKey(winreg.HKEY_CURRENT_USER, r"Software\Classes\.pandorafolder")
+                legacy_path = r"Software\Classes\Directory\Background\shell\PandoraFolder"
+                winreg.DeleteKey(winreg.HKEY_CURRENT_USER, legacy_path + r"\command")
+                winreg.DeleteKey(winreg.HKEY_CURRENT_USER, legacy_path)
             except FileNotFoundError:
                 pass
             
-            for p in [r"Software\Classes\PandoraFolder\shell\open\command", 
-                      r"Software\Classes\PandoraFolder\shell\open", 
-                      r"Software\Classes\PandoraFolder\shell", 
-                      r"Software\Classes\PandoraFolder\DefaultIcon", 
-                      r"Software\Classes\PandoraFolder"]:
-                try: winreg.DeleteKey(winreg.HKEY_CURRENT_USER, p)
-                except FileNotFoundError: pass
-
-            logger.info("Registered Windows context menu (Background\\shell\\PandoraFolder)")
+            # Notify Windows Shell to refresh the New menu cache
+            SHCNE_ASSOCCHANGED = 0x08000000
+            SHCNF_IDLIST = 0x0000
+            ctypes.windll.shell32.SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, None, None)
+            
+            logger.info("Registered Windows context menu (New > Pandora Folder)")
         except Exception as e:
             logger.error(f"WinAPI register_context_menu error: {e}")
 

@@ -2058,6 +2058,11 @@ if __name__ == "__main__":
     sig_timer.timeout.connect(lambda: None)
     sig_timer.start(200)
     
+    if "--create-folder" in sys.argv:
+        t_type = "cursor" if "cursor" in sys.argv else "grid"
+        # Use singleShot so it runs right after the event loop starts
+        QTimer.singleShot(500, lambda: app.create_folder_callback(t_type))
+    
     exit_code = app.exec()
     import sys
     sys.exit(exit_code)
