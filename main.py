@@ -264,7 +264,7 @@ import ctypes
 import subprocess
 from ctypes import wintypes
 from PyQt6.QtGui import QCursor, QKeyEvent
-from PyQt6.QtCore import (Qt, QEvent, QPoint, QTimer, qInstallMessageHandler, QtMsgType, QParallelAnimationGroup, QEasingCurve, QPropertyAnimation, QVariantAnimation, QObject, pyqtSignal)
+from PyQt6.QtCore import (Qt, QEvent, QPoint, QTimer, qInstallMessageHandler, QtMsgType, QParallelAnimationGroup, QEasingCurve, QPropertyAnimation, QVariantAnimation, QObject, pyqtSignal, pyqtSlot)
 
 def qt_message_handler(mode, context, message):
     if "QFont::setPointSize" in message or "Point size <= 0" in message:
@@ -928,6 +928,7 @@ class ElectronDashboardManager(QObject):
         self.ipc_thread = threading.Thread(target=ipc_server_loop, daemon=True)
         self.ipc_thread.start()
 
+    @pyqtSlot()
     def _on_create_folder_requested(self):
         if hasattr(self, 'create_folder_callback'):
             t_type = getattr(self, '_pending_create_type', 'grid')
