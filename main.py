@@ -311,6 +311,8 @@ class GlobalHook:
         self.hold_mode = 'Hold'
         self.menu_open = False
         self.blocked_keys = set()
+        self.last_rclick_pos = None
+        self.last_rclick_time = 0
         if cfg: self.reload_config(cfg)
         
     def reload_config(self, cfg):
@@ -491,24 +493,31 @@ class GlobalHook:
             return ctypes.windll.user32.CallNextHookEx(self.hook_kb, nCode, wParam, lParam)
 
         def ms_callback(nCode, wParam, lParam):
-            if nCode >= 0 and self.menu_open:
-                if wParam == 0x0200: # WM_MOUSEMOVE
+            if nCode >= 0:
+                if wParam == 0x0204: # WM_RBUTTONDOWN
                     ms_data = ctypes.cast(lParam, ctypes.POINTER(MSLLHOOKSTRUCT))[0]
-                    pos = ms_data.pt
+                    import time
+                    self.last_rclick_pos = (ms_data.pt.x, ms_data.pt.y)
+                    self.last_rclick_time = time.time()
+                    
+                if self.menu_open:
+                    if wParam == 0x0200: # WM_MOUSEMOVE
+                        ms_data = ctypes.cast(lParam, ctypes.POINTER(MSLLHOOKSTRUCT))[0]
+                        pos = ms_data.pt
 
-                    if self.center_x is not None and self.radius:
-                        dx, dy = pos.x - self.center_x, pos.y - self.center_y
-                        dist = math.hypot(dx, dy)
-                        if dist > self.radius:
-                            angle = math.atan2(dy, dx)
-                            new_x = self.center_x + int(self.radius * math.cos(angle))
-                            new_y = self.center_y + int(self.radius * math.sin(angle))
-                            ctypes.windll.user32.SetCursorPos(new_x, new_y)
-                            return 1
+                        if self.center_x is not None and self.radius:
+                            dx, dy = pos.x - self.center_x, pos.y - self.center_y
+                            dist = math.hypot(dx, dy)
+                            if dist > self.radius:
+                                angle = math.atan2(dy, dx)
+                                new_x = self.center_x + int(self.radius * math.cos(angle))
+                                new_y = self.center_y + int(self.radius * math.sin(angle))
+                                ctypes.windll.user32.SetCursorPos(new_x, new_y)
+                                return 1
 
-                    app = QApplication.instance()
-                    if hasattr(app, 'halo'):
-                        app.halo.last_global_mouse_pos = QPoint(pos.x, pos.y)
+                        app = QApplication.instance()
+                        if hasattr(app, 'halo'):
+                            app.halo.last_global_mouse_pos = QPoint(pos.x, pos.y)
                 elif wParam == 0x020A: # WM_MOUSEWHEEL
                     ms_data = ctypes.cast(lParam, ctypes.POINTER(MSLLHOOKSTRUCT))[0]
                     delta = ctypes.c_short(ms_data.mouseData >> 16).value
@@ -1662,6 +1671,17 @@ if __name__ == "__main__":
         start_c, start_r = 0, 0
         if t_type == "cursor":
             pos = QCursor.pos()
+            
+            # If the user recently right-clicked (e.g., to open the context menu), use that exact coordinate
+            # rather than the position where they clicked the submenu item (which has an offset).
+            app_instance = QApplication.instance()
+            if hasattr(app_instance, 'global_hook'):
+                import time
+                if app_instance.global_hook.last_rclick_pos and (time.time() - app_instance.global_hook.last_rclick_time < 5.0):
+                    from PyQt6.QtCore import QPoint
+                    pos = QPoint(*app_instance.global_hook.last_rclick_pos)
+                    app_instance.global_hook.last_rclick_pos = None  # Consume the event
+            
             start_c = round((pos.x() - scr_cx - pad) / gs)
             start_r = round((pos.y() - scr_cy - pad + margin_y_top) / gs)
         
