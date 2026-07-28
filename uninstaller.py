@@ -84,6 +84,20 @@ class UninstallWorker(QThread):
                 winreg.DeleteKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Pandora")
             except: pass
             
+            # Clean up context menu entries (ShellNew and legacy)
+            self.progress.emit(85, "Removing context menu entries...")
+            for key_path in [
+                r"Software\Classes\.pandorafolder\ShellNew",
+                r"Software\Classes\.pandorafolder",
+                r"Software\Classes\PandoraFolder\DefaultIcon",
+                r"Software\Classes\PandoraFolder",
+                r"Software\Classes\Directory\Background\shell\PandoraFolder\command",
+                r"Software\Classes\Directory\Background\shell\PandoraFolder",
+            ]:
+                try:
+                    winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
+                except: pass
+            
             self.progress.emit(100, "Finishing uninstallation cleanup...")
             self.finished.emit(True)
         except Exception as e:

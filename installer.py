@@ -99,7 +99,7 @@ class InstallWorker(QThread):
             import winreg
             if self.do_startup:
                 try:
-                    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, winreg.KEY_SET_VALUE)
+                    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
                     winreg.SetValueEx(key, "Pandora", 0, winreg.REG_SZ, f'"{exe_path}" --startup')
                     winreg.CloseKey(key)
                 except:
@@ -108,13 +108,24 @@ class InstallWorker(QThread):
             try:
                 import datetime
                 today = datetime.datetime.now().strftime("%Y%m%d")
-                key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Pandora")
+                key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Pandora")
                 winreg.SetValueEx(key, "DisplayName", 0, winreg.REG_SZ, "Pandora")
                 winreg.SetValueEx(key, "DisplayIcon", 0, winreg.REG_SZ, f'"{exe_path}"')
                 uninstaller_path = os.path.join(self.localappdata_dir, 'Uninstaller', 'PandoraUninstaller.exe')
                 winreg.SetValueEx(key, "UninstallString", 0, winreg.REG_SZ, f'"{uninstaller_path}"')
                 winreg.SetValueEx(key, "Publisher", 0, winreg.REG_SZ, "Pandora")
-                winreg.SetValueEx(key, "DisplayVersion", 0, winreg.REG_SZ, "1.0.0")
+                # Try to read version from the installed config
+                display_version = "0.9.7"
+                try:
+                    import json as _json
+                    cfg_path = os.path.join(os.environ.get('APPDATA', ''), 'Pandora', 'config.json')
+                    if os.path.exists(cfg_path):
+                        with open(cfg_path) as f:
+                            _cfg = _json.load(f)
+                            display_version = _cfg.get('app_version', display_version)
+                except Exception:
+                    pass
+                winreg.SetValueEx(key, "DisplayVersion", 0, winreg.REG_SZ, display_version)
                 winreg.SetValueEx(key, "EstimatedSize", 0, winreg.REG_DWORD, 1000000)
                 winreg.SetValueEx(key, "InstallDate", 0, winreg.REG_SZ, today)
                 winreg.CloseKey(key)
