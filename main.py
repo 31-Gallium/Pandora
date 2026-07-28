@@ -1782,10 +1782,22 @@ if __name__ == "__main__":
         script_path = getattr(dashboard, '_update_script_path', None)
         if script_path and os.path.exists(script_path):
             subprocess.Popen(f'"{script_path}"', shell=True, creationflags=0x08000000)
-        elif getattr(sys, 'frozen', False):
-            subprocess.Popen(sys.argv, creationflags=0x08000000)
+        # Strip --create-folder so it doesn't re-trigger on restart
+        clean_argv = []
+        skip_next = False
+        for arg in sys.argv:
+            if skip_next:
+                skip_next = False
+                continue
+            if arg == "--create-folder":
+                skip_next = True
+                continue
+            clean_argv.append(arg)
+
+        if getattr(sys, 'frozen', False):
+            subprocess.Popen(clean_argv, creationflags=0x08000000)
         else:
-            subprocess.Popen([sys.executable] + sys.argv, creationflags=0x08000000)
+            subprocess.Popen([sys.executable] + clean_argv, creationflags=0x08000000)
         
         # Small delay to allow new process to start before we exit
         import time
