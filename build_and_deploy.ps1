@@ -87,7 +87,7 @@ if (Test-Path "$WorkspaceDir\dist_electron") {
 Push-Location "$WorkspaceDir\electron_dashboard"
 # Copy assets so they are packaged into the Electron app
 Copy-Item -Path "..\assets" -Destination "assets" -Recurse -Force
-npx electron-packager . "PandoraUI" --platform=win32 --arch=x64 --icon="..\icon.ico" --out="..\dist_electron" --overwrite
+npx electron-packager . "PandoraUI" --platform=win32 --arch=x64 --icon="..\icon.ico" --out="..\dist_electron" --asar --overwrite
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: electron-packager failed." -ForegroundColor Red
     Exit
@@ -197,6 +197,48 @@ Get-ChildItem -Path "$WorkspaceDir\dist\Pandora\_internal" -Recurse -Filter "obj
 Get-ChildItem -Path "$WorkspaceDir\dist\Pandora\_internal" -Recurse -Filter "*.tlog" -Directory -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "node_modules" } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
 if (Test-Path "$WorkspaceDir\dist\payload.zip") { Remove-Item "$WorkspaceDir\dist\payload.zip" -Force }
+
+Write-Host "Generating manifest.json and version.txt for differential updates..."
+$manifestScript = @"
+import os
+import hashlib
+import json
+import re
+
+dist_dir = r'$($WorkspaceDir.Replace('\', '\\'))\\dist\\Pandora'
+manifest = {}
+
+# Extract version from config.py
+version = "0.0.0"
+config_path = r'$($WorkspaceDir.Replace('\', '\\'))\\config.py'
+if os.path.exists(config_path):
+    with open(config_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+        match = re.search(r'APP_VERSION\s*=\s*["\']([^"\']+)["\']', content)
+        if match:
+            version = match.group(1)
+
+with open(os.path.join(dist_dir, 'version.txt'), 'w', encoding='utf-8') as f:
+    f.write(version)
+
+for root, _, files in os.walk(dist_dir):
+    for file in files:
+        if file in ('manifest.json', 'version.txt'):
+            continue
+        filepath = os.path.join(root, file)
+        relpath = os.path.relpath(filepath, dist_dir).replace('\\\\', '/')
+        hasher = hashlib.sha256()
+        with open(filepath, 'rb') as f:
+            while chunk := f.read(8192):
+                hasher.update(chunk)
+        manifest[relpath] = hasher.hexdigest()
+
+with open(os.path.join(dist_dir, 'manifest.json'), 'w') as f:
+    json.dump(manifest, f, indent=2)
+"@
+Set-Content -Path "$WorkspaceDir\dist\gen_manifest.py" -Value $manifestScript
+& $VenvPython "$WorkspaceDir\dist\gen_manifest.py"
+
 Compress-Archive -Path "$WorkspaceDir\dist\Pandora\*" -DestinationPath "$WorkspaceDir\dist\payload.zip"
 
 # 8. Build Custom Python Installer

@@ -643,6 +643,12 @@ body.out-of-focus .page-pill {
     border: 3px solid rgba(80, 250, 123, 0.7);
     box-shadow: 0 0 8px rgba(80, 250, 123, 0.15);
 }
+.version-pill.status-updating {
+    border: 3px solid transparent;
+    background: linear-gradient(#121216, #121216) padding-box,
+                conic-gradient(var(--accent-general) var(--update-progress, 0%), rgba(255,255,255,0.1) 0) border-box;
+    box-shadow: 0 0 8px rgba(var(--accent-general-rgb), 0.3);
+}
 .version-pill.status-available {
     border: 3px solid rgba(255, 184, 108, 0.7);
     box-shadow: 0 0 8px rgba(255, 184, 108, 0.15);
@@ -2234,7 +2240,19 @@ input[type=range]::-webkit-slider-thumb:hover {
 
 
 /* Animation Style Radio Group */
-
+#rollbacks-list::-webkit-scrollbar {
+    width: 6px;
+}
+#rollbacks-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+#rollbacks-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+#rollbacks-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 /* ═══ Window Controls Pill Hover ═══ */
 .window-controls:hover .win-btn.pill { background: #3b82f6; color: #ffffff; }
 body.light-theme .window-controls:hover .win-btn.pill { background: #0066cc; color: #ffffff; }

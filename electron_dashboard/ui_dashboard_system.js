@@ -129,6 +129,7 @@ class SystemTab {
         const bar = document.getElementById('update-progress-bar');
         const text = document.getElementById('update-progress-text');
         const btn = document.getElementById('btn-check-update');
+        const pill = document.getElementById('version-pill');
         
         if (wrap) wrap.style.display = 'block';
         if (bar) bar.style.width = `${data.percent}%`;
@@ -137,12 +138,18 @@ class SystemTab {
             btn.innerHTML = `${data.percent}%`;
             btn.disabled = true;
         }
+        if (pill) {
+            pill.classList.remove('status-available', 'status-error', 'status-uptodate');
+            pill.classList.add('status-updating');
+            pill.style.setProperty('--update-progress', `${data.percent}%`);
+        }
     }
 
     handleUpdateComplete(data) {
         const btn = document.getElementById('btn-check-update');
         const status = document.getElementById('update-status');
         const bar = document.getElementById('update-progress-bar');
+        const pill = document.getElementById('version-pill');
 
         if (bar) bar.style.width = '100%';
 
@@ -156,19 +163,27 @@ class SystemTab {
                 btn.dataset.action = 'restart';
                 btn.disabled = false;
             }
+            if (pill) {
+                pill.classList.remove('status-updating');
+                pill.classList.add('status-uptodate');
+            }
         } else {
             if (status) {
                 status.textContent = data.message || 'Update failed.';
                 status.style.color = '#ff5555';
             }
             if (btn) {
-                btn.innerHTML = 'Retry';
+                btn.innerHTML = 'Retry Update';
                 btn.dataset.action = 'check';
                 btn.disabled = false;
             }
-            const wrap = document.getElementById('update-progress-wrap');
-            if (wrap) wrap.style.display = 'none';
+            if (pill) {
+                pill.classList.remove('status-updating');
+                pill.classList.add('status-error');
+            }
         }
+        const wrap = document.getElementById('update-progress-wrap');
+        if (wrap) wrap.style.display = 'none';
     }
 
     handleReleaseHistoryResult(releases) {

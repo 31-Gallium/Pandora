@@ -122,144 +122,139 @@ class ReleaseHistoryFetcher(QThread):
             self.result.emit([])
 
 
-class UpdateWorker(QThread):
-    """Downloads and applies an update from a GitHub release asset."""
+class HTTPRangeFile:
+    def __init__(self, url):
+        self.url = url
+        req = Request(self.url, method='HEAD')
+        req.add_header('User-Agent', 'Pandora-Updater')
+        # GitHub releases redirect to AWS S3 which supports range requests
+        import urllib.request
+        # We need a custom opener to catch the redirect URL to make range requests, 
+        # or we can just use the url directly and let urlopen handle redirect on every range request.
+        # Handling redirect on every request adds ~100ms latency per read.
+        # Let's resolve the final URL once to optimize speed.
+        try:
+            with urlopen(req) as resp:
+                self.final_url = resp.url
+                self.size = int(resp.headers.get('Content-Length', 0))
+        except Exception:
+            self.final_url = self.url
+            self.size = 0
+            
+        self.pos = 0
+
+    def seek(self, offset, whence=0):
+        if whence == 0: self.pos = offset
+        elif whence == 1: self.pos += offset
+        elif whence == 2: self.pos = self.size + offset
+        return self.pos
+
+    def tell(self): return self.pos
+
+    def read(self, size=-1):
+        if size == -1: size = self.size - self.pos
+        if size == 0: return b""
+        end = self.pos + size - 1
+        req = Request(self.final_url, headers={
+            'Range': f'bytes={self.pos}-{end}',
+            'User-Agent': 'Pandora-Updater'
+        })
+        with urlopen(req) as resp:
+            data = resp.read()
+        self.pos += len(data)
+        return data
+
+
+class DifferentialUpdater(QThread):
+    """Downloads and applies an update incrementally using HTTP Range requests."""
     progress = pyqtSignal(int, str)    # (percent, status_message)
     finished = pyqtSignal(bool, str)   # (success, message)
 
-    def __init__(self, download_url, parent=None):
+    def __init__(self, target_version, payload_url, parent=None):
         super().__init__(parent)
-        self.download_url = download_url
-        import sys
-        if getattr(sys, 'frozen', False):
-            self.install_dir = os.path.dirname(sys.executable)
-        else:
-            self.install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.target_version = target_version
+        self.payload_url = payload_url
+        self.localappdata_dir = os.path.join(os.environ.get('LOCALAPPDATA', os.path.expanduser('~')), "Programs", "Pandora")
 
     def run(self):
-        tmp_zip = None
         try:
-            # Step 1: Backup config
-            self.progress.emit(5, "Backing up settings...")
-            config_bak = CONFIG_PATH + '.bak'
-            if os.path.exists(CONFIG_PATH):
-                shutil.copy2(CONFIG_PATH, config_bak)
-                logger.info(f"Config backed up to {config_bak}")
-
-            # Step 2: Download the update zip
-            self.progress.emit(10, "Downloading update...")
-            req = Request(self.download_url, headers={
-                'User-Agent': 'Pandora-Updater'
-            })
-            
-            with urlopen(req, timeout=120) as resp:
-                total = int(resp.headers.get('Content-Length', 0))
-                tmp_fd, tmp_zip = tempfile.mkstemp(suffix='.zip')
-                
-                downloaded = 0
-                with os.fdopen(tmp_fd, 'wb') as f:
-                    while True:
-                        chunk = resp.read(65536)  # 64KB chunks
-                        if not chunk:
-                            break
-                        f.write(chunk)
-                        downloaded += len(chunk)
-                        if total > 0:
-                            pct = 10 + int((downloaded / total) * 60)  # 10-70%
-                            self.progress.emit(pct, f"Downloading... {downloaded // 1024}KB / {total // 1024}KB")
-                        else:
-                            self.progress.emit(40, f"Downloading... {downloaded // 1024}KB")
-
-            # Step 3: Validate the zip
-            self.progress.emit(72, "Verifying download...")
-            if not zipfile.is_zipfile(tmp_zip):
-                self.finished.emit(False, "Downloaded file is not a valid zip archive.")
-                return
-
-            # Step 4: Extract to temp directory to avoid locked files
-            self.progress.emit(75, "Extracting update...")
-            import time
+            import hashlib
             import sys
-            temp_extract_dir_raw = os.path.abspath(os.path.join(tempfile.gettempdir(), f'PandoraUpdate_{int(time.time())}'))
             
-            # Windows MAX_PATH bypass for zipfile extraction
-            if sys.platform == 'win32' and not temp_extract_dir_raw.startswith('\\\\?\\\\'):
-                temp_extract_dir_unc = '\\\\?\\\\' + temp_extract_dir_raw
-            else:
-                temp_extract_dir_unc = temp_extract_dir_raw
-                
-            if os.path.exists(temp_extract_dir_unc):
-                shutil.rmtree(temp_extract_dir_unc)
-            os.makedirs(temp_extract_dir_unc)
-
-            with zipfile.ZipFile(tmp_zip, 'r') as zf:
-                file_list = zf.namelist()
-                total_files = len(file_list)
-                for i, file in enumerate(file_list):
-                    zf.extract(file, temp_extract_dir_unc)
-                    if i % 20 == 0:
-                        pct = 75 + int((i / max(total_files, 1)) * 20)  # 75-95%
-                        self.progress.emit(pct, f"Extracting files... ({i}/{total_files})")
-
-            # Step 5: Generate update script
-            self.progress.emit(96, "Preparing restart script...")
-            
-            try:
-                from utils import WinAPI
-                WinAPI.unregister_context_menu()
-            except Exception as e:
-                pass
-            
-            import sys
-            executable = sys.executable if not getattr(sys, 'frozen', False) else sys.argv[0]
             if getattr(sys, 'frozen', False):
-                launch_cmd = f'start "" "{executable}"'
+                current_app_dir = os.path.dirname(sys.executable)
             else:
-                args = ' '.join(f'"{arg}"' for arg in sys.argv[1:])
-                launch_cmd = f'start "" "{executable}" {args}'
+                current_app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                
+            new_app_dir = os.path.join(self.localappdata_dir, f"app-{self.target_version}")
+            if os.path.exists(new_app_dir):
+                shutil.rmtree(new_app_dir, ignore_errors=True)
+            os.makedirs(new_app_dir, exist_ok=True)
             
-            bat_path = os.path.join(tempfile.gettempdir(), f'pandora_apply_update_{int(time.time())}.bat')
+            self.progress.emit(10, "Connecting to payload server...")
+            hf = HTTPRangeFile(self.payload_url)
             
-            # Use robocopy because it handles >260 character paths automatically
-            bat_content = f"""@echo off
-echo Waiting for Pandora to close...
-timeout /t 2 /nobreak > nul
-taskkill /f /im Pandora.exe > nul 2>&1
-taskkill /f /im PandoraUI.exe > nul 2>&1
-taskkill /f /im PandoraCore.exe > nul 2>&1
-taskkill /f /im AudioCaptureService.exe > nul 2>&1
+            self.progress.emit(15, "Parsing remote payload...")
+            with zipfile.ZipFile(hf) as zip_ref:
+                # 1. Read manifest from remote zip
+                if 'manifest.json' in zip_ref.namelist():
+                    manifest_data = zip_ref.read('manifest.json')
+                    remote_manifest = json.loads(manifest_data.decode('utf-8'))
+                else:
+                    remote_manifest = None
+                    
+                total_files = len(zip_ref.namelist())
+                completed_files = 0
+                
+                # 2. Diff and Download
+                for file_info in zip_ref.infolist():
+                    file_name = file_info.filename
+                    target_path = os.path.join(new_app_dir, file_name)
+                    
+                    if file_info.is_dir():
+                        os.makedirs(target_path, exist_ok=True)
+                        continue
+                        
+                    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                    
+                    reused = False
+                    if remote_manifest and file_name in remote_manifest:
+                        local_file = os.path.join(current_app_dir, file_name)
+                        if os.path.exists(local_file):
+                            hasher = hashlib.sha256()
+                            with open(local_file, 'rb') as f:
+                                while chunk := f.read(8192):
+                                    hasher.update(chunk)
+                            if hasher.hexdigest() == remote_manifest[file_name]:
+                                try:
+                                    os.link(local_file, target_path)
+                                    reused = True
+                                except Exception:
+                                    shutil.copy2(local_file, target_path)
+                                    reused = True
+                    
+                    if not reused:
+                        pct = 15 + int(80 * (completed_files / max(1, total_files)))
+                        self.progress.emit(pct, f"Downloading {file_name}...")
+                        data = zip_ref.read(file_name)
+                        with open(target_path, 'wb') as f:
+                            f.write(data)
+                            
+                    completed_files += 1
 
-echo Installing update...
-set retry_count=0
-:retry
-robocopy "{temp_extract_dir_raw}" "{self.install_dir}" /E /IS /IT /MT:8
-if %ERRORLEVEL% GEQ 8 (
-    set /a retry_count+=1
-    if %retry_count% lss 5 (
-        echo Copy failed, retrying in 2 seconds...
-        timeout /t 2 /nobreak > nul
-        goto retry
-    )
-)
-
-echo Restarting Pandora...
-{launch_cmd}
-del "%~f0"
-"""
-            with open(bat_path, 'w', encoding='utf-8') as f:
-                f.write(bat_content)
-
-            self.progress.emit(100, "Update complete!")
-            self.finished.emit(True, bat_path)
-            logger.info("Update applied successfully, restart script ready")
-
-        except Exception as e:
-            logger.error(f"Update failed: {e}")
-            self.finished.emit(False, f"Update failed: {e}")
-        finally:
-            # Cleanup temp file
-            if tmp_zip and os.path.exists(tmp_zip):
+            self.progress.emit(98, "Preparing restart...")
+            
+            # Copy the launcher out to root, just in case
+            root_launcher = os.path.join(self.localappdata_dir, 'Pandora.exe')
+            extracted_launcher = os.path.join(new_app_dir, 'Pandora.exe')
+            if os.path.exists(extracted_launcher):
                 try:
-                    os.remove(tmp_zip)
+                    shutil.copy2(extracted_launcher, root_launcher)
                 except Exception:
                     pass
+
+            self.finished.emit(True, "Update ready for restart.")
+
+        except Exception as e:
+            logger.error(f"Differential update failed: {e}")
+            self.finished.emit(False, str(e))

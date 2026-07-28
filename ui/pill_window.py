@@ -14,6 +14,7 @@ class DashboardPillWindow(QWidget):
         self.grid_overlay = grid_overlay
         self.restart_func = restart_func
         self.quit_func = quit_func
+        self.update_progress_val = 0.0
         
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.Tool)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -371,6 +372,20 @@ class DashboardPillWindow(QWidget):
             painter.strokePath(skeleton0, border_pen)
             painter.strokePath(skeleton35, border_pen)
             
+            # Progress outline overlay
+            if self.update_progress_val > 0:
+                prog_pen = QPen(QColor(self.accent_color), 57)
+                prog_pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+                prog_pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+                
+                # We can clip to a rectangle that scales from left to right to reveal the stroke
+                painter.save()
+                clip_w = int(self.width() * self.update_progress_val)
+                painter.setClipRect(0, 0, clip_w, self.height())
+                painter.strokePath(skeleton0, prog_pen)
+                painter.strokePath(skeleton35, prog_pen)
+                painter.restore()
+            
             # 2. Draw fill on top: stroke skeletons with exact width (54)
             #    Uses CompositionMode_Source to avoid double-alpha in overlap region
             painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
@@ -661,3 +676,7 @@ class DashboardPillWindow(QWidget):
         
     def hide_pill(self):
         self.hide()
+        
+    def update_progress_outline(self, percent):
+        self.update_progress_val = percent / 100.0
+        self.update()

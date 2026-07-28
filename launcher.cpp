@@ -24,8 +24,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     std::wstring dir = pathStr.substr(0, lastSlash);
     
-    // Path to the core executable
-    std::wstring corePath = dir + L"\\PandoraCore.exe";
+    // Look for app-* directories (Discord-style versioning)
+    WIN32_FIND_DATAW findData;
+    std::wstring searchPath = dir + L"\\app-*";
+    HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
+    
+    std::wstring highestVersion = L"";
+    std::wstring targetAppDir = L"";
+    
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+                std::wstring folderName = findData.cFileName;
+                // Basic string comparison works for zero-padded or uniform versions,
+                // but for robust semver 0.7.0 vs 0.10.0 we could write a parser.
+                // For simplicity, since folder names are like app-0.7.0, we just do a string length + dict comparison
+                if (folderName.length() > highestVersion.length() || 
+                   (folderName.length() == highestVersion.length() && folderName > highestVersion)) {
+                    highestVersion = folderName;
+                }
+            }
+        } while (FindNextFileW(hFind, &findData));
+        FindClose(hFind);
+    }
+    
+    std::wstring corePath;
+    std::wstring workingDir;
+    
+    if (!highestVersion.empty()) {
+        // We are at the root, launch the highest version payload
+        targetAppDir = dir + L"\\" + highestVersion;
+        corePath = targetAppDir + L"\\PandoraCore.exe";
+        workingDir = targetAppDir;
+    } else {
+        // We are inside the payload, launch the local core
+        corePath = dir + L"\\PandoraCore.exe";
+        workingDir = dir;
+    }
     
     // Check if PandoraCore.exe exists
     DWORD fileAttr = GetFileAttributesW(corePath.c_str());
@@ -43,7 +78,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         // Skip argv[0] (which is the launcher exe) and append all other arguments
         for (int i = 1; i < argc; ++i) {
             cmdLine += L" ";
-            // Escape/quote argument
             cmdLine += L"\"";
             cmdLine += argv[i];
             cmdLine += L"\"";
@@ -69,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         FALSE,
         0,
         NULL,
-        dir.c_str(),
+        workingDir.c_str(),
         &si,
         &pi
     );

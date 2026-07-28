@@ -1779,9 +1779,8 @@ if __name__ == "__main__":
             pass
             
         # Handle restart correctly whether running from python script or compiled binary
-        script_path = getattr(dashboard, '_update_script_path', None)
-        if script_path and os.path.exists(script_path):
-            subprocess.Popen(f'"{script_path}"', shell=True, creationflags=0x08000000)
+        is_updating = getattr(dashboard, '_is_updating', False)
+        
         # Strip --create-folder so it doesn't re-trigger on restart
         clean_argv = []
         skip_next = False
@@ -1794,7 +1793,16 @@ if __name__ == "__main__":
                 continue
             clean_argv.append(arg)
 
-        if getattr(sys, 'frozen', False):
+        if is_updating:
+            localappdata = os.path.join(os.environ.get('LOCALAPPDATA', os.path.expanduser('~')), "Programs", "Pandora")
+            launcher_path = os.path.join(localappdata, "Pandora.exe")
+            if os.path.exists(launcher_path):
+                subprocess.Popen(f'"{launcher_path}"', shell=True, creationflags=0x08000000)
+            elif getattr(sys, 'frozen', False):
+                subprocess.Popen(clean_argv, creationflags=0x08000000)
+            else:
+                subprocess.Popen([sys.executable] + clean_argv, creationflags=0x08000000)
+        elif getattr(sys, 'frozen', False):
             subprocess.Popen(clean_argv, creationflags=0x08000000)
         else:
             subprocess.Popen([sys.executable] + clean_argv, creationflags=0x08000000)
@@ -1870,6 +1878,7 @@ if __name__ == "__main__":
     def on_update_check_result(result):
         if result.get('available') and result.get('download_url'):
             dashboard._pending_download_url = result['download_url']
+            dashboard._pending_target_version = result.get('latest_version', 'unknown')
         dashboard.ws_thread.send_command_to_clients({
             'type': 'update_check_result',
             'data': result
@@ -1877,14 +1886,15 @@ if __name__ == "__main__":
 
     def on_apply_update():
         url = getattr(dashboard, '_pending_download_url', None)
+        target_version = getattr(dashboard, '_pending_target_version', 'unknown')
         if not url:
             dashboard.ws_thread.send_command_to_clients({
                 'type': 'update_complete',
                 'data': {'success': False, 'message': 'No update URL available. Check for updates first.'}
             })
             return
-        from core_services.update_checker import UpdateWorker
-        dashboard._update_worker = UpdateWorker(url)
+        from core_services.update_checker import DifferentialUpdater
+        dashboard._update_worker = DifferentialUpdater(target_version, url)
         dashboard._update_worker.progress.connect(on_update_progress)
         dashboard._update_worker.finished.connect(on_update_finished)
         dashboard._update_worker.start()
@@ -1894,10 +1904,13 @@ if __name__ == "__main__":
             'type': 'update_progress',
             'data': {'percent': percent, 'status': status}
         })
+        # Emit signal to update pill window outline if requested
+        if hasattr(dashboard, 'pill_window') and dashboard.pill_window:
+            dashboard.pill_window.update_progress_outline(percent)
 
     def on_update_finished(success, message):
         if success:
-            dashboard._update_script_path = message
+            dashboard._is_updating = True
             dashboard.ws_thread.send_command_to_clients({
                 'type': 'update_complete',
                 'data': {'success': success, 'message': "Update ready! Restart to apply."}
@@ -1919,8 +1932,11 @@ if __name__ == "__main__":
 
     def on_apply_rollback(url):
         if not url: return
-        from core_services.update_checker import UpdateWorker
-        dashboard._update_worker = UpdateWorker(url)
+        import re
+        match = re.search(r'/download/v([^/]+)/', url)
+        target_version = match.group(1) if match else "rollback"
+        from core_services.update_checker import DifferentialUpdater
+        dashboard._update_worker = DifferentialUpdater(target_version, url)
         dashboard._update_worker.progress.connect(on_update_progress)
         dashboard._update_worker.finished.connect(on_update_finished)
         dashboard._update_worker.start()

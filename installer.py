@@ -53,31 +53,43 @@ class InstallWorker(QThread):
                 
             if zipfile.is_zipfile(payload_path):
                 with zipfile.ZipFile(payload_path, 'r') as zip_ref:
+                    version = "unknown"
+                    if 'version.txt' in zip_ref.namelist():
+                        with zip_ref.open('version.txt') as vf:
+                            version = vf.read().decode('utf-8').strip()
+                            
+                    app_dir = os.path.join(self.localappdata_dir, f'app-{version}')
+                    if not os.path.exists(app_dir):
+                        os.makedirs(app_dir)
+                        
                     total_files = len(zip_ref.namelist())
                     extracted = 0
                     for file in zip_ref.namelist():
-                        zip_ref.extract(file, self.localappdata_dir)
+                        zip_ref.extract(file, app_dir)
                         extracted += 1
                         if extracted % 20 == 0:
                             prog = 20 + int(50 * (extracted / total_files))
                             self.progress.emit(prog, f"Extracting {file}...")
+                            
+                    # Copy the launcher out to the root to act as the static shim
+                    root_launcher = os.path.join(self.localappdata_dir, 'Pandora.exe')
+                    extracted_launcher = os.path.join(app_dir, 'Pandora.exe')
+                    if os.path.exists(extracted_launcher):
+                        shutil.copy2(extracted_launcher, root_launcher)
             else:
                 time.sleep(1.5)
                 self.progress.emit(70, "Mock extraction complete...")
+                app_dir = self.localappdata_dir
             
             # Ensure critical runtime DLLs are findable by the PyInstaller bootloader.
-            # On machines without the VC++ 2015-2022 Redistributable installed system-wide,
-            # python312.dll fails to load because its transitive dependencies 
-            # (vcruntime140.dll, ucrtbase.dll) aren't on the DLL search path.
-            # Fix: copy these DLLs from _internal/ to the root install directory.
             self.progress.emit(75, "Configuring runtime dependencies...")
             try:
                 import glob
-                internal_dir = os.path.join(self.localappdata_dir, '_internal')
+                internal_dir = os.path.join(app_dir, '_internal')
                 if os.path.isdir(internal_dir):
                     for pattern in ['vcruntime140*.dll', 'python3*.dll', 'ucrtbase.dll']:
                         for src in glob.glob(os.path.join(internal_dir, pattern)):
-                            dst = os.path.join(self.localappdata_dir, os.path.basename(src))
+                            dst = os.path.join(app_dir, os.path.basename(src))
                             if not os.path.exists(dst):
                                 shutil.copy2(src, dst)
             except Exception:
