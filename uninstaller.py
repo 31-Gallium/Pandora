@@ -89,6 +89,9 @@ class UninstallWorker(QThread):
             for key_path in [
                 r"Software\Classes\.pandorafolder\ShellNew",
                 r"Software\Classes\.pandorafolder",
+                r"Software\Classes\PandoraFolder\shell\open\command",
+                r"Software\Classes\PandoraFolder\shell\open",
+                r"Software\Classes\PandoraFolder\shell",
                 r"Software\Classes\PandoraFolder\DefaultIcon",
                 r"Software\Classes\PandoraFolder",
                 r"Software\Classes\Directory\Background\shell\PandoraFolder\command",

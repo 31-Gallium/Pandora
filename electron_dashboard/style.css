@@ -640,15 +640,15 @@ body.out-of-focus .page-pill {
     background: #1a1a20;
 }
 .version-pill.status-uptodate {
-    border: 1.5px solid rgba(80, 250, 123, 0.7);
+    border: 3px solid rgba(80, 250, 123, 0.7);
     box-shadow: 0 0 8px rgba(80, 250, 123, 0.15);
 }
 .version-pill.status-available {
-    border: 1.5px solid rgba(255, 184, 108, 0.7);
+    border: 3px solid rgba(255, 184, 108, 0.7);
     box-shadow: 0 0 8px rgba(255, 184, 108, 0.15);
 }
 .version-pill.status-error {
-    border: 1.5px solid rgba(255, 85, 85, 0.7);
+    border: 3px solid rgba(255, 85, 85, 0.7);
     box-shadow: 0 0 8px rgba(255, 85, 85, 0.15);
 }
 
