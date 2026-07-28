@@ -910,8 +910,13 @@ class ElectronDashboardManager(QObject):
                     win32pipe.ConnectNamedPipe(pipe, None)
                     result, data = win32file.ReadFile(pipe, 4096)
                     message = data.decode('utf-8')
-                    if message == "--create-folder":
-                        from PyQt6.QtCore import QMetaObject, Qt
+                    if message.startswith("--create-folder"):
+                        parts = message.split(maxsplit=1)
+                        t_type = parts[1] if len(parts) > 1 else "grid"
+                        from PyQt6.QtCore import QMetaObject, Qt, Q_ARG
+                        import PyQt6.QtCore as QtCore
+                        # Call without Q_ARG to avoid slot signature issues, pass as state
+                        self._pending_create_type = t_type
                         QMetaObject.invokeMethod(self, "_on_create_folder_requested", Qt.ConnectionType.QueuedConnection)
                     
                     win32pipe.DisconnectNamedPipe(pipe)
@@ -925,7 +930,8 @@ class ElectronDashboardManager(QObject):
 
     def _on_create_folder_requested(self):
         if hasattr(self, 'create_folder_callback'):
-            self.create_folder_callback("grid")
+            t_type = getattr(self, '_pending_create_type', 'grid')
+            self.create_folder_callback(t_type)
             
     def _on_dashboard_create_folder(self, folder_name):
         if hasattr(self, 'create_folder_callback'):
@@ -1335,7 +1341,8 @@ if __name__ == "__main__":
                         win32file.OPEN_EXISTING,
                         0, None
                     )
-                    win32file.WriteFile(handle, b"--create-folder")
+                    t_type = " cursor" if "cursor" in sys.argv else ""
+                    win32file.WriteFile(handle, f"--create-folder{t_type}".encode('utf-8'))
                     win32file.CloseHandle(handle)
                 except Exception as e:
                     pass
@@ -1651,13 +1658,19 @@ if __name__ == "__main__":
         final_cols = 2
         final_rows = 2
         
+        start_c, start_r = 0, 0
+        if t_type == "cursor":
+            pos = QCursor.pos()
+            start_c = round((pos.x() - scr_cx - pad) / gs)
+            start_r = round((pos.y() - scr_cy - pad + margin_y_top) / gs)
+        
         def find_space(cols, rows):
             for radius in range(0, 30):
                 for dc in range(-radius, radius + 1):
                     for dr in range(-radius, radius + 1):
                         if max(abs(dc), abs(dr)) == radius:
-                            if is_free(dc, dr, cols, rows):
-                                return dc, dr
+                            if is_free(start_c + dc, start_r + dr, cols, rows):
+                                return start_c + dc, start_r + dr
             return None
 
         # Try sizes: 2x2 -> 2x1 -> 1x2 -> 1x1
