@@ -518,13 +518,13 @@ class GlobalHook:
                         app = QApplication.instance()
                         if hasattr(app, 'halo'):
                             app.halo.last_global_mouse_pos = QPoint(pos.x, pos.y)
-                elif wParam == 0x020A: # WM_MOUSEWHEEL
-                    ms_data = ctypes.cast(lParam, ctypes.POINTER(MSLLHOOKSTRUCT))[0]
-                    delta = ctypes.c_short(ms_data.mouseData >> 16).value
-                    app = QApplication.instance()
-                    if hasattr(app, 'halo'):
-                        self.signals.mouse_wheel.emit(delta)
-                    return 1
+                    elif wParam == 0x020A: # WM_MOUSEWHEEL
+                        ms_data = ctypes.cast(lParam, ctypes.POINTER(MSLLHOOKSTRUCT))[0]
+                        delta = ctypes.c_short(ms_data.mouseData >> 16).value
+                        app = QApplication.instance()
+                        if hasattr(app, 'halo'):
+                            self.signals.mouse_wheel.emit(delta)
+                        return 1
 
             return ctypes.windll.user32.CallNextHookEx(self.hook_ms, nCode, wParam, lParam)
 
