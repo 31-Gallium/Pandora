@@ -157,14 +157,22 @@ class HTTPRangeFile:
         if size == -1: size = self.size - self.pos
         if size == 0: return b""
         end = self.pos + size - 1
-        req = Request(self.final_url, headers={
-            'Range': f'bytes={self.pos}-{end}',
-            'User-Agent': 'Pandora-Updater'
-        })
-        with urlopen(req) as resp:
-            data = resp.read()
-        self.pos += len(data)
-        return data
+        import time
+        last_err = None
+        for attempt in range(3):
+            try:
+                req = Request(self.final_url, headers={
+                    'Range': f'bytes={self.pos}-{end}',
+                    'User-Agent': 'Pandora-Updater'
+                })
+                with urlopen(req, timeout=30) as resp:
+                    data = resp.read()
+                self.pos += len(data)
+                return data
+            except Exception as e:
+                last_err = e
+                time.sleep(1 * (2 ** attempt))  # 1s, 2s, 4s
+        raise last_err
 
 
 class DifferentialUpdater(QThread):
@@ -189,6 +197,14 @@ class DifferentialUpdater(QThread):
                 current_app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
                 
             new_app_dir = os.path.join(self.localappdata_dir, f"app-{self.target_version}")
+            
+            # Guard: never delete the directory we are currently running from
+            current_norm = os.path.normcase(os.path.abspath(current_app_dir))
+            new_norm = os.path.normcase(os.path.abspath(new_app_dir))
+            if current_norm == new_norm:
+                self.finished.emit(False, "You are already running this version.")
+                return
+            
             if os.path.exists(new_app_dir):
                 shutil.rmtree(new_app_dir, ignore_errors=True)
             os.makedirs(new_app_dir, exist_ok=True)

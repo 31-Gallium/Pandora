@@ -230,7 +230,7 @@ class SystemTab {
                     dlBtn.disabled = true;
                     dlBtn.textContent = 'Installing...';
                     if (window.sendCustomCommand) {
-                        window.sendCustomCommand({ type: 'apply_rollback', download_url: r.download_url });
+                        window.sendCustomCommand({ type: 'apply_rollback', download_url: r.download_url, version: r.version });
                     }
                 };
             }

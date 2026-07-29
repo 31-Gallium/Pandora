@@ -18,7 +18,7 @@ class WebSocketServerThread(QThread):
     check_updates_requested = pyqtSignal()
     apply_update_requested = pyqtSignal()
     fetch_releases_requested = pyqtSignal()
-    apply_rollback_requested = pyqtSignal(str)
+    apply_rollback_requested = pyqtSignal(str, str)
     
     def __init__(self, cfg, host="localhost", port=0):
         super().__init__()
@@ -73,7 +73,7 @@ class WebSocketServerThread(QThread):
                     elif payload.get('type') == 'fetch_releases':
                         self.fetch_releases_requested.emit()
                     elif payload.get('type') == 'apply_rollback':
-                        self.apply_rollback_requested.emit(payload.get('download_url'))
+                        self.apply_rollback_requested.emit(payload.get('download_url', ''), payload.get('version', ''))
                 except Exception as e:
                     print(f"WS Parse Error: {e}")
         finally:

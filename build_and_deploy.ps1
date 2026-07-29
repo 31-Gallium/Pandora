@@ -244,7 +244,7 @@ for root, _, files in os.walk(dist_dir):
         if file in ('manifest.json', 'version.txt'):
             continue
         filepath = os.path.join(root, file)
-        relpath = os.path.relpath(filepath, dist_dir).replace('\\\\', '/')
+        relpath = os.path.relpath(filepath, dist_dir).replace(os.sep, '/')
         hasher = hashlib.sha256()
         with open(filepath, 'rb') as f:
             while chunk := f.read(8192):
@@ -302,3 +302,4 @@ if (Test-Path $SetupExe) {
 } else {
     Write-Host "ERROR: Compiled setup was not found at $SetupExe." -ForegroundColor Red
 }
+

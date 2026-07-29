@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <string>
 #include <shellapi.h>
+#include <vector>
 
 extern "C" {
     // Forces Nvidia Optimus laptops to use the High Performance NVIDIA GPU
@@ -32,15 +33,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::wstring highestVersion = L"";
     std::wstring targetAppDir = L"";
     
+    // Helper lambda: parse "app-X.Y.Z" into a vector of ints for proper semver comparison
+    auto parseSemVer = [](const std::wstring& name) -> std::vector<int> {
+        std::vector<int> parts;
+        // Strip "app-" prefix
+        size_t start = name.find(L'-');
+        if (start == std::wstring::npos) return parts;
+        std::wstring ver = name.substr(start + 1);
+        // Split on '.' and parse each segment as int
+        size_t pos = 0;
+        while (pos < ver.size()) {
+            size_t dot = ver.find(L'.', pos);
+            if (dot == std::wstring::npos) dot = ver.size();
+            try { parts.push_back(std::stoi(ver.substr(pos, dot - pos))); }
+            catch (...) { parts.push_back(0); }
+            pos = dot + 1;
+        }
+        return parts;
+    };
+    
     if (hFind != INVALID_HANDLE_VALUE) {
+        std::vector<int> highestParts;
         do {
             if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                 std::wstring folderName = findData.cFileName;
-                // Basic string comparison works for zero-padded or uniform versions,
-                // but for robust semver 0.7.0 vs 0.10.0 we could write a parser.
-                // For simplicity, since folder names are like app-0.7.0, we just do a string length + dict comparison
-                if (folderName.length() > highestVersion.length() || 
-                   (folderName.length() == highestVersion.length() && folderName > highestVersion)) {
+                std::vector<int> thisParts = parseSemVer(folderName);
+                if (thisParts > highestParts) {
+                    highestParts = thisParts;
                     highestVersion = folderName;
                 }
             }

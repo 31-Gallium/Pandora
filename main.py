@@ -1930,13 +1930,15 @@ if __name__ == "__main__":
         }))
         dashboard._release_fetcher.start()
 
-    def on_apply_rollback(url):
+    def on_apply_rollback(url, version):
         if not url: return
-        import re
-        match = re.search(r'/download/v([^/]+)/', url)
-        target_version = match.group(1) if match else "rollback"
+        if not version:
+            # Fallback: parse from URL if JS didn't send version
+            import re
+            match = re.search(r'/download/v([^/]+)/', url)
+            version = match.group(1) if match else "rollback"
         from core_services.update_checker import DifferentialUpdater
-        dashboard._update_worker = DifferentialUpdater(target_version, url)
+        dashboard._update_worker = DifferentialUpdater(version, url)
         dashboard._update_worker.progress.connect(on_update_progress)
         dashboard._update_worker.finished.connect(on_update_finished)
         dashboard._update_worker.start()

@@ -126,8 +126,8 @@ class InstallWorker(QThread):
                 uninstaller_path = os.path.join(self.localappdata_dir, 'Uninstaller', 'PandoraUninstaller.exe')
                 winreg.SetValueEx(key, "UninstallString", 0, winreg.REG_SZ, f'"{uninstaller_path}"')
                 winreg.SetValueEx(key, "Publisher", 0, winreg.REG_SZ, "Pandora")
-                # Try to read version from the installed config
-                display_version = "0.9.7"
+                # Use version from payload's version.txt (already extracted above)
+                display_version = version if version != "unknown" else "0.9.8"
                 try:
                     import json as _json
                     cfg_path = os.path.join(os.environ.get('APPDATA', ''), 'Pandora', 'config.json')
