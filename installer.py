@@ -79,6 +79,14 @@ class InstallWorker(QThread):
                     if os.path.exists(extracted_launcher):
                         shutil.copy2(extracted_launcher, root_launcher)
                     
+                    # Copy the Uninstaller folder to root so the registry path is correct
+                    extracted_uninstaller_dir = os.path.join(app_dir, 'Uninstaller')
+                    root_uninstaller_dir = os.path.join(self.localappdata_dir, 'Uninstaller')
+                    if os.path.isdir(extracted_uninstaller_dir):
+                        if os.path.exists(root_uninstaller_dir):
+                            shutil.rmtree(root_uninstaller_dir, ignore_errors=True)
+                        shutil.copytree(extracted_uninstaller_dir, root_uninstaller_dir)
+                    
                     # Clean up old app-* version folders to prevent disk bloat
                     try:
                         current_app_name = os.path.basename(app_dir)

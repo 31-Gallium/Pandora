@@ -271,6 +271,17 @@ class DifferentialUpdater(QThread):
                 except Exception:
                     pass
 
+            # Copy the Uninstaller folder to root so the registry path stays valid
+            extracted_uninstaller_dir = os.path.join(new_app_dir, 'Uninstaller')
+            root_uninstaller_dir = os.path.join(self.localappdata_dir, 'Uninstaller')
+            if os.path.isdir(extracted_uninstaller_dir):
+                try:
+                    if os.path.exists(root_uninstaller_dir):
+                        shutil.rmtree(root_uninstaller_dir, ignore_errors=True)
+                    shutil.copytree(extracted_uninstaller_dir, root_uninstaller_dir)
+                except Exception:
+                    pass
+
             # Clean up old app-* version folders to prevent disk bloat
             try:
                 current_app_name = os.path.basename(new_app_dir)
