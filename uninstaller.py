@@ -5,6 +5,7 @@ import winreg
 import subprocess
 import tempfile
 import zipfile
+import math
 from PyQt6.QtCore import Qt, pyqtSignal, QSize, QPoint, QPropertyAnimation, QEasingCurve, QTimer, QRectF, QRect, QParallelAnimationGroup, QThread
 from PyQt6.QtGui import QFont, QCursor, QPainter, QColor, QLinearGradient, QIcon, QPainterPath
 from PyQt6.QtSvg import QSvgRenderer
@@ -33,6 +34,11 @@ class UninstallWorker(QThread):
     def run(self):
         try:
             self.progress.emit(10, "Stopping background processes and threads...")
+            import subprocess
+            import time
+            for proc in ["Pandora.exe", "PandoraCore.exe", "PandoraUI.exe", "AudioCaptureService.exe"]:
+                subprocess.run(["taskkill", "/F", "/IM", proc], creationflags=subprocess.CREATE_NO_WINDOW, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            time.sleep(2)
             
             self.progress.emit(30, "Managing user data and settings...")
             internal_storage = os.path.join(self.appdata_dir, "internal_storage")
@@ -550,7 +556,7 @@ class UninstallerUI(QWidget):
         left_layout.addStretch()
         
         # Version
-        version_label = QLabel("Version 1.0.0")
+        version_label = QLabel("Version 0.9.8")
         version_label.setFont(QFont("Segoe UI", 9))
         version_label.setStyleSheet("color: #555566; background: transparent; border: none;")
         left_layout.addWidget(version_label, 0, Qt.AlignmentFlag.AlignCenter)
@@ -665,21 +671,22 @@ class UninstallerUI(QWidget):
         self.is_dragging = False
 
     def resolve_asset_path(self, filename):
-        paths = [
+        paths = []
+        if hasattr(sys, '_MEIPASS'):
+            paths.append(os.path.join(sys._MEIPASS, 'assets', filename))
+            paths.append(os.path.join(sys._MEIPASS, filename))
+        if getattr(sys, 'frozen', False):
+            base_dir = os.path.dirname(sys.executable)
+            paths.extend([
+                os.path.join(base_dir, 'assets', filename),
+                os.path.join(base_dir, '..', 'assets', filename),
+            ])
+        paths.extend([
             os.path.join(os.getcwd(), 'assets', filename),
             os.path.join(os.getcwd(), filename),
             os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', filename),
             os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', filename),
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', filename)
-        ]
-        
-        if getattr(sys, 'frozen', False):
-            base_dir = os.path.dirname(sys.executable)
-            paths.extend([
-                os.path.join(base_dir, '..', 'assets', filename),
-                os.path.join(base_dir, 'assets', filename)
-            ])
-            
+        ])
         for p in paths:
             if os.path.exists(p):
                 return p
@@ -835,11 +842,12 @@ class UninstallerUI(QWidget):
         localappdata_dir = os.path.join(os.environ.get('LOCALAPPDATA', os.path.expanduser('~')), "Programs", "Pandora")
         bat_content = f"""@echo off
 :loop
-tasklist | find /i "Pandora.exe" >nul
+tasklist /FI "IMAGENAME eq PandoraUninstaller.exe" 2>nul | find /i "PandoraUninstaller.exe" >nul
 if not errorlevel 1 (
     timeout /t 1 /nobreak >nul
     goto loop
 )
+timeout /t 2 /nobreak >nul
 rmdir /s /q "{localappdata_dir}"
 del "%~f0"
 """

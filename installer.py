@@ -29,8 +29,9 @@ class InstallWorker(QThread):
             self.progress.emit(10, "Closing existing instances...")
             import subprocess
             import time
-            subprocess.run(["taskkill", "/F", "/IM", "Pandora.exe", "/T"], creationflags=subprocess.CREATE_NO_WINDOW)
-            time.sleep(1)
+            for proc in ["Pandora.exe", "PandoraCore.exe", "PandoraUI.exe", "AudioCaptureService.exe"]:
+                subprocess.run(["taskkill", "/F", "/IM", proc], creationflags=subprocess.CREATE_NO_WINDOW, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            time.sleep(2)
             
             self.progress.emit(20, "Extracting application files...")
             import sys
@@ -42,10 +43,11 @@ class InstallWorker(QThread):
                 payload_path = os.path.join(os.path.dirname(__file__), 'installer', 'payload.zip')
                 
             if not os.path.exists(payload_path):
-                # Fallback for testing
                 payload_path = os.path.join(os.path.dirname(__file__), 'payload.zip')
                 if not os.path.exists(payload_path):
-                    with open(payload_path, 'w') as f: f.write("mock")
+                    self.progress.emit(100, "Error: Installation payload is missing or corrupted.")
+                    self.finished.emit(False)
+                    return
 
                 
             if not os.path.exists(self.localappdata_dir):
@@ -76,6 +78,17 @@ class InstallWorker(QThread):
                     extracted_launcher = os.path.join(app_dir, 'Pandora.exe')
                     if os.path.exists(extracted_launcher):
                         shutil.copy2(extracted_launcher, root_launcher)
+                    
+                    # Clean up old app-* version folders to prevent disk bloat
+                    try:
+                        current_app_name = os.path.basename(app_dir)
+                        for entry in os.listdir(self.localappdata_dir):
+                            if entry.startswith('app-') and entry != current_app_name:
+                                old_dir = os.path.join(self.localappdata_dir, entry)
+                                if os.path.isdir(old_dir):
+                                    shutil.rmtree(old_dir, ignore_errors=True)
+                    except Exception:
+                        pass  # Non-critical — old folders just waste space
             else:
                 time.sleep(1.5)
                 self.progress.emit(70, "Mock extraction complete...")
@@ -657,7 +670,11 @@ class InstallerUI(QWidget):
         left_layout.addStretch()
         
         # Version
-        version_label = QLabel("Version 1.0.0")
+        try:
+            from config import APP_VERSION as _v
+        except ImportError:
+            _v = "0.9.8"
+        version_label = QLabel(f"Version {_v}")
         version_label.setFont(QFont("Segoe UI", 9))
         version_label.setStyleSheet("color: #555566; background: transparent; border: none;")
         left_layout.addWidget(version_label, 0, Qt.AlignmentFlag.AlignCenter)

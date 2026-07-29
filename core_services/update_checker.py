@@ -271,6 +271,17 @@ class DifferentialUpdater(QThread):
                 except Exception:
                     pass
 
+            # Clean up old app-* version folders to prevent disk bloat
+            try:
+                current_app_name = os.path.basename(new_app_dir)
+                for entry in os.listdir(self.localappdata_dir):
+                    if entry.startswith('app-') and entry != current_app_name:
+                        old_dir = os.path.join(self.localappdata_dir, entry)
+                        if os.path.isdir(old_dir):
+                            shutil.rmtree(old_dir, ignore_errors=True)
+            except Exception:
+                pass
+
             self.finished.emit(True, "Update ready for restart.")
 
         except Exception as e:
