@@ -293,6 +293,15 @@ class DifferentialUpdater(QThread):
             except Exception:
                 pass
 
+            # Update the registry DisplayVersion so Apps & Features shows the correct version
+            try:
+                import winreg
+                key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Pandora", 0, winreg.KEY_SET_VALUE)
+                winreg.SetValueEx(key, "DisplayVersion", 0, winreg.REG_SZ, self.target_version)
+                winreg.CloseKey(key)
+            except Exception:
+                pass  # Registry key may not exist for portable installs
+
             self.finished.emit(True, "Update ready for restart.")
 
         except Exception as e:
