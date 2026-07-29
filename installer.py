@@ -148,7 +148,7 @@ class InstallWorker(QThread):
                 winreg.SetValueEx(key, "UninstallString", 0, winreg.REG_SZ, f'"{uninstaller_path}"')
                 winreg.SetValueEx(key, "Publisher", 0, winreg.REG_SZ, "Pandora")
                 # Use version from payload's version.txt (already extracted above)
-                display_version = version if version != "unknown" else "0.9.8"
+                display_version = version if version != "unknown" else "0.9.9"
                 try:
                     import json as _json
                     cfg_path = os.path.join(os.environ.get('APPDATA', ''), 'Pandora', 'config.json')
@@ -681,7 +681,7 @@ class InstallerUI(QWidget):
         try:
             from config import APP_VERSION as _v
         except ImportError:
-            _v = "0.9.8"
+            _v = "0.9.9"
         version_label = QLabel(f"Version {_v}")
         version_label.setFont(QFont("Segoe UI", 9))
         version_label.setStyleSheet("color: #555566; background: transparent; border: none;")
