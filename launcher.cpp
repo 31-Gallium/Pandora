@@ -57,10 +57,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         do {
             if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                 std::wstring folderName = findData.cFileName;
-                std::vector<int> thisParts = parseSemVer(folderName);
-                if (thisParts > highestParts) {
-                    highestParts = thisParts;
-                    highestVersion = folderName;
+                // Only consider the folder if PandoraCore.exe actually exists inside it (not a partial extraction)
+                std::wstring testCore = dir + L"\\" + folderName + L"\\PandoraCore.exe";
+                DWORD attr = GetFileAttributesW(testCore.c_str());
+                if (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
+                    std::vector<int> thisParts = parseSemVer(folderName);
+                    if (thisParts > highestParts) {
+                        highestParts = thisParts;
+                        highestVersion = folderName;
+                    }
                 }
             }
         } while (FindNextFileW(hFind, &findData));

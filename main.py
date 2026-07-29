@@ -1885,6 +1885,8 @@ if __name__ == "__main__":
         })
 
     def on_apply_update():
+        if hasattr(dashboard, '_update_worker') and dashboard._update_worker.isRunning():
+            return
         url = getattr(dashboard, '_pending_download_url', None)
         target_version = getattr(dashboard, '_pending_target_version', 'unknown')
         if not url:
@@ -1900,6 +1902,8 @@ if __name__ == "__main__":
         dashboard._update_worker.start()
 
     def on_update_progress(percent, status):
+        dashboard._last_update_percent = percent
+        dashboard._last_update_status = status
         dashboard.ws_thread.send_command_to_clients({
             'type': 'update_progress',
             'data': {'percent': percent, 'status': status}
@@ -1947,6 +1951,20 @@ if __name__ == "__main__":
     dashboard.ws_thread.apply_update_requested.connect(on_apply_update)
     dashboard.ws_thread.fetch_releases_requested.connect(on_fetch_releases)
     dashboard.ws_thread.apply_rollback_requested.connect(on_apply_rollback)
+    
+    def on_client_connected():
+        if getattr(dashboard, '_is_updating', False):
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'update_complete',
+                'data': {'success': True, 'message': 'Update ready for restart.'}
+            })
+        elif hasattr(dashboard, '_update_worker') and dashboard._update_worker.isRunning():
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'update_progress',
+                'data': {'percent': getattr(dashboard, '_last_update_percent', 0), 'status': getattr(dashboard, '_last_update_status', 'Updating...')}
+            })
+            
+    dashboard.ws_thread.client_connected.connect(on_client_connected)
     
     def on_tray_activated(reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:

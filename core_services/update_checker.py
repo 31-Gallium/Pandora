@@ -306,4 +306,10 @@ class DifferentialUpdater(QThread):
 
         except Exception as e:
             logger.error(f"Differential update failed: {e}")
+            # Clean up partial folder on failure
+            if 'new_app_dir' in locals() and os.path.exists(new_app_dir):
+                try:
+                    shutil.rmtree(new_app_dir, ignore_errors=True)
+                except Exception:
+                    pass
             self.finished.emit(False, str(e))
