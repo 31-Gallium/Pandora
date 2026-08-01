@@ -1885,7 +1885,7 @@ if __name__ == "__main__":
         })
 
     def on_apply_update():
-        if hasattr(dashboard, '_update_worker') and dashboard._update_worker.isRunning():
+        if getattr(dashboard, '_update_worker', None) is not None and dashboard._update_worker.isRunning():
             return
         url = getattr(dashboard, '_pending_download_url', None)
         target_version = getattr(dashboard, '_pending_target_version', 'unknown')
@@ -1958,7 +1958,7 @@ if __name__ == "__main__":
                 'type': 'update_complete',
                 'data': {'success': True, 'message': 'Update ready for restart.'}
             })
-        elif hasattr(dashboard, '_update_worker') and dashboard._update_worker.isRunning():
+        elif getattr(dashboard, '_update_worker', None) is not None and dashboard._update_worker.isRunning():
             dashboard.ws_thread.send_command_to_clients({
                 'type': 'update_progress',
                 'data': {'percent': getattr(dashboard, '_last_update_percent', 0), 'status': getattr(dashboard, '_last_update_status', 'Updating...')}
