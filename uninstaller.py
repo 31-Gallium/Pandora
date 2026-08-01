@@ -556,7 +556,7 @@ class UninstallerUI(QWidget):
         left_layout.addStretch()
         
         # Version
-        version_label = QLabel("Version 0.9.9")
+        version_label = QLabel("Version 0.9.10")
         version_label.setFont(QFont("Segoe UI", 9))
         version_label.setStyleSheet("color: #555566; background: transparent; border: none;")
         left_layout.addWidget(version_label, 0, Qt.AlignmentFlag.AlignCenter)

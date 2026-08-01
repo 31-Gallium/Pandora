@@ -1952,6 +1952,31 @@ if __name__ == "__main__":
     dashboard.ws_thread.fetch_releases_requested.connect(on_fetch_releases)
     dashboard.ws_thread.apply_rollback_requested.connect(on_apply_rollback)
     
+    def on_extract_halo_icon(path, req_id):
+        try:
+            from utils import IconExtractor
+            pix = IconExtractor.get_icon_pixmap(path, 48)
+            from PyQt6.QtCore import QByteArray, QBuffer, QIODevice
+            import base64
+            byte_array = QByteArray()
+            buffer = QBuffer(byte_array)
+            buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+            pix.save(buffer, "PNG")
+            b64_data = base64.b64encode(byte_array.data()).decode('utf-8')
+            icon_url = f"data:image/png;base64,{b64_data}"
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'halo_icon_extracted',
+                'data': {'req_id': req_id, 'icon': icon_url}
+            })
+        except Exception as e:
+            print(f"Extract halo icon failed for {path}: {e}")
+            dashboard.ws_thread.send_command_to_clients({
+                'type': 'halo_icon_extracted',
+                'data': {'req_id': req_id, 'icon': 'assets/launcher.svg'}
+            })
+            
+    dashboard.ws_thread.extract_halo_icon_requested.connect(on_extract_halo_icon)
+    
     def on_client_connected():
         if getattr(dashboard, '_is_updating', False):
             dashboard.ws_thread.send_command_to_clients({

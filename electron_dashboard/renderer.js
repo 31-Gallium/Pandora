@@ -47,6 +47,23 @@ window.sendCustomCommand = function(cmd) {
     }
 };
 
+window.extractHaloIconPromises = {};
+window.extractHaloIcon = function(path) {
+    return new Promise((resolve, reject) => {
+        const reqId = Math.random().toString(36).substring(2);
+        window.extractHaloIconPromises[reqId] = { resolve, reject };
+        window.sendCustomCommand({ type: 'extract_halo_icon', path: path, req_id: reqId });
+        
+        // Timeout
+        setTimeout(() => {
+            if (window.extractHaloIconPromises[reqId]) {
+                delete window.extractHaloIconPromises[reqId];
+                resolve('ERROR: Timeout'); // fail softly so it falls back to launcher.svg
+            }
+        }, 5000);
+    });
+};
+
 // Instantiate Tab Modules
 const generalTab = new GeneralTab(getConfig, sendConfigUpdate);
 const haloTab = new HaloTab(getConfig, sendConfigUpdate);
@@ -118,6 +135,13 @@ function connectWebSocket() {
             systemTab.handleUpdateComplete(parsed.data);
         } else if (parsed.type === 'release_history_result') {
             systemTab.handleReleaseHistoryResult(parsed.data);
+        } else if (parsed.type === 'halo_icon_extracted') {
+            const reqId = parsed.data.req_id;
+            const iconUrl = parsed.data.icon;
+            if (reqId && window.extractHaloIconPromises[reqId]) {
+                window.extractHaloIconPromises[reqId].resolve(iconUrl);
+                delete window.extractHaloIconPromises[reqId];
+            }
         }
     });
 

@@ -315,7 +315,7 @@ class Halo(QWidget):
         if not hasattr(self, 'layer_index'): self.layer_index = 0
         if self.layer_index >= len(self.menus): self.layer_index = max(0, len(self.menus) - 1)
         if self.menus:
-            self.tools = self.menus[self.layer_index].get('tools', [])
+            self.tools = [t for t in self.menus[self.layer_index].get('tools', []) if t.get('id', '').strip() != '' or t.get('label', '').strip() != '']
         else:
             self.tools = []
             
@@ -489,7 +489,7 @@ class Halo(QWidget):
         next_valid_idx = (curr_valid_idx + steps) % len(valid_indices)
         self.layer_index = valid_indices[next_valid_idx]
 
-        self.tools = self.menus[self.layer_index].get('tools', [])
+        self.tools = [t for t in self.menus[self.layer_index].get('tools', []) if t.get('id', '').strip() != '' or t.get('label', '').strip() != '']
 
         self.slice_progress = {} # reset anims
         self.active_index = -1
@@ -554,16 +554,22 @@ class Halo(QWidget):
             self.execute_current(close_halo=True)
         
     def _anim_loop(self):
+        changed = False
+        trail_active = hasattr(self, 'mouse_trail') and len(self.mouse_trail) > 0
         # Process queued mouse movement once per frame to decouple Win32 hook from Qt rendering
+        nav_active = hasattr(self, '_nav_keys') and len(self._nav_keys) > 0
         if getattr(self, 'last_global_mouse_pos', None) is not None:
-            if not hasattr(self, '_last_processed_mouse_pos') or self._last_processed_mouse_pos != self.last_global_mouse_pos:
+            if not hasattr(self, '_last_processed_mouse_pos') or self._last_processed_mouse_pos != self.last_global_mouse_pos or nav_active:
                 self._process_mouse_pos(self.last_global_mouse_pos)
                 self._last_processed_mouse_pos = self.last_global_mouse_pos
-        elif hasattr(self, '_nav_keys') and self._nav_keys:
+            else:
+                if hasattr(self, 'mouse_trail') and len(self.mouse_trail) > 1:
+                    if not getattr(self, 'closing', False):
+                        self.mouse_trail.pop()
+                        changed = True
+        elif nav_active:
             from PyQt6.QtGui import QCursor
             self._process_mouse_pos(QCursor.pos())
-
-        changed = False
         
         layer_anim = getattr(self, "layer_anim_progress", 0.0)
         
@@ -590,8 +596,22 @@ class Halo(QWidget):
                 if getattr(self, 'original_cursor_pos', None):
                     from PyQt6.QtGui import QCursor
                     QCursor.setPos(self.original_cursor_pos)
+                    
+                # NOW restore the cursor shape and release the mouse grab
+                while QApplication.overrideCursor():
+                    QApplication.restoreOverrideCursor()
+                self._restore_win32_cursor()
+                self.setCursor(Qt.CursorShape.ArrowCursor)
+                self.releaseMouse()
                 return
         else:
+            if getattr(self, '_needs_cursor_teleport', False) and getattr(self, "fade_t", 0.0) > 0.08:
+                # After ~2-3 frames, the window is composited by DWM and the mouse is 
+                # fully grabbed. It's now safe to teleport the hardware cursor without it flashing.
+                from PyQt6.QtGui import QCursor
+                QCursor.setPos(self.center_pt.x(), self.center_pt.y())
+                self._needs_cursor_teleport = False
+                
             if getattr(self, "fade_t", 0.0) < 1.0:
                 self.fade_t = min(1.0, elapsed / duration)
                 # Premium Cubic Out easing for deceleration on entry
@@ -659,6 +679,10 @@ class Halo(QWidget):
                     if track.get('status') == 'Playing' or getattr(mod, '_idle_frame_counter', 999) < 120:
                         vis_changed = True
 
+        # Force full repaint if trail is active to prevent partial-rect clipping artifacts
+        if trail_active:
+            changed = True
+            
         if changed:
             self.update()
         elif vis_changed:
@@ -666,7 +690,7 @@ class Halo(QWidget):
             cx = self.center_pt.x()
             cy = self.center_pt.y()
             # Safe bounding box for all visualizers including Edge Ring EQ which bleeds outward
-            update_radius = int(self.inner_radius) + 120 
+            update_radius = int(self.outer_radius) + 60 
             self.update(QRect(cx - update_radius, cy - update_radius, update_radius * 2, update_radius * 2))
     def show_center(self):
         # Refresh composition blur state (in case the user changed it in dashboard)
@@ -752,17 +776,18 @@ class Halo(QWidget):
         self.center_pt = QPoint(self.width() // 2, self.height() // 2)
         self._refresh_geometry()
         
-        QCursor.setPos(pos.x(), pos.y())
-        self.anim_timer.start(16) # ~60 FPS
-        self.current_mouse_pos = self.center_pt
-        self.last_global_mouse_pos = pos
-        self.slice_progress = {}
-        self.clear_override_tools()
-        
+        import ctypes
         if not hasattr(self, '_custom_cursor'):
             self._custom_cursor = self._create_custom_cursor()
-        QApplication.setOverrideCursor(self._custom_cursor)
-        self.setCursor(self._custom_cursor)
+        while QApplication.overrideCursor():
+            QApplication.restoreOverrideCursor()
+        
+        self.current_mouse_pos = self.center_pt
+        self.last_global_mouse_pos = pos
+        self._last_processed_mouse_pos = pos
+        self.mouse_trail = []
+        self.slice_progress = {}
+        self.clear_override_tools()
         
         from utils import get_system_volume_level, get_battery_info
         self.vol_level = get_system_volume_level()
@@ -778,17 +803,42 @@ class Halo(QWidget):
         self.closing = False
         self.fade_progress = 0.0
         self.fade_t = 0.0
+        self._cursor_revealed = False
         
-
-        
-        # Start animation clock AFTER capture so the capture time doesn't eat into the animation
-        self.anim_start_time = time.perf_counter()
-        self.anim_duration = 0.35
-        
+        # Show the overlay so it becomes the foreground window.
+        # We use 0.01 (1% opacity) to avoid the DWM blur "blink". Because low
+        # opacity can cause Windows to route hit-testing to the background app,
+        # we explicitly call grabMouse() below to lock all mouse input to us.
+        self.setWindowOpacity(0.01)
         self.show()
         self.activateWindow()
         self.raise_()
         self.setFocus()
+        self.grabMouse()
+        
+        # Force Qt to process the window show/activation events immediately
+        # so it becomes the actual hit-test target before we move the cursor.
+        QApplication.processEvents()
+        
+        # NOW hide cursor at the OS level. Our overlay has the mouse grab,
+        # so WM_SETCURSOR comes to us, not the background app.
+        self._win32_cursor_hidden = False
+        self._saved_cursor_handle = ctypes.windll.user32.GetCursor()
+        ctypes.windll.user32.SetCursor(0)
+        while ctypes.windll.user32.ShowCursor(False) >= 0:
+            pass
+        self._win32_cursor_hidden = True
+        
+        # We DO NOT teleport the cursor synchronously here. If we do, the hardware 
+        # cursor moves instantly, but Windows DWM hasn't composited our window's first 
+        # frame yet, causing the cursor to flash over the background app. 
+        # We set a flag and teleport it in the animation loop after ~30ms.
+        self._needs_cursor_teleport = True
+        
+        # Start animation clock AFTER everything is set up
+        self.anim_start_time = time.perf_counter()
+        self.anim_duration = 0.35
+        self.anim_timer.start(16)
         
         self._refresh_geometry()
         
@@ -797,8 +847,33 @@ class Halo(QWidget):
     def update_mouse(self, global_pos):
         self.last_global_mouse_pos = global_pos
 
+    def _restore_win32_cursor(self):
+        """Restore Win32 cursor visibility if we hid it."""
+        import ctypes
+        if getattr(self, '_win32_cursor_hidden', False):
+            # Restore the cursor image first, then make it visible
+            saved = getattr(self, '_saved_cursor_handle', 0)
+            if saved:
+                ctypes.windll.user32.SetCursor(saved)
+            while ctypes.windll.user32.ShowCursor(True) < 0:
+                pass
+            self._win32_cursor_hidden = False
+
     def _process_mouse_pos(self, global_pos):
         if getattr(self, 'closing', False): return
+        if getattr(self, '_needs_cursor_teleport', False): return
+        
+        # Reveal custom cursor only when user actually moves the mouse
+        # a meaningful distance from center (not a synthetic QCursor.setPos event)
+        if not getattr(self, '_cursor_revealed', True):
+            local_pos = self.mapFromGlobal(global_pos)
+            move_dist = math.hypot(local_pos.x() - self.center_pt.x(), local_pos.y() - self.center_pt.y())
+            if move_dist > 3:  # User has actually moved - reveal custom cursor
+                self._cursor_revealed = True
+                self._restore_win32_cursor()
+                QApplication.setOverrideCursor(self._custom_cursor)
+                self.setCursor(self._custom_cursor)
+            
         local_pos = self.mapFromGlobal(global_pos)
         dx = local_pos.x() - self.center_pt.x()
         dy = local_pos.y() - self.center_pt.y()
@@ -920,10 +995,10 @@ class Halo(QWidget):
         self.anim_timer.stop()
         if hasattr(QApplication.instance(), 'global_hook'):
             QApplication.instance().global_hook.set_constraint(None, None)
-        
-        while QApplication.overrideCursor():
-            QApplication.restoreOverrideCursor()
-        self.setCursor(Qt.CursorShape.ArrowCursor)
+            
+        # Do NOT restore the cursor or release the mouse here!
+        # If we do, the user will see the mouse sitting in the center of the screen
+        # during the 200ms fade-out. We wait until _anim_loop finishes the fade.
         
         # Interaction Shield: Block execution ONLY for the tool being adjusted
         if self.vol_opacity > 0.1 and self.active_index != -1 and self.active_index < len(self.current_tools):
@@ -1011,13 +1086,16 @@ class Halo(QWidget):
         p.setPen(Qt.PenStyle.NoPen)
         p.drawEllipse(QPointF(cx, cy), self.outer_radius + 40, self.outer_radius + 40)
         
-        # Apply opacity for the Halo menu elements
-        p.setOpacity(fade)
-        
         # Invisible shield for center (mouse capture area)
+        # MUST be drawn BEFORE p.setOpacity(fade) so it always has alpha=1.
+        # If drawn with alpha=0, Windows hit-testing ignores our window and
+        # sends WM_SETCURSOR to the background app.
         p.setBrush(QColor(0, 0, 0, 1))
         p.setPen(Qt.PenStyle.NoPen)
         p.drawEllipse(self.center_pt, self.outer_radius, self.outer_radius)
+        
+        # Apply opacity for the Halo menu elements
+        p.setOpacity(fade)
         
         # Animation transforms for layer switching
         layer_anim = getattr(self, "layer_anim_progress", 0.0)
@@ -1679,6 +1757,9 @@ class Halo(QWidget):
         elif key in (Qt.Key.Key_S, Qt.Key.Key_Down): self._nav_keys.discard('S')
         elif key in (Qt.Key.Key_D, Qt.Key.Key_Right): self._nav_keys.discard('D')
         
+        if not self._nav_keys and getattr(self, 'last_global_mouse_pos', None) is not None:
+            self._process_mouse_pos(self.last_global_mouse_pos)
+        
         super().keyReleaseEvent(event)
 
     def hideEvent(self, event):
@@ -1687,7 +1768,9 @@ class Halo(QWidget):
             QApplication.instance().global_hook.set_constraint(None, None)
         while QApplication.overrideCursor():
             QApplication.restoreOverrideCursor()
+        self._restore_win32_cursor()
         self.setCursor(Qt.CursorShape.ArrowCursor)
+        self.releaseMouse()
 
         if hasattr(self, 'hub_manager'):
             for mod in [self.hub_manager.media_hub, self.hub_manager.time_hub]:

@@ -857,19 +857,19 @@ function updateLayerDropdown() {
             e.stopPropagation();
             haloCurrentLayer = i;
             dd.classList.remove('show');
-            refreshHalo();
+            refreshHalo(false);
         });
         dd.appendChild(opt);
     }
 }
 
 
-function refreshHalo() {
+function refreshHalo(saveConfig = true) {
     updateLayerDropdown();
     renderHaloRadial();
     
     // Sync to Python
-    if (window.getAppConfig && window.sendAppUpdate) {
+    if (saveConfig && window.getAppConfig && window.sendAppUpdate) {
         const cfg = window.getAppConfig();
         if (!cfg.halo) cfg.halo = {};
         
@@ -914,12 +914,14 @@ window.updateHaloLayersFromConfig = function(menus) {
                     // handler now does the same. Previously cached base64 may be a
                     // stale generic document icon from before the fix.
                     if (isPath) {
-                        ipcRenderer.invoke('app:getFileIcon', t.id).then(extractedIcon => {
-                            if (extractedIcon && !extractedIcon.startsWith('ERROR:')) {
-                                sliceObj.icon = extractedIcon;
-                                renderHaloRadial();
-                            }
-                        }).catch(err => console.error("On-the-fly icon extract failed:", err));
+                        if (window.extractHaloIcon) {
+                            window.extractHaloIcon(t.id).then(extractedIcon => {
+                                if (extractedIcon && !extractedIcon.startsWith('ERROR:')) {
+                                    sliceObj.icon = extractedIcon;
+                                    renderHaloRadial();
+                                }
+                            }).catch(err => console.error("On-the-fly icon extract failed:", err));
+                        }
                     }
                     return sliceObj;
                 })
@@ -935,7 +937,7 @@ window.updateHaloLayersFromConfig = function(menus) {
 
 function switchHaloLayer(index) {
     haloCurrentLayer = index;
-    refreshHalo();
+    refreshHalo(false);
 }
 
 /* ── Command Bank ── */
@@ -1058,9 +1060,11 @@ async function selectCustomApp() {
         
         let iconUrl = 'assets/launcher.svg';
         try {
-            const extractedIcon = await ipcRenderer.invoke('app:getFileIcon', filePath);
-            if (extractedIcon && !extractedIcon.startsWith('ERROR:')) {
-                iconUrl = extractedIcon;
+            if (window.extractHaloIcon) {
+                const extractedIcon = await window.extractHaloIcon(filePath);
+                if (extractedIcon && !extractedIcon.startsWith('ERROR:')) {
+                    iconUrl = extractedIcon;
+                }
             }
         } catch (err) {
             console.error("Failed to extract file icon:", err);
@@ -1131,7 +1135,7 @@ if (haloCenterHub) {
         } else {
             haloCurrentLayer = (haloCurrentLayer + 1) % haloLayers.length;
         }
-        refreshHalo();
+        refreshHalo(false);
     });
 }
 
